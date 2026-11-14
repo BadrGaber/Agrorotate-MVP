@@ -1,0 +1,33 @@
+{
+  "name": "agrorotate-dss-mvp",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AgroRotate — Multi-Objective Crop Rotation & Soil-Water Resilience Decision-Support Tool (Frontend MVP)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:api": "node server/index.mjs",
+    "build": "tsc && vite build",
+    "export:ai": "node scripts/export-ai-evidence.mjs",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "audit:inputs": "node scripts/audit-input-usage.mjs",
+    "audit:decision": "node scripts/audit-decision-sensitivity.mjs",
+    "audit:offline": "node scripts/audit-offline-cache.mjs"
+  },
+  "dependencies": {
+    "@geoman-io/leaflet-geoman-free": "^2.20.6",
+    "leaflet": "^1.9.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/leaflet": "^1.9.22",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.3",
+    "typescript": "^5.6.3",
+    "vite": "^8.3.5"
+  }
+}

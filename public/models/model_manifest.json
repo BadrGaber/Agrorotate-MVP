@@ -1,0 +1,12 @@
+{
+  "model_version": "agrorotate.surrogate_weights/real-v1",
+  "trained_targets": [
+    "yield_gap_pct"
+  ],
+  "rows": 3404,
+  "sites": 501,
+  "crops": 22,
+  "oof_mae": 20.57,
+  "oof_spearman": 0.278,
+  "deployed_utc": "2026-11-14T10:02:52.343765+00:00"
+}

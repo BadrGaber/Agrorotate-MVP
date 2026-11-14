@@ -1,0 +1,184 @@
+:root {
+  --bg-canvas: #07080c;
+  --bg-canvas-gradient:
+    radial-gradient(
+      circle at 15% 12%,
+      rgba(255, 255, 255, 0.035) 0%,
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 85% 88%,
+      rgba(16, 185, 129, 0.06) 0%,
+      transparent 45%
+    ),
+    linear-gradient(160deg, #040507 0%, #0c0e14 48%, #131620 100%);
+  --bg-surface: rgba(18, 20, 28, 0.9);
+  --bg-surface-solid: #11131b;
+  --bg-surface-raised: rgba(24, 27, 38, 0.94);
+  --bg-surface-subtle: rgba(13, 15, 22, 0.85);
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-inverse: #050608;
+  --action-primary: #10b981;
+  --action-primary-hover: #34d399;
+  --action-secondary: #38bdf8;
+  --accent-indigo: #818cf8;
+  --accent-harvest: #f59e0b;
+  --accent-harvest-bg: rgba(245, 158, 11, 0.14);
+  --border-strong: rgba(148, 163, 184, 0.28);
+  --border-subtle: rgba(148, 163, 184, 0.14);
+  --focus-ring: #34d399;
+  --selected-surface: rgba(16, 185, 129, 0.14);
+  --success-text: #34d399;
+  --success-bg: rgba(16, 185, 129, 0.15);
+  --warning-text: #fbbf24;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --error-text: #f87171;
+  --error-bg: rgba(239, 68, 68, 0.15);
+  --card-shadow: 0 12px 38px rgba(0, 0, 0, 0.65);
+  --font-sans:
+    "Inter", "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+  --font-display:
+    "Inter Display", "Inter", "Outfit", "Plus Jakarta Sans", system-ui,
+    sans-serif;
+  --font-ornate:
+    "TeX Gyre Chorus", "Z003", "Apple Chancery", "Snell Roundhand", Georgia,
+    cursive;
+  --font-mono:
+    "JetBrains Mono", "DejaVu Sans Mono", ui-monospace, SFMono-Regular,
+    monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background-color: var(--bg-canvas);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--focus-ring) !important;
+  outline-offset: 2px !important;
+}
+
+@keyframes botanicalFloat {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(2deg);
+  }
+}
+@keyframes botanicalPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 6px rgba(52, 211, 153, 0.35));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 14px rgba(52, 211, 153, 0.72));
+  }
+}
+@keyframes stepFadeEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.botanical-icon-float {
+  animation: botanicalFloat 3.6s ease-in-out infinite;
+}
+.botanical-icon-pulse {
+  animation: botanicalPulse 2.6s ease-in-out infinite;
+}
+.step-fade-enter {
+  animation: stepFadeEnter 0.28s ease-out forwards;
+}
+
+.interactive-card {
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.interactive-card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.6),
+    0 0 14px rgba(16, 185, 129, 0.12);
+}
+
+.interactive-btn-glow {
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+.interactive-btn-glow:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.dss-input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-strong);
+  background-color: var(--bg-surface-solid);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.dss-panel {
+  padding: 22px;
+  border-radius: 20px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: var(--card-shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.dss-subcard {
+  padding: 16px;
+  border-radius: 16px;
+  background-color: var(--bg-surface-subtle);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

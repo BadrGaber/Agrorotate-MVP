@@ -1,0 +1,35 @@
+{
+  "dataset": "ISRIC WoSIS laboratory profiles vs ISRIC SoilGrids 250m v2.0 (paired at site)",
+  "sample_points": {
+    "ph": 177,
+    "clay": 181,
+    "ece": 0
+  },
+  "nominal_coverage": 0.9,
+  "empirical_coverage": {
+    "ph": 0.8814,
+    "clay": 0.9006,
+    "ece": null
+  },
+  "conformal_half_widths": {
+    "MEAS": 0.868,
+    "EST": 1.426,
+    "EO_PRIOR": 2.046
+  },
+  "conformal_ph_bounds": {
+    "MEAS": 1.2,
+    "EST": 1.38,
+    "EO_PRIOR": 1.98
+  },
+  "conformal_clay_pct_bounds": {
+    "MEAS": 17.4,
+    "EST": 20.01,
+    "EO_PRIOR": 28.71
+  },
+  "provenance": {
+    "ph": "real paired WoSIS/SoilGrids values",
+    "clay": "real paired WoSIS/SoilGrids values",
+    "ece": "assumed: no measured ECe exists in the dataset"
+  },
+  "note": "EST = MEAS x 1.15 and EO_PRIOR = MEAS x 1.65 are documented modality penalties, not measured."
+}

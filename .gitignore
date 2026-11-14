@@ -1,0 +1,46 @@
+# Dependencies & Build Output
+node_modules/
+dist/
+.cache/
+
+# Python Virtual Environments & Bytecode
+.venv/
+venv/
+AI/.venv/
+AI/**/__pycache__/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment Variables & Tokens (Sensitive)
+.env
+.env.local
+.env.*.local
+*.log
+server/.env
+server/.env*
+AI/.env
+!server/.env.example
+!.env.example
+
+# Runtime Caches & Local Plan Storage
+server/.cache/
+server/data/
+
+# AI Raw Bulk Downloads (re-downloadable via download_real_datasets.py)
+AI/data/raw/*.zip
+AI/data/raw/*.zarr/
+AI/data/raw/*.parquet
+AI/data/raw/*_raw.csv
+AI/data/raw/*.nc
+!AI/data/raw/README.md
+!AI/data/raw/natural_earth_admin0_countries.geojson
+!AI/data/raw/eppo_pathogen_taxonomy.json
+
+# OS and Editor junk
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
