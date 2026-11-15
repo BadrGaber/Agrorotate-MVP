@@ -1,0 +1,450 @@
+openapi: 3.1.0
+info:
+  title: AgroRotate Backend API
+  version: 1.0.0
+  description: |
+    REST & Geospatial Backend Contract for **AgroRotate** (Multi-Objective Crop Rotation & Soil-Water Resilience Decision-Support Tool).
+    Aligned with the V0.1 Discovery & System Architecture Package (`DIAG-02`, `DIAG-05`, `DIAG-07`, `DIAG-08`, `DIAG-09`).
+    - **Epistemic Provenance Tags**: Every soil and environmental parameter carries `MEAS` (Measured Lab/Sensor), `EST` (Farmer Field Observation), or `MOD` (Modeled EO/SoilGrids Prior).
+    - **Spatial Scale Honesty**: Exposes grid resolutions (`50 km` NASA POWER, `5.5 km` CHIRPS v3, `9 km` NASA SMAP L4, `250 m` ISRIC SoilGrids 2.0 WCS/VRT) alongside 90% prediction intervals (`PI90: q0.05-q0.95`).
+servers:
+  - url: http://localhost:8000
+    description: Local Development Backend (FastAPI / Node / PostGIS)
+  - url: https://api.agrorotate-dss.org
+    description: Production Geospatial & Agronomic API Gateway
+
+paths:
+  /api/v1/health:
+    get:
+      summary: Local API and AI-capability health
+      operationId: health
+      tags: [System]
+      responses:
+        "200":
+          description: Service status plus the honest AI mode and model path.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok: { type: boolean }
+                  version: { type: string }
+                  ai:
+                    type: object
+                    properties:
+                      mode: { type: string, enum: [grounded_rules] }
+                      trainedRanker: { type: boolean }
+                      modelPath: { type: ["string", "null"] }
+
+  /api/v1/geocode:
+    get:
+      summary: Explicit place search through the cached Nominatim proxy
+      operationId: geocode
+      tags: [Geospatial & EO Context]
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string, minLength: 3 }
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 10, default: 5 }
+      responses:
+        "200":
+          description: Places with WGS84 coordinates and optional bbox.
+
+  /api/v1/field/analyze:
+    post:
+      summary: One-call WGS84 geometry, terrain and NASA POWER field analysis
+      operationId: analyzeField
+      tags: [Geospatial & EO Context]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [boundary]
+              properties:
+                boundary:
+                  type: array
+                  minItems: 3
+                  items:
+                    type: object
+                    required: [lat, lon]
+                    properties:
+                      lat: { type: number }
+                      lon: { type: number }
+                years: { type: integer, minimum: 1, maximum: 10, default: 5 }
+                elevationM: { type: ["number", "null"] }
+                force: { type: boolean, default: false }
+      responses:
+        "200":
+          description: Spherical area, bbox, centroid, terrain and cached POWER payload.
+
+  /api/v1/context:
+    post:
+      summary: Resolve Field Geospatial, SoilGrids 2.0 & NASA EO Context (STG-01..STG-03)
+      operationId: fetchFieldEnvironmentalContext
+      tags:
+        - Geospatial & EO Context
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContextQueryRequest"
+      responses:
+        "200":
+          description: Normalized field location, 0-30cm soil profile with PI90 bounds, and seasonal climate/moisture series.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContextQueryResponse"
+
+  /api/v1/fields/{fieldId}/soil:
+    put:
+      summary: Update Field Soil Profile & Persist Tier-1/Tier-2 Overrides (FLOW-B)
+      operationId: updateFieldSoilProfile
+      tags:
+        - Soil Diagnostics
+      parameters:
+        - name: fieldId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SoilProfile"
+      responses:
+        "200":
+          description: Updated soil profile with preserved audit/dispute lineage.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SoilProfile"
+
+  /api/v1/rotations/evaluate:
+    post:
+      summary: Evaluate 6-Season Crop Rotation Slot & Generate Ranked Alternatives (STG-05..STG-11)
+      operationId: evaluateRotationSequence
+      tags:
+        - Decision Engine
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EvaluateRotationRequest"
+      responses:
+        "200":
+          description: Agronomic verdict (optimal/conditional/conflict), water/N impact, and top 3 break-crop suggestions.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EvaluateRotationResponse"
+
+  /api/v1/plans/sync:
+    post:
+      summary: Synchronize Approved 3-Year Land Rotation Plan Snapshot (DIAG-07)
+      operationId: syncApprovedRotationPlan
+      tags:
+        - Plan Persistence & Sync
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlanSyncRequest"
+      responses:
+        "200":
+          description: Plan snapshot stored and versioned in backend database.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PlanSyncResponse"
+
+  /api/v1/outcomes:
+    post:
+      summary: Log Post-Harvest Actual Outcome & Recalibrate Carry-Over State (STG-12 / DIAG-09)
+      operationId: submitPostHarvestOutcome
+      tags:
+        - Post-Harvest Feedback Loop
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PostHarvestReviewRecord"
+      responses:
+        "200":
+          description: Outcome recorded and Year 2+ carry-over state updated.
+
+components:
+  schemas:
+    EpistemicProvenance:
+      type: string
+      enum: [MEAS, EST, MOD]
+
+    PolygonVertex:
+      type: object
+      required: [id, lat, lon, xPct, yPct]
+      properties:
+        id:
+          type: string
+        lat:
+          type: number
+          format: double
+        lon:
+          type: number
+          format: double
+        xPct:
+          type: number
+        yPct:
+          type: number
+
+    ContextQueryRequest:
+      type: object
+      required: [lat, lon]
+      properties:
+        lat:
+          type: number
+          example: 30.1234
+        lon:
+          type: number
+          example: 31.2345
+        areaHa:
+          type: number
+          example: 4.2
+        slopeClass:
+          type: string
+          enum: [flat, gentle_2_5, steep_gt_5]
+        boundaryPolygon:
+          type: array
+          items:
+            $ref: "#/components/schemas/PolygonVertex"
+
+    PredictionInterval90:
+      type: object
+      required: [lower, upper, unit, meaning]
+      properties:
+        lower:
+          type: number
+        upper:
+          type: number
+        unit:
+          type: string
+        meaning:
+          type: string
+
+    SoilPropertyEntry:
+      type: object
+      required: [property, value, provenance, sourceLabel, status]
+      properties:
+        property:
+          type: string
+          enum: [texture, ph, organicMatter, salinityEce, bulkDensity, cec]
+        value:
+          oneOf:
+            - type: number
+            - type: string
+            - type: "null"
+        unit:
+          type: ["string", "null"]
+        provenance:
+          $ref: "#/components/schemas/EpistemicProvenance"
+        sourceLabel:
+          type: string
+        uncertainty:
+          oneOf:
+            - $ref: "#/components/schemas/PredictionInterval90"
+            - type: "null"
+        status:
+          type: string
+          enum: [current, unknown, stale]
+
+    SoilProfile:
+      type: object
+      required:
+        [id, fieldId, profileDepthCm, entries, mixedSource, validationStatus]
+      properties:
+        id:
+          type: string
+        fieldId:
+          type: string
+        profileDepthCm:
+          type: string
+          enum: ["0-30", "30-100"]
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/SoilPropertyEntry"
+        mixedSource:
+          type: boolean
+        validationStatus:
+          type: string
+
+    ContextQueryResponse:
+      type: object
+      properties:
+        location:
+          type: object
+        soilProfile:
+          $ref: "#/components/schemas/SoilProfile"
+        environmentalSeries:
+          type: array
+          items:
+            type: object
+        provenanceMeta:
+          type: object
+          properties:
+            nasaPowerGridKm:
+              type: number
+            chirpsGridKm:
+              type: number
+            smapGridKm:
+              type: number
+            soilGridsPixelM:
+              type: number
+            fetchedAtIso:
+              type: string
+              format: date-time
+            cacheStatus:
+              type: string
+              enum: [HIT_REGIONAL_TILE, LIVE_SUBSET, OFFLINE_FALLBACK]
+
+    EvaluateRotationRequest:
+      type: object
+      required:
+        [
+          fieldId,
+          slotIndex,
+          seasonSlots,
+          constraints,
+          soilProfile,
+          priorityPreset,
+        ]
+      properties:
+        fieldId:
+          type: string
+        slotIndex:
+          type: integer
+          minimum: 0
+          maximum: 5
+        seasonSlots:
+          type: array
+          items:
+            type: object
+        constraints:
+          type: object
+        soilProfile:
+          $ref: "#/components/schemas/SoilProfile"
+        priorityPreset:
+          type: string
+          enum: [balanced, water, soil, risk]
+        previousHistoryCropId:
+          type: ["string", "null"]
+
+    EvaluateRotationResponse:
+      type: object
+      required: [opinion, suggestions]
+      properties:
+        opinion:
+          type: object
+          properties:
+            verdict:
+              type: string
+              enum: [optimal, conditional, conflict]
+            verdictIcon:
+              type: string
+            verdictTitleEn:
+              type: string
+            summaryEn:
+              type: string
+            rotationImpactEn:
+              type: string
+            waterImpactEn:
+              type: string
+            soilImpactEn:
+              type: string
+            waterMm:
+              type: number
+            nEffectKg:
+              type: number
+        suggestions:
+          type: array
+          items:
+            type: object
+
+    PlanSyncRequest:
+      type: object
+      required:
+        [
+          farm,
+          field,
+          location,
+          soilProfile,
+          constraints,
+          plan,
+          clientTimestampIso,
+        ]
+      properties:
+        farm:
+          type: object
+        field:
+          type: object
+        location:
+          type: object
+        soilProfile:
+          $ref: "#/components/schemas/SoilProfile"
+        constraints:
+          type: object
+        plan:
+          type: object
+        clientTimestampIso:
+          type: string
+          format: date-time
+
+    PlanSyncResponse:
+      type: object
+      required: [synced, serverRevisionId, syncedAtIso, message]
+      properties:
+        synced:
+          type: boolean
+        serverRevisionId:
+          type: string
+        syncedAtIso:
+          type: string
+          format: date-time
+        message:
+          type: string
+
+    PostHarvestReviewRecord:
+      type: object
+      required: [id, planId, seasonSlotId, actualCropId, yieldTier]
+      properties:
+        id:
+          type: string
+        planId:
+          type: string
+        seasonSlotId:
+          type: string
+        actualCropId:
+          type: string
+        actualSowingDate:
+          type: string
+        actualHarvestDate:
+          type: string
+        yieldTier:
+          type: string
+          enum: [above_target, on_target, below_target, failed]
+        observedStress:
+          type: array
+          items:
+            type: string
+        note:
+          type: string

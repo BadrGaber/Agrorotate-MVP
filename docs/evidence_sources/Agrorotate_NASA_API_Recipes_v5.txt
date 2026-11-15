@@ -1,0 +1,45 @@
+AGROROTATE - NASA DATA REQUEST RECIPES (v5.0; 29 Oct 2026)
+
+IMPORTANT
+These are templates, not a claim that data have been retrieved for the user's field. Replace placeholders with the actual field coordinates/date range and test the selected variables. Store the exact query and returned metadata.
+
+1) NASA POWER daily point request (candidate agroclimatology variables)
+https://power.larc.nasa.gov/api/temporal/daily/point?parameters=T2M,T2M_MAX,T2M_MIN,RH2M,WS2M,ALLSKY_SFC_SW_DWN,PRECTOTCORR&community=AG&longitude={LONGITUDE}&latitude={LATITUDE}&start={YYYYMMDD}&end={YYYYMMDD}&format=JSON
+
+Notes: Confirm every parameter in the NASA POWER parameter dictionary for the chosen daily/AG endpoint; native resolution can differ by variable. Explicitly use/record time-standard=UTC or LST. If the query fails because a parameter or date range is not supported, revise it based on official docs instead of silently dropping a variable.
+
+2) NASA Earthdata / HLS discovery
+https://search.earthdata.nasa.gov/
+Use an actual field polygon, search HLS L30/S30 collection, constrain the time range, and save collection/version/granule IDs. Apply the documented cloud/shadow/quality masks before computing indices.
+
+3) NASA MODIS NDVI/EVI (MOD13Q1) discovery
+https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/MOD13Q1/
+Use as a 250-m, 16-day regional context product; keep scale factors and pixel-quality data.
+
+4) SMAP L4 discovery
+https://search.earthdata.nasa.gov/search?q=SMAP
+Select the current 9-km 3-hourly surface/root-zone product/version; use only for regional moisture context.
+
+5) GPM IMERG
+https://gpm.nasa.gov/data/imerg
+Use Final for retrospective analysis when available; store run/version, accumulation/rate unit and time aggregation.
+
+6) SRTM terrain
+https://www.earthdata.nasa.gov/s3fs-public/2025-05/SRTM_Quick_Guide.pdf
+Choose a named DEM product/resolution and compute slope/TWI with a documented method.
+
+7) Data processing checklist
+- Verify coordinates, boundary geometry and CRS.
+- Store source ID, product short name/version, query, downloaded date, raw file, units, scale factor, QA mask and missing-value code.
+- Do not call a regional pixel value a field measurement.
+- Do not infer disease, nutrient shortage, ECe, ESP, Ksat or irrigation applied from NDVI alone.
+- Pair ETc=Kc*ETo with FAO-56 and crop-stage coefficients; effective rainfall and irrigation efficiency are separate.
+- Pair salinity response only with matching crop species, yield endpoint, units and ECe source.
+
+Source documentation:
+NASA POWER Daily API: https://power.larc.nasa.gov/docs/services/api/temporal/daily/
+NASA POWER resolution FAQ: https://power.larc.nasa.gov/docs/faqs/data/
+NASA POWER parameters: https://power.larc.nasa.gov/docs/tutorials/parameters/
+NASA HLS overview: https://hls.gsfc.nasa.gov/about-hls/
+FAO-56: https://www.fao.org/4/X0490E/X0490E00.htm
+FAO salinity table: https://www.fao.org/4/Y4263E/y4263e0e.htm
