@@ -65,22 +65,92 @@ export function AppShell({
     <div className="shell">
       <header className="topbar no-print">
         <div className="topbar__inner">
-          <a
-            className="brand"
-            href={routeHref("landing")}
-            onClick={(event) => {
-              event.preventDefault();
-              navigate("landing");
-            }}
-          >
-            <span className="brand__mark">
-              <Glyph name="sprout" size={22} />
-            </span>
-            <span>
-              <span className="brand__name">AgroRotate</span>
-              <span className="brand__tag">Evidence-first rotations</span>
-            </span>
-          </a>
+          <div className="topbar__main">
+            <a
+              className="brand"
+              href={routeHref("landing")}
+              onClick={(event) => {
+                event.preventDefault();
+                navigate("landing");
+              }}
+            >
+              <span className="brand__mark">
+                <Glyph name="sprout" size={22} />
+              </span>
+              <span>
+                <span className="brand__name">AgroRotate</span>
+                <span className="brand__tag">Evidence-first rotations</span>
+              </span>
+            </a>
+
+            <div className="topbar__actions">
+              <SoundToggle />
+              <button
+                type="button"
+                className="btn btn--small btn--primary topbar__preview-btn"
+                onClick={onStartPreview}
+                data-sound="whoosh"
+                title="Open the five-step preview — sample screens, no live changes"
+              >
+                <Glyph name="sparkle" size={13} />
+                <span className="topbar__btn-label">Preview</span>
+              </button>
+              <span
+                className="badge badge--soft badge--none topbar__status"
+                title={
+                  apiOnline === null
+                    ? "Checking the local API"
+                    : apiOnline
+                      ? "Local API reachable — plans can sync and NASA data is cached server-side"
+                      : "No local API — the app stores everything in this browser"
+                }
+              >
+                <span
+                  className={`status-dot ${
+                    apiOnline === null ? "" : apiOnline ? "is-online" : "is-local"
+                  }`}
+                />
+                <span className="topbar__status-text">
+                  {apiOnline === null
+                    ? "checking"
+                    : apiOnline
+                      ? "API online"
+                      : "browser mode"}
+                </span>
+              </span>
+              {(dirty || savedAtIso) && (
+                <span
+                  className="badge badge--soft badge--none topbar__status"
+                  title="Autosaved in this browser"
+                >
+                  <Glyph name={dirty ? "cloud" : "check"} size={12} />
+                  <span className="topbar__status-text">
+                    {dirty
+                      ? "saving…"
+                      : savedAtIso && `saved ${timeAgo(savedAtIso)}`}
+                  </span>
+                </span>
+              )}
+              <button
+                type="button"
+                className="icon-btn"
+                title="Reset this browser workspace"
+                aria-label="Reset workspace"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Reset the field, soil, water, priorities and plan in this browser? This cannot be undone.",
+                    )
+                  ) {
+                    resetWorkspace();
+                    navigate("field");
+                  }
+                }}
+              >
+                <Glyph name="rotate" size={15} />
+              </button>
+            </div>
+          </div>
 
           <nav className="nav" aria-label="Main">
             <a
@@ -134,70 +204,6 @@ export function AppShell({
               );
             })}
           </nav>
-
-          <div className="topbar__actions">
-            <SoundToggle />
-            <button
-              type="button"
-              className="btn btn--small btn--primary"
-              onClick={onStartPreview}
-              data-sound="whoosh"
-              title="Open the five-step preview — sample screens, no live changes"
-            >
-              <Glyph name="sparkle" size={13} />
-              Preview
-            </button>
-            <span
-              className="badge badge--soft badge--none topbar__status"
-              title={
-                apiOnline === null
-                  ? "Checking the local API"
-                  : apiOnline
-                    ? "Local API reachable — plans can sync and NASA data is cached server-side"
-                    : "No local API — the app stores everything in this browser"
-              }
-            >
-              <span
-                className={`status-dot ${
-                  apiOnline === null ? "" : apiOnline ? "is-online" : "is-local"
-                }`}
-              />
-              {apiOnline === null
-                ? "checking"
-                : apiOnline
-                  ? "API online"
-                  : "browser mode"}
-            </span>
-            {(dirty || savedAtIso) && (
-              <span
-                className="badge badge--soft badge--none topbar__status"
-                title="Autosaved in this browser"
-              >
-                <Glyph name={dirty ? "cloud" : "check"} size={12} />
-                {dirty
-                  ? "saving…"
-                  : savedAtIso && `saved ${timeAgo(savedAtIso)}`}
-              </span>
-            )}
-            <button
-              type="button"
-              className="icon-btn"
-              title="Reset this browser workspace"
-              aria-label="Reset workspace"
-              onClick={() => {
-                if (
-                  window.confirm(
-                    "Reset the field, soil, water, priorities and plan in this browser? This cannot be undone.",
-                  )
-                ) {
-                  resetWorkspace();
-                  navigate("field");
-                }
-              }}
-            >
-              <Glyph name="rotate" size={15} />
-            </button>
-          </div>
         </div>
       </header>
 

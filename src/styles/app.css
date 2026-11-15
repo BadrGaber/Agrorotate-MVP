@@ -171,7 +171,7 @@ button {
   position: sticky;
   top: 0;
   z-index: 60;
-  background: rgba(6, 10, 7, 0.82);
+  background: rgba(6, 10, 7, 0.88);
   backdrop-filter: blur(18px) saturate(1.2);
   border-bottom: 1px solid var(--rule);
 }
@@ -179,11 +179,15 @@ button {
 .topbar__inner {
   max-width: 1320px;
   margin: 0 auto;
-  padding: 11px 24px;
+  padding: 10px 24px;
   display: flex;
   align-items: center;
   gap: 20px;
   justify-content: space-between;
+}
+
+.topbar__main {
+  display: contents;
 }
 
 .brand {
@@ -193,6 +197,7 @@ button {
   text-decoration: none;
   color: var(--ink);
   flex-shrink: 0;
+  order: 1;
 }
 
 .brand__mark {
@@ -228,12 +233,13 @@ button {
 .nav {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
   flex-wrap: wrap;
+  order: 2;
 }
 
 .nav__link {
-  padding: 7px 12px;
+  padding: 6px 12px;
   border-radius: 999px;
   font-size: 12.5px;
   font-weight: 600;
@@ -272,10 +278,15 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
+  order: 3;
+  flex-shrink: 0;
 }
 
 .topbar__status {
   color: var(--ink-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .status-dot {
@@ -284,6 +295,7 @@ button {
   border-radius: 999px;
   background: var(--rule-strong);
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .status-dot.is-online {
@@ -305,12 +317,112 @@ button {
   background: rgba(255, 255, 255, 0.02);
   color: var(--ink-faint);
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .icon-btn:hover {
   color: var(--ink);
   border-color: var(--rule-strong);
   background: rgba(255, 255, 255, 0.05);
+}
+
+/* Responsive layout for Tablets & Mobiles */
+@media (max-width: 980px) {
+  .topbar__inner {
+    padding: 7px 14px 8px 14px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .topbar__main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+    order: 1;
+  }
+
+  .brand {
+    order: unset;
+  }
+
+  .brand__mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+  }
+
+  .brand__name {
+    font-size: 16px;
+  }
+
+  .topbar__actions {
+    order: unset;
+    gap: 6px;
+  }
+
+  .nav {
+    order: 2;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 3px 0 2px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav__link {
+    padding: 5px 11px;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+}
+
+/* Mobile optimizations: prevent any action or sound button from disappearing */
+@media (max-width: 680px) {
+  .topbar__status-text {
+    display: none;
+  }
+
+  .topbar__status {
+    padding: 5px 8px;
+    min-height: 28px;
+  }
+
+  .brand__tag {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar__preview-btn .topbar__btn-label {
+    display: none;
+  }
+
+  .topbar__preview-btn {
+    padding: 6px 9px;
+    min-height: 31px;
+  }
+
+  .topbar__inner {
+    padding: 6px 10px 7px 10px;
+    gap: 5px;
+  }
+
+  .nav__link {
+    padding: 4px 10px;
+    font-size: 11.5px;
+  }
 }
 
 .page {
