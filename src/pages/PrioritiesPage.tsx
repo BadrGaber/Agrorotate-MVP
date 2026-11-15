@@ -283,15 +283,16 @@ export function PrioritiesPage({ navigate }: { navigate: (route: RouteKey) => vo
                     <div
                       key={cropId}
                       className="row row--between note"
-                      style={{ padding: "8px 12px" }}
+                      style={{ padding: "8px 12px", gap: 8 }}
                     >
-                      <span>
+                      <span style={{ minWidth: 0, flex: 1, wordBreak: "break-word" }}>
                         <strong>{crop?.name ?? cropId}</strong>
                         <span className="small"> · {reason || "no reason recorded"}</span>
                       </span>
                       <button
                         type="button"
                         className="btn btn--small btn--ghost"
+                        style={{ flexShrink: 0 }}
                         onClick={() => {
                           const next = { ...state.priorities.excluded };
                           delete next[cropId];

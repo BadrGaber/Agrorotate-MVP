@@ -70,6 +70,38 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+img,
+svg,
+video,
+canvas,
+audio,
+iframe {
+  max-width: 100%;
+}
+
+p,
+span,
+a,
+code,
+pre,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+td,
+th,
+label,
+button {
+  overflow-wrap: break-word;
+}
+
+a {
+  word-break: break-word;
+}
+
 button,
 input,
 select,

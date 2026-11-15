@@ -396,11 +396,11 @@ export function MethodPage() {
                 "Every water result names ETo method, window and assumptions.",
                 "Every value shows its source status instead of being guessed.",
               ].map((test) => (
-                <div key={test} className="row" style={{ alignItems: "flex-start", gap: 8 }}>
-                  <span style={{ color: "var(--forest)", marginTop: 2 }}>
+                <div key={test} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                  <span style={{ color: "var(--forest)", marginTop: 2, flexShrink: 0 }}>
                     <Glyph name="check" size={14} />
                   </span>
-                  <span className="small">{test}</span>
+                  <span className="small" style={{ minWidth: 0, flex: 1 }}>{test}</span>
                 </div>
               ))}
             </div>
@@ -444,11 +444,11 @@ export function MethodPage() {
                 "Risk Guardrail: When Risk & pest break is set to 3.5 or higher, the maximum economic return trajectory automatically prunes high-margin crops that introduce severe salinization hazards or root-knot nematode vulnerabilities.",
                 "Opening the rotation board runs this same hybrid for Year 1 (warm first, then cool so the family break sees the first pick) and selects Season 1 so its Best 3 card appears immediately.",
               ].map((line) => (
-                <div key={line} className="row" style={{ alignItems: "flex-start", gap: 8 }}>
-                  <span style={{ color: "var(--forest)", marginTop: 2 }}>
+                <div key={line} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
+                  <span style={{ color: "var(--forest)", marginTop: 2, flexShrink: 0 }}>
                     <Glyph name="check" size={13} />
                   </span>
-                  <span className="small">{line}</span>
+                  <span className="small" style={{ minWidth: 0, flex: 1 }}>{line}</span>
                 </div>
               ))}
             </div>

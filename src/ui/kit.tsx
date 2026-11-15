@@ -63,16 +63,16 @@ export function Card({
     >
       {(title || aside) && (
         <div className="card__head">
-          <div>
+          <div className="card__head-main">
             {title && (
               <h2 className="card__title">
                 {glyph && <Glyph name={glyph} size={17} />}
-                {title}
+                <span>{title}</span>
               </h2>
             )}
             {hint && <p className="card__hint">{hint}</p>}
           </div>
-          {aside && <div className="row">{aside}</div>}
+          {aside && <div className="row card__aside">{aside}</div>}
         </div>
       )}
       {children}
@@ -95,7 +95,7 @@ export function Note({
   return (
     <div className={cls} style={style}>
       <Glyph name={glyph} size={17} className="note__icon" />
-      <div>{children}</div>
+      <div className="note__content">{children}</div>
     </div>
   );
 }

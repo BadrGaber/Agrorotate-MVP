@@ -244,19 +244,21 @@ export function SoilPage({ navigate }: { navigate: (route: RouteKey) => void }) 
                       className="card card--flat"
                       style={{ padding: 16, background: "var(--paper-deep)" }}
                     >
-                      <div className="row row--between" style={{ alignItems: "flex-start" }}>
-                        <div style={{ display: "flex", gap: 8 }}>
-                          <Glyph name={observation.glyph} size={16} />
-                          <div>
-                            <div style={{ fontWeight: 650, fontSize: 13.5, lineHeight: 1.35 }}>
+                      <div className="row row--between" style={{ alignItems: "flex-start", gap: 8 }}>
+                        <div style={{ display: "flex", gap: 8, minWidth: 0, flex: 1 }}>
+                          <span style={{ flexShrink: 0, marginTop: 2, display: "inline-flex" }}>
+                            <Glyph name={observation.glyph} size={16} />
+                          </span>
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <div style={{ fontWeight: 650, fontSize: 13.5, lineHeight: 1.35, wordBreak: "break-word" }}>
                               {observation.question}
                             </div>
-                            <div className="hint" style={{ marginTop: 3 }}>
+                            <div className="hint" style={{ marginTop: 3, wordBreak: "break-word" }}>
                               {observation.hint}
                             </div>
                           </div>
                         </div>
-                        <span className="mono" style={{ color: "var(--ink-faint)", flexShrink: 0 }}>
+                        <span className="mono" style={{ color: "var(--ink-faint)", flexShrink: 0, marginLeft: "auto" }}>
                           §{observation.section}
                         </span>
                       </div>

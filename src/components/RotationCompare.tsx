@@ -141,7 +141,7 @@ export function RotationCompare({
         </span>
       </div>
 
-      <div className="compare__grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}>
+      <div className="compare__grid">
         {solutions.map((solution) => {
           const slotCropIds = solution.slots.map((s) => s.cropId);
           const metrics = rotationMetrics(state, slotCropIds);

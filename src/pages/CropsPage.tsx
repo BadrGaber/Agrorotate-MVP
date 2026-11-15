@@ -106,7 +106,7 @@ export function CropsPage({ navigate }: { navigate: (route: RouteKey) => void })
         <Stat value={CROP_FAMILIES.length} label="Botanical families" foot="used for rotation breaks" />
       </div>
 
-      <div className="split" style={{ gridTemplateColumns: "minmax(0, 1.45fr) minmax(340px, 1fr)" }}>
+      <div className="split split--crops">
         <div className="stack">
           <Card
             glyph="compass"
@@ -240,7 +240,7 @@ export function CropsPage({ navigate }: { navigate: (route: RouteKey) => void })
           )}
         </div>
 
-        <div className="stack" style={{ position: "sticky", top: 86 }}>
+        <div className="stack crops-detail-stack">
           {selected && selectedEvidence ? (
             <>
               <Card

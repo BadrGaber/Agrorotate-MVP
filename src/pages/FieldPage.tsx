@@ -386,7 +386,7 @@ export function FieldPage({
           <Card flat>
             <div className="row" style={{ gap: 10 }}>
               <SproutLoader size="sm" label="Growing the field context" />
-              <div>
+              <div style={{ minWidth: 0, flex: 1 }}>
                 <strong>Loading NASA POWER for this field…</strong>
                 <div className="small">
                   Daily T2M_MAX, T2M_MIN, RH2M, WS2M, all-sky shortwave and
