@@ -70,15 +70,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-img,
-svg,
-video,
-canvas,
-audio,
-iframe {
-  max-width: 100%;
-}
-
 p,
 span,
 a,

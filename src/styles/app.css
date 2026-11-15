@@ -2249,6 +2249,19 @@ input[type="range"] {
   outline: none;
 }
 
+/* Ensure Leaflet and Geoman vector and tile layers are completely unconstrained */
+.leaflet-container svg,
+.leaflet-container img,
+.leaflet-container canvas,
+.leaflet-pane svg,
+.leaflet-pane img,
+.leaflet-pane canvas,
+.leaflet-overlay-pane svg,
+.leaflet-layer svg {
+  max-width: none !important;
+  max-height: none !important;
+}
+
 /* WMS tiles meet at their own edges; drop borders and pin the pane background
    so no light seams or dark lines show between 256 px request tiles. */
 .field-map .leaflet-tile {
