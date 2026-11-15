@@ -1,0 +1,551 @@
+﻿site_id,latitude,longitude,country,sampling_frame,grid_reference_year,grid_resolution_arcmin,approx_cell_km_at_equator,mapspam_spatial_layout,mapspam_cell_index,mapspam_index_y,mapspam_index_x,country_iso3,country_assignment_source,mapspam_crop_count,mapspam_dominant_crop_code,mapspam_dominant_crop
+AGR_0001,-21.791666585363615,-43.12500009954542,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1341,1642,BRA,Natural_Earth_110m_admin0,14.0,soyb,Soybean
+AGR_0002,6.6250000606363955,124.37499977863646,Philippines,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1000,3652,PHL,Natural_Earth_110m_admin0,7.0,rice,Rice
+AGR_0003,13.708333388818204,-13.125000121363598,Senegal,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,915,2002,SEN,Natural_Earth_110m_admin0,18.0,pmil,Pearl Millet
+AGR_0004,44.45833336645458,88.95833313772735,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,546,3227,CHN,Natural_Earth_110m_admin0,2.0,temf,Temperate Fruit
+AGR_0005,65.62500001772732,44.45833317009095,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,292,2693,RUS,Natural_Earth_110m_admin0,2.0,temf,Temperate Fruit
+AGR_0006,-19.54166658699998,170.20833307863646,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1314,4202,,unresolved_no_polygon_match,2.0,cnut,Coconut
+AGR_0007,44.208333366636396,132.62499977263641,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,549,3751,RUS,Natural_Earth_110m_admin0,15.0,soyb,Soybean
+AGR_0008,35.79166670609094,110.04166645572732,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,650,3480,CHN,Natural_Earth_110m_admin0,21.0,maiz,Maize
+AGR_0009,50.37500002881822,24.20833318481823,Ukraine,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,475,2450,UKR,Natural_Earth_110m_admin0,20.0,whea,Wheat
+AGR_0010,13.458333389000032,46.291666502090976,Yemen,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,918,2715,YEM,Natural_Earth_110m_admin0,1.0,citr,Citrus
+AGR_0011,47.20833336445458,-2.125000129363599,France,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,513,2134,FRA,Natural_Earth_110m_admin0,13.0,whea,Wheat
+AGR_0012,18.95833338500003,94.20833313390918,Myanmar,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,852,3290,MMR,Natural_Earth_110m_admin0,20.0,rice,Rice
+AGR_0013,32.70833337500003,63.791666489363706,Afghanistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,687,2925,AFG,Natural_Earth_110m_admin0,2.0,barl,Barley
+AGR_0014,30.708333376454576,27.87499984881822,Egypt,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,711,2494,EGY,Natural_Earth_110m_admin0,1.0,rice,Rice
+AGR_0015,2.791666730090938,30.70833318009096,Democratic Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1046,2528,COD,Natural_Earth_110m_admin0,34.0,plnt,Plantain
+AGR_0016,-31.95833324463635,-71.29166674572724,Chile,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1463,1304,CHL,Natural_Earth_110m_admin0,3.0,rest,Rest of Crops
+AGR_0017,-23.291666584272704,146.79166642900006,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1359,3921,AUS,Natural_Earth_110m_admin0,7.0,bean,Bean
+AGR_0018,-30.374999912454527,30.291666513727336,South Africa,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1444,2523,ZAF,Natural_Earth_110m_admin0,18.0,sugc,Sugarcane
+AGR_0019,8.958333392272749,-68.12500008136361,Venezuela,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,972,1342,VEN,Natural_Earth_110m_admin0,19.0,maiz,Maize
+AGR_0020,-20.791666586090898,-55.20833342409088,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1329,1497,BRA,Natural_Earth_110m_admin0,8.0,soyb,Soybean
+AGR_0021,13.208333389181846,-59.5416667542727,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,921,1445,,unresolved_no_polygon_match,16.0,sugc,Sugarcane
+AGR_0022,32.2916667086364,130.7083331073637,Japan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,692,3728,JPN,Natural_Earth_110m_admin0,17.0,vege,Other Vegetables
+AGR_0023,-21.45833325227271,-54.875000090999976,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1337,1501,BRA,Natural_Earth_110m_admin0,11.0,soyb,Soybean
+AGR_0024,41.458333368636396,-83.9583334031818,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,582,1152,USA,Natural_Earth_110m_admin0,15.0,soyb,Soybean
+AGR_0025,50.95833336172731,-99.62500005845453,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,468,964,CAN,Natural_Earth_110m_admin0,4.0,rape,Rapeseed
+AGR_0026,-12.041666592454519,-60.29166675372724,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1224,1436,BRA,Natural_Earth_110m_admin0,3.0,soyb,Soybean
+AGR_0027,7.708333393181846,81.04166647681822,Sri Lanka,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,987,3132,LKA,Natural_Earth_110m_admin0,7.0,rice,Rice
+AGR_0028,35.958333372636396,51.95833316463643,Iran,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,648,2783,IRN,Natural_Earth_110m_admin0,11.0,whea,Wheat
+AGR_0029,36.95833337190912,59.62499982572734,Iran,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,636,2875,IRN,Natural_Earth_110m_admin0,4.0,barl,Barley
+AGR_0030,-22.791666584636346,35.458333176636415,Mozambique,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1353,2585,MOZ,Natural_Earth_110m_admin0,26.0,maiz,Maize
+AGR_0031,62.95833335300004,77.04166647972735,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,324,3084,RUS,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0032,37.875000037909125,67.70833315318188,Uzbekistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,625,2972,UZB,Natural_Earth_110m_admin0,15.0,temf,Temperate Fruit
+AGR_0033,53.29166669336367,-4.458333460999967,United Kingdom,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,440,2106,GBR,Natural_Earth_110m_admin0,10.0,opul,Other Pulses
+AGR_0034,6.458333394090928,125.54166644445465,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1002,3666,,unresolved_no_polygon_match,5.0,rice,Rice
+AGR_0035,13.458333389000032,36.291666509363694,Ethiopia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,918,2595,ETH,Natural_Earth_110m_admin0,16.0,sorg,Sorghum
+AGR_0036,14.958333387909121,-16.70833345209087,Senegal,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,900,1959,SEN,Natural_Earth_110m_admin0,18.0,cass,Cassava
+AGR_0037,56.54166669100004,66.04166648772733,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,401,2952,RUS,Natural_Earth_110m_admin0,14.0,whea,Wheat
+AGR_0038,23.125000048636394,-99.5416667251818,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,802,965,MEX,Natural_Earth_110m_admin0,1.0,sorg,Sorghum
+AGR_0039,0.04166673209093119,-80.04166673936362,Ecuador,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1079,1199,ECU,Natural_Earth_110m_admin0,25.0,oilp,Oil Palm
+AGR_0040,-7.791666595545436,-60.95833341990907,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1173,1428,BRA,Natural_Earth_110m_admin0,6.0,bana,Banana
+AGR_0041,19.125000051545484,110.1249997890001,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,850,3481,CHN,Natural_Earth_110m_admin0,23.0,rubb,Rubber
+AGR_0042,34.87500004009094,-78.54166674045452,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,661,1217,USA,Natural_Earth_110m_admin0,20.0,soyb,Soybean
+AGR_0043,-6.874999929545439,-34.95833343881816,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1162,1740,BRA,Natural_Earth_110m_admin0,11.0,maiz,Maize
+AGR_0044,9.541666725181841,76.6249998133637,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,965,3079,IND,Natural_Earth_110m_admin0,18.0,rubb,Rubber
+AGR_0045,44.45833336645458,-109.12500005154544,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,546,850,USA,Natural_Earth_110m_admin0,7.0,temf,Temperate Fruit
+AGR_0046,17.458333386090942,81.87499980954553,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,870,3142,IND,Natural_Earth_110m_admin0,14.0,cnut,Coconut
+AGR_0047,-8.458333261727248,122.62499977990919,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1181,3631,IDN,Natural_Earth_110m_admin0,13.0,cnut,Coconut
+AGR_0048,47.70833336409095,-57.54166675572725,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,507,1469,CAN,Natural_Earth_110m_admin0,2.0,pota,Potato
+AGR_0049,27.20833337900003,-81.29166673845452,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,753,1184,USA,Natural_Earth_110m_admin0,19.0,sugc,Sugarcane
+AGR_0050,19.791666717727296,105.29166645918187,Vietnam,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,842,3423,VNM,Natural_Earth_110m_admin0,1.0,rubb,Rubber
+AGR_0051,55.2083333586364,49.20833316663641,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,417,2750,RUS,Natural_Earth_110m_admin0,22.0,whea,Wheat
+AGR_0052,-16.5416665891818,44.62499983663642,Madagascar,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1278,2695,MDG,Natural_Earth_110m_admin0,20.0,rice,Rice
+AGR_0053,7.708333393181846,35.87499984300004,Ethiopia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,987,2590,ETH,Natural_Earth_110m_admin0,16.0,ocer,Other Cereals
+AGR_0054,56.1250000246364,52.62499983081824,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,406,2791,RUS,Natural_Earth_110m_admin0,15.0,barl,Barley
+AGR_0055,-1.9583332664545168,-55.958333423545426,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1103,1488,BRA,Natural_Earth_110m_admin0,4.0,cass,Cassava
+AGR_0056,1.5416667310000207,12.54166652663642,Gabon,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1061,2310,GAB,Natural_Earth_110m_admin0,7.0,vege,Other Vegetables
+AGR_0057,20.45833338390912,-90.29166673190907,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,834,1076,MEX,Natural_Earth_110m_admin0,5.0,maiz,Maize
+AGR_0058,16.791666719909117,48.29166650063641,Yemen,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,878,2739,YEM,Natural_Earth_110m_admin0,1.0,cowp,Cowpea
+AGR_0059,26.291666713000026,59.541666492454596,Iran,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,764,2874,IRN,Natural_Earth_110m_admin0,2.0,whea,Wheat
+AGR_0060,21.708333383000024,-77.79166674099997,Cuba,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,819,1226,CUB,Natural_Earth_110m_admin0,24.0,sugc,Sugarcane
+AGR_0061,63.87500001900004,-144.7916666922727,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,313,422,USA,Natural_Earth_110m_admin0,8.0,barl,Barley
+AGR_0062,34.87500004009094,126.95833311009099,South Korea,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,661,3683,KOR,Natural_Earth_110m_admin0,18.0,barl,Barley
+AGR_0063,20.041666717545482,-13.208333454636318,Mauritania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,839,2001,MRT,Natural_Earth_110m_admin0,2.0,sorg,Sorghum
+AGR_0064,64.87500001827277,-22.45833344790904,Iceland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,301,1890,ISL,Natural_Earth_110m_admin0,3.0,barl,Barley
+AGR_0065,68.29166668245459,124.79166644500006,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,260,3657,RUS,Natural_Earth_110m_admin0,9.0,ocer,Other Cereals
+AGR_0066,44.95833336609094,-64.20833341754543,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,540,1389,CAN,Natural_Earth_110m_admin0,11.0,temf,Temperate Fruit
+AGR_0067,-15.124999923545431,50.29166649918187,Madagascar,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1261,2763,MDG,Natural_Earth_110m_admin0,25.0,rest,Rest of Crops
+AGR_0068,24.95833338063639,101.95833312827281,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,780,3383,CHN,Natural_Earth_110m_admin0,32.0,maiz,Maize
+AGR_0069,9.95833339154548,106.54166645827277,Vietnam,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,960,3438,VNM,Natural_Earth_110m_admin0,21.0,vege,Other Vegetables
+AGR_0070,51.375000028090945,-104.87500005463635,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,463,901,CAN,Natural_Earth_110m_admin0,11.0,rape,Rapeseed
+AGR_0071,-34.04166657645453,20.291666521000053,South Africa,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1488,2403,ZAF,Natural_Earth_110m_admin0,21.0,whea,Wheat
+AGR_0072,15.708333387363666,21.95833318645458,Chad,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,891,2423,TCD,Natural_Earth_110m_admin0,2.0,opul,Other Pulses
+AGR_0073,67.79166668281823,15.041666524818226,Norway,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,266,2340,NOR,Natural_Earth_110m_admin0,1.0,barl,Barley
+AGR_0074,22.875000048818208,28.54166651500006,Egypt,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,805,2502,EGY,Natural_Earth_110m_admin0,10.0,whea,Wheat
+AGR_0075,56.29166669118186,64.3749998222728,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,404,2932,RUS,Natural_Earth_110m_admin0,15.0,whea,Wheat
+AGR_0076,20.45833338390912,105.70833312554552,Vietnam,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,834,3428,VNM,Natural_Earth_110m_admin0,20.0,maiz,Maize
+AGR_0077,-31.041666578636352,-54.875000090999976,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1452,1501,BRA,Natural_Earth_110m_admin0,10.0,soyb,Soybean
+AGR_0078,-28.62499991372725,17.54166652300006,Namibia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1423,2370,NAM,Natural_Earth_110m_admin0,2.0,whea,Wheat
+AGR_0079,19.45833338463639,-103.37500005572726,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,846,919,MEX,Natural_Earth_110m_admin0,8.0,maiz,Maize
+AGR_0080,-41.20833323790909,144.79166643045463,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1574,3897,AUS,Natural_Earth_110m_admin0,4.0,rest,Rest of Crops
+AGR_0081,1.1250000646363816,109.62499978936373,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1066,3475,IDN,Natural_Earth_110m_admin0,16.0,oilp,Oil Palm
+AGR_0082,-17.62499992172725,177.62499973990916,Fiji,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1291,4291,FJI,Natural_Earth_110m_admin0,14.0,sugc,Sugarcane
+AGR_0083,59.70833335536368,151.54166642554551,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,363,3978,RUS,Natural_Earth_110m_admin0,3.0,pota,Potato
+AGR_0084,17.041666719727303,51.70833316481824,Yemen,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,875,2780,YEM,Natural_Earth_110m_admin0,1.0,trof,Other Tropical Fruit
+AGR_0085,46.125000031909124,137.7083331022728,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,526,3812,RUS,Natural_Earth_110m_admin0,5.0,ocer,Other Cereals
+AGR_0086,54.04166669281822,105.87499979209096,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,431,3430,RUS,Natural_Earth_110m_admin0,12.0,whea,Wheat
+AGR_0087,15.125000054454574,14.374999858636414,Chad,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,898,2332,TCD,Natural_Earth_110m_admin0,1.0,opul,Other Pulses
+AGR_0088,10.291666724636386,9.291666529000054,Nigeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,956,2271,NGA,Natural_Earth_110m_admin0,20.0,grou,Groundnut
+AGR_0089,42.87500003427276,-112.9583333820909,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,565,804,USA,Natural_Earth_110m_admin0,19.0,whea,Wheat
+AGR_0090,35.125000039909125,-119.87500004372725,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,658,721,USA,Natural_Earth_110m_admin0,19.0,temf,Temperate Fruit
+AGR_0091,40.45833336936367,96.62499979881827,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,594,3319,CHN,Natural_Earth_110m_admin0,19.0,whea,Wheat
+AGR_0092,53.12500002681822,-118.37500004481817,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,442,739,CAN,Natural_Earth_110m_admin0,1.0,lent,Lentil
+AGR_0093,-18.87499992081817,145.9583330962728,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1306,3911,AUS,Natural_Earth_110m_admin0,1.0,rape,Rapeseed
+AGR_0094,66.62500001700005,47.958333167545504,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,280,2735,RUS,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0095,3.7083333960909357,117.04166645063643,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1035,3564,IDN,Natural_Earth_110m_admin0,20.0,oilp,Oil Palm
+AGR_0096,30.20833337681821,52.04166649790915,Iran,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,717,2784,IRN,Natural_Earth_110m_admin0,23.0,whea,Wheat
+AGR_0097,28.541666711363668,70.62499981772734,Pakistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,737,3007,PAK,Natural_Earth_110m_admin0,24.0,whea,Wheat
+AGR_0098,-13.958333257727247,-69.70833341354543,Peru,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1247,1323,PER,Natural_Earth_110m_admin0,6.0,coff,Arabica Coffee
+AGR_0099,-1.1249999337272527,9.958333195181865,Gabon,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1093,2279,GAB,Natural_Earth_110m_admin0,4.0,swpo,Sweet Potato
+AGR_0100,9.041666725545483,44.874999836454606,Somaliland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,971,2698,SOL,Natural_Earth_110m_admin0,2.0,sorg,Sorghum
+AGR_0101,-32.208333244454536,-64.70833341718179,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1466,1383,ARG,Natural_Earth_110m_admin0,1.0,trof,Other Tropical Fruit
+AGR_0102,29.041666711000033,15.541666524454598,Libya,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,731,2346,LBY,Natural_Earth_110m_admin0,2.0,rest,Rest of Crops
+AGR_0103,41.37500003536367,31.708333179363677,Turkey,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,583,2540,TUR,Natural_Earth_110m_admin0,18.0,citr,Citrus
+AGR_0104,15.541666720818213,-16.375000118999964,Senegal,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,893,1963,SEN,Natural_Earth_110m_admin0,13.0,cowp,Cowpea
+AGR_0105,39.04166670372731,-74.87500007645453,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,611,1261,USA,Natural_Earth_110m_admin0,12.0,maiz,Maize
+AGR_0106,-34.04166657645453,146.87499976227284,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1488,3922,AUS,Natural_Earth_110m_admin0,18.0,whea,Wheat
+AGR_0107,47.791666697363674,-68.62500008099997,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,506,1336,CAN,Natural_Earth_110m_admin0,10.0,ocer,Other Cereals
+AGR_0108,-21.541666585545443,165.458333082091,New Caledonia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1338,4145,NCL,Natural_Earth_110m_admin0,14.0,vege,Other Vegetables
+AGR_0109,38.708333370636396,70.45833315118188,Tajikistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,615,3005,TJK,Natural_Earth_110m_admin0,4.0,temf,Temperate Fruit
+AGR_0110,3.208333396454563,-67.95833341481816,Colombia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1041,1344,COL,Natural_Earth_110m_admin0,2.0,cass,Cassava
+AGR_0111,42.125000034818214,111.54166645463644,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,574,3498,CHN,Natural_Earth_110m_admin0,14.0,bean,Bean
+AGR_0112,9.125000058818202,-7.12500012572724,Ivory Coast,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,970,2074,CIV,Natural_Earth_110m_admin0,30.0,yams,Yams
+AGR_0113,-25.45833324936362,44.958333169727325,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1385,2699,,unresolved_no_polygon_match,22.0,swpo,Sweet Potato
+AGR_0114,20.125000050818215,-15.12500011990906,Mauritania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,838,1978,MRT,Natural_Earth_110m_admin0,1.0,sorg,Sorghum
+AGR_0115,-21.45833325227271,33.70833317790914,Mozambique,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1337,2564,MOZ,Natural_Earth_110m_admin0,9.0,whea,Wheat
+AGR_0116,43.04166670081822,119.20833311572736,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,563,3590,CHN,Natural_Earth_110m_admin0,23.0,maiz,Maize
+AGR_0117,49.458333362818216,34.20833317754551,Ukraine,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,486,2570,UKR,Natural_Earth_110m_admin0,23.0,sunf,Sunflower
+AGR_0118,-10.291666593727257,149.95833309336373,Papua New Guinea,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1203,3959,PNG,Natural_Earth_110m_admin0,21.0,sorg,Sorghum
+AGR_0119,62.62500001990913,85.04166647390915,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,328,3180,RUS,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0120,-50.291666564636344,-69.87500008009089,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1683,1321,ARG,Natural_Earth_110m_admin0,1.0,temf,Temperate Fruit
+AGR_0121,-0.6249999340908801,117.37499978372736,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1087,3568,IDN,Natural_Earth_110m_admin0,18.0,cnut,Coconut
+AGR_0122,-11.9583332591818,-54.12500009154543,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1223,1510,BRA,Natural_Earth_110m_admin0,6.0,soyb,Soybean
+AGR_0123,64.54166668518187,67.7916664864546,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,305,2973,RUS,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0124,1.1250000646363816,110.1249997890001,Malaysia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1066,3481,MYS,Natural_Earth_110m_admin0,18.0,oilp,Oil Palm
+AGR_0125,48.208333363727306,-73.70833341063634,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,501,1275,CAN,Natural_Earth_110m_admin0,5.0,ocer,Other Cereals
+AGR_0126,47.54166669754549,-83.20833340372725,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,509,1161,CAN,Natural_Earth_110m_admin0,2.0,barl,Barley
+AGR_0127,38.87500003718185,87.70833313863645,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,613,3212,CHN,Natural_Earth_110m_admin0,3.0,temf,Temperate Fruit
+AGR_0128,50.87500002845458,3.79166653300004,Belgium,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,469,2205,BEL,Natural_Earth_110m_admin0,11.0,whea,Wheat
+AGR_0129,52.95833336027276,74.62499981481824,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,444,3055,KAZ,Natural_Earth_110m_admin0,11.0,whea,Wheat
+AGR_0130,-24.208333250272716,24.79166651772732,Botswana,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1370,2457,BWA,Natural_Earth_110m_admin0,13.0,maiz,Maize
+AGR_0131,5.375000061545478,-73.79166674390906,Colombia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1015,1274,COL,Natural_Earth_110m_admin0,12.0,coff,Arabica Coffee
+AGR_0132,1.4583333977273014,-60.54166675354543,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1062,1433,BRA,Natural_Earth_110m_admin0,1.0,citr,Citrus
+AGR_0133,-15.208333256818165,49.7916664995455,Madagascar,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1262,2757,MDG,Natural_Earth_110m_admin0,21.0,rest,Rest of Crops
+AGR_0134,25.625000046818215,110.20833312227282,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,772,3482,CHN,Natural_Earth_110m_admin0,29.0,vege,Other Vegetables
+AGR_0135,31.958333375545486,21.041666520454584,Libya,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,696,2412,LBY,Natural_Earth_110m_admin0,7.0,rest,Rest of Crops
+AGR_0136,45.1250000326364,-89.29166673263634,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,538,1088,USA,Natural_Earth_110m_admin0,15.0,ocer,Other Cereals
+AGR_0137,62.79166668645458,129.62499977481824,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,326,3715,RUS,Natural_Earth_110m_admin0,9.0,ocer,Other Cereals
+AGR_0138,19.125000051545484,98.37499979754554,Thailand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,850,3340,THA,Natural_Earth_110m_admin0,9.0,cass,Cassava
+AGR_0139,18.291666718818206,-76.87500007499997,Jamaica,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,860,1237,JAM,Natural_Earth_110m_admin0,25.0,cnut,Coconut
+AGR_0140,27.375000045545484,-105.62500005409089,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,751,892,MEX,Natural_Earth_110m_admin0,1.0,bean,Bean
+AGR_0141,-4.708333264454524,141.04166643318192,Papua New Guinea,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1136,3852,PNG,Natural_Earth_110m_admin0,15.0,swpo,Sweet Potato
+AGR_0142,-11.791666592636346,32.87499984518186,Zambia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1221,2554,ZMB,Natural_Earth_110m_admin0,12.0,maiz,Maize
+AGR_0143,-18.124999921363624,14.374999858636414,Namibia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1297,2332,NAM,Natural_Earth_110m_admin0,8.0,orts,Other Roots
+AGR_0144,22.37500004918185,33.12499984500005,Egypt,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,811,2557,EGY,Natural_Earth_110m_admin0,8.0,sugb,Sugarbeet
+AGR_0145,39.375000036818214,105.87499979209096,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,607,3430,CHN,Natural_Earth_110m_admin0,2.0,sunf,Sunflower
+AGR_0146,10.958333390818211,99.458333130091,Thailand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,948,3353,THA,Natural_Earth_110m_admin0,4.0,oilp,Oil Palm
+AGR_0147,62.541666686636404,84.79166647409099,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,329,3177,RUS,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0148,-5.374999930636349,104.87499979281827,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1144,3418,IDN,Natural_Earth_110m_admin0,15.0,rice,Rice
+AGR_0149,51.791666694454584,32.70833317863642,Ukraine,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,458,2552,UKR,Natural_Earth_110m_admin0,22.0,whea,Wheat
+AGR_0150,0.45833339845457033,21.624999853363676,Democratic Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1074,2419,COD,Natural_Earth_110m_admin0,2.0,maiz,Maize
+AGR_0151,-21.208333252454523,164.8749997491819,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1334,4138,,unresolved_no_polygon_match,13.0,cnut,Coconut
+AGR_0152,19.87500005100003,-13.541666787727223,Mauritania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,841,1997,MRT,Natural_Earth_110m_admin0,2.0,sorg,Sorghum
+AGR_0153,51.29166669481822,77.95833314572732,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,464,3095,KAZ,Natural_Earth_110m_admin0,11.0,barl,Barley
+AGR_0154,57.79166669009095,-105.9583333871818,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,386,888,CAN,Natural_Earth_110m_admin0,2.0,opul,Other Pulses
+AGR_0155,-32.04166657790908,-55.54166675718179,Uruguay,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1464,1493,URY,Natural_Earth_110m_admin0,20.0,soyb,Soybean
+AGR_0156,25.208333380454576,108.79166645663642,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,777,3465,CHN,Natural_Earth_110m_admin0,25.0,rice,Rice
+AGR_0157,47.29166669772731,118.70833311609098,Mongolia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,512,3584,MNG,Natural_Earth_110m_admin0,8.0,whea,Wheat
+AGR_0158,31.20833337609094,45.12499983627279,Iraq,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,705,2701,IRQ,Natural_Earth_110m_admin0,7.0,whea,Wheat
+AGR_0159,18.875000051727298,-99.62500005845453,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,853,964,MEX,Natural_Earth_110m_admin0,21.0,maiz,Maize
+AGR_0160,-14.54166659063634,-47.79166676281815,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1254,1586,BRA,Natural_Earth_110m_admin0,22.0,sorg,Sorghum
+AGR_0161,15.125000054454574,-88.45833339990907,Honduras,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,898,1098,HND,Natural_Earth_110m_admin0,22.0,coff,Arabica Coffee
+AGR_0162,31.291666709363668,-111.37500004990908,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,704,823,MEX,Natural_Earth_110m_admin0,1.0,maiz,Maize
+AGR_0163,47.70833336409095,66.29166648754551,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,507,2955,KAZ,Natural_Earth_110m_admin0,2.0,whea,Wheat
+AGR_0164,15.708333387363666,25.374999850636414,Sudan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,891,2464,SDN,Natural_Earth_110m_admin0,9.0,sesa,Sesame Seed
+AGR_0165,37.875000037909125,-106.37500005354543,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,625,883,USA,Natural_Earth_110m_admin0,3.0,ocer,Other Cereals
+AGR_0166,-5.041666597545429,139.20833310118192,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1140,3830,IDN,Natural_Earth_110m_admin0,10.0,oilp,Oil Palm
+AGR_0167,-19.208333253909075,-52.87500009245451,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1310,1525,BRA,Natural_Earth_110m_admin0,9.0,soyb,Soybean
+AGR_0168,48.875000029909124,61.12499982463643,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,493,2893,KAZ,Natural_Earth_110m_admin0,1.0,trof,Other Tropical Fruit
+AGR_0169,47.54166669754549,-96.45833339409089,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,509,1002,USA,Natural_Earth_110m_admin0,19.0,soyb,Soybean
+AGR_0170,-25.87499991572726,151.87499975863645,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1390,3982,AUS,Natural_Earth_110m_admin0,5.0,bean,Bean
+AGR_0171,-6.958333262818158,-58.541666754999966,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1163,1457,BRA,Natural_Earth_110m_admin0,3.0,cass,Cassava
+AGR_0172,28.9583333777273,120.37499978154554,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,732,3604,CHN,Natural_Earth_110m_admin0,27.0,rest,Rest of Crops
+AGR_0173,34.54166670700003,-100.87500005754544,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,665,949,USA,Natural_Earth_110m_admin0,17.0,cott,Cotton
+AGR_0174,46.708333364818216,-103.54166672227271,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,519,917,USA,Natural_Earth_110m_admin0,16.0,soyb,Soybean
+AGR_0175,-27.12499991481816,-54.541666757909056,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1405,1505,ARG,Natural_Earth_110m_admin0,21.0,rest,Rest of Crops
+AGR_0176,60.208333355000036,12.791666526454605,Sweden,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,357,2313,SWE,Natural_Earth_110m_admin0,8.0,whea,Wheat
+AGR_0177,-22.9583332511818,144.12499976427281,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1355,3889,AUS,Natural_Earth_110m_admin0,8.0,whea,Wheat
+AGR_0178,47.8750000306364,-76.95833340827271,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,505,1236,CAN,Natural_Earth_110m_admin0,1.0,ocer,Other Cereals
+AGR_0179,35.125000039909125,60.958333158090966,Iran,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,658,2891,IRN,Natural_Earth_110m_admin0,24.0,whea,Wheat
+AGR_0180,56.875000024090944,22.874999852454607,Latvia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,397,2434,LVA,Natural_Earth_110m_admin0,11.0,whea,Wheat
+AGR_0181,26.291666713000026,64.62499982209096,Pakistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,764,2935,PAK,Natural_Earth_110m_admin0,5.0,whea,Wheat
+AGR_0182,38.95833337045458,-111.95833338281817,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,612,816,USA,Natural_Earth_110m_admin0,6.0,temf,Temperate Fruit
+AGR_0183,38.87500003718185,38.541666507727314,Turkey,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,613,2622,TUR,Natural_Earth_110m_admin0,16.0,whea,Wheat
+AGR_0184,-1.0416666004545192,-47.041666763363594,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1092,1595,BRA,Natural_Earth_110m_admin0,13.0,cass,Cassava
+AGR_0185,5.2916667282727445,116.12499978463646,Malaysia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1016,3553,MYS,Natural_Earth_110m_admin0,11.0,oilp,Oil Palm
+AGR_0186,27.375000045545484,128.62499977554555,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,751,3703,,unresolved_no_polygon_match,1.0,rice,Rice
+AGR_0187,-2.958333265727248,-68.12500008136361,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1115,1342,BRA,Natural_Earth_110m_admin0,6.0,cass,Cassava
+AGR_0188,57.70833335681822,-98.12500005954544,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,387,982,CAN,Natural_Earth_110m_admin0,1.0,opul,Other Pulses
+AGR_0189,47.04166669790913,5.791666531545502,France,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,515,2229,FRA,Natural_Earth_110m_admin0,15.0,whea,Wheat
+AGR_0190,9.708333391727294,-85.04166673572725,Costa Rica,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,963,1139,CRI,Natural_Earth_110m_admin0,2.0,maiz,Maize
+AGR_0191,21.875000049545477,-6.125000126454495,Mauritania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,817,2086,MRT,Natural_Earth_110m_admin0,1.0,citr,Citrus
+AGR_0192,-7.458333262454531,33.374999844818234,United Republic of Tanzania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1169,2560,TZA,Natural_Earth_110m_admin0,30.0,sunf,Sunflower
+AGR_0193,15.625000054090933,74.95833314790914,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,892,3059,IND,Natural_Earth_110m_admin0,21.0,chic,Chickpea
+AGR_0194,15.125000054454574,4.208333199363693,Niger,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,898,2210,NER,Natural_Earth_110m_admin0,7.0,pmil,Pearl Millet
+AGR_0195,1.375000064454568,-49.875000094636334,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1063,1561,,unresolved_no_polygon_match,1.0,citr,Citrus
+AGR_0196,21.625000049727305,39.62499984027278,Saudi Arabia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,820,2635,SAU,Natural_Earth_110m_admin0,7.0,citr,Citrus
+AGR_0197,-14.45833325736362,40.20833317318187,Mozambique,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1253,2642,MOZ,Natural_Earth_110m_admin0,25.0,maiz,Maize
+AGR_0198,41.29166670209094,69.79166648500006,Uzbekistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,584,2997,UZB,Natural_Earth_110m_admin0,15.0,temf,Temperate Fruit
+AGR_0199,51.375000028090945,67.12499982027279,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,463,2965,KAZ,Natural_Earth_110m_admin0,16.0,whea,Wheat
+AGR_0200,1.375000064454568,-59.79166675409088,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1063,1442,BRA,Natural_Earth_110m_admin0,1.0,citr,Citrus
+AGR_0201,-28.54166658045453,126.20833311063646,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1422,3674,AUS,Natural_Earth_110m_admin0,2.0,barl,Barley
+AGR_0202,-1.0416666004545192,24.12499985154551,Democratic Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1092,2449,COD,Natural_Earth_110m_admin0,3.0,grou,Groundnut
+AGR_0203,-45.37499990154545,170.6249997450001,New Zealand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1624,4207,NZL,Natural_Earth_110m_admin0,7.0,barl,Barley
+AGR_0204,-7.291666595909064,108.54166645681826,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1167,3462,IDN,Natural_Earth_110m_admin0,25.0,rice,Rice
+AGR_0205,27.041666712454578,1.0416665350000471,Algeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,755,2172,DZA,Natural_Earth_110m_admin0,14.0,trof,Other Tropical Fruit
+AGR_0206,5.208333395000025,101.79166646172732,Malaysia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1017,3381,MYS,Natural_Earth_110m_admin0,9.0,ooil,Other Oil Crops
+AGR_0207,-12.62499992536361,141.95833309918189,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1231,3863,AUS,Natural_Earth_110m_admin0,1.0,swpo,Sweet Potato
+AGR_0208,26.62500004609094,54.458333162818235,Iran,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,760,2813,IRN,Natural_Earth_110m_admin0,1.0,whea,Wheat
+AGR_0209,66.45833335045458,14.041666525545509,Norway,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,282,2328,NOR,Natural_Earth_110m_admin0,1.0,barl,Barley
+AGR_0210,15.708333387363666,-84.37500006954544,Honduras,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,891,1147,HND,Natural_Earth_110m_admin0,18.0,oilp,Oil Palm
+AGR_0211,-14.04166659099998,49.54166649972734,Madagascar,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1248,2754,MDG,Natural_Earth_110m_admin0,25.0,rest,Rest of Crops
+AGR_0212,60.7083333546364,4.958333198818224,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,351,2219,,unresolved_no_polygon_match,5.0,whea,Wheat
+AGR_0213,57.79166669009095,114.04166645281825,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,386,3528,RUS,Natural_Earth_110m_admin0,7.0,chic,Chickpea
+AGR_0214,4.208333395727294,-73.45833341081816,Colombia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1029,1278,COL,Natural_Earth_110m_admin0,15.0,rice,Rice
+AGR_0215,30.458333376636396,31.041666513181866,Egypt,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,714,2532,EGY,Natural_Earth_110m_admin0,30.0,whea,Wheat
+AGR_0216,49.041666696454584,-107.62500005263635,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,491,868,CAN,Natural_Earth_110m_admin0,4.0,lent,Lentil
+AGR_0217,20.041666717545482,-72.79166674463634,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,839,1286,,unresolved_no_polygon_match,13.0,maiz,Maize
+AGR_0218,31.125000042818215,-4.458333460999967,Morocco,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,706,2106,MAR,Natural_Earth_110m_admin0,24.0,whea,Wheat
+AGR_0219,-2.0416665997272503,102.87499979427278,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1104,3394,IDN,Natural_Earth_110m_admin0,17.0,oilp,Oil Palm
+AGR_0220,53.458333359909126,-110.62500005045453,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,438,832,CAN,Natural_Earth_110m_admin0,12.0,rape,Rapeseed
+AGR_0221,34.708333373545486,-86.20833340154543,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,663,1125,USA,Natural_Earth_110m_admin0,16.0,soyb,Soybean
+AGR_0222,19.625000051181843,-90.29166673190907,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,844,1076,MEX,Natural_Earth_110m_admin0,15.0,citr,Citrus
+AGR_0223,-24.124999916999982,118.54166644954554,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1369,3582,AUS,Natural_Earth_110m_admin0,2.0,whea,Wheat
+AGR_0224,45.625000032272766,-93.4583333962727,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,532,1038,USA,Natural_Earth_110m_admin0,19.0,maiz,Maize
+AGR_0225,31.20833337609094,-84.54166673609089,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,705,1145,USA,Natural_Earth_110m_admin0,19.0,grou,Groundnut
+AGR_0226,46.37500003172731,-111.20833338336362,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,523,825,USA,Natural_Earth_110m_admin0,1.0,whea,Wheat
+AGR_0227,8.958333392272749,16.87499985681822,Chad,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,972,2362,TCD,Natural_Earth_110m_admin0,19.0,sorg,Sorghum
+AGR_0228,29.875000043727304,-94.29166672899999,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,721,1028,USA,Natural_Earth_110m_admin0,8.0,citr,Citrus
+AGR_0229,-4.458333264636337,37.624999841727316,United Republic of Tanzania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1133,2611,TZA,Natural_Earth_110m_admin0,27.0,bana,Banana
+AGR_0230,-29.45833324645453,120.0416664484546,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1433,3600,AUS,Natural_Earth_110m_admin0,3.0,barl,Barley
+AGR_0231,-4.541666597909071,121.54166644736372,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1134,3618,IDN,Natural_Earth_110m_admin0,20.0,coco,Cocoa
+AGR_0232,43.70833336700004,78.29166647881826,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,555,3099,KAZ,Natural_Earth_110m_admin0,13.0,soyb,Soybean
+AGR_0233,55.125000025363676,71.37499981718187,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,418,3016,RUS,Natural_Earth_110m_admin0,18.0,whea,Wheat
+AGR_0234,65.12500001809096,30.374999847000055,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,298,2524,RUS,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0235,34.79166670681821,9.041666529181867,Tunisia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,662,2268,TUN,Natural_Earth_110m_admin0,15.0,ooil,Other Oil Crops
+AGR_0236,-8.708333261545434,16.95833319009097,Angola,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1184,2363,AGO,Natural_Earth_110m_admin0,14.0,maiz,Maize
+AGR_0237,49.37500002954549,77.04166647972735,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,487,3084,KAZ,Natural_Earth_110m_admin0,7.0,barl,Barley
+AGR_0238,15.291666721000027,-61.375000086272706,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,896,1423,,unresolved_no_polygon_match,19.0,coco,Cocoa
+AGR_0239,45.95833336536367,130.62499977409098,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,528,3727,CHN,Natural_Earth_110m_admin0,23.0,rice,Rice
+AGR_0240,56.79166669081822,-121.04166670954544,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,398,707,CAN,Natural_Earth_110m_admin0,10.0,opul,Other Pulses
+AGR_0241,-28.37499991390908,30.62499984681824,South Africa,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1420,2527,ZAF,Natural_Earth_110m_admin0,22.0,sugc,Sugarcane
+AGR_0242,57.458333357000036,-102.04166672336362,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,390,935,CAN,Natural_Earth_110m_admin0,1.0,soyb,Soybean
+AGR_0243,33.458333374454575,-99.70833339172725,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,678,963,USA,Natural_Earth_110m_admin0,19.0,whea,Wheat
+AGR_0244,-6.374999929909066,134.54166643790919,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1156,3774,IDN,Natural_Earth_110m_admin0,11.0,cnut,Coconut
+AGR_0245,15.37500005427276,44.291666503545514,Yemen,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,895,2691,YEM,Natural_Earth_110m_admin0,5.0,rest,Rest of Crops
+AGR_0246,55.791666691545494,98.6249997973637,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,410,3343,RUS,Natural_Earth_110m_admin0,12.0,whea,Wheat
+AGR_0247,31.708333375727307,35.95833317627279,Jordan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,699,2591,JOR,Natural_Earth_110m_admin0,7.0,ooil,Other Oil Crops
+AGR_0248,-22.124999918454535,-65.62500008318179,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1345,1372,ARG,Natural_Earth_110m_admin0,2.0,ocer,Other Cereals
+AGR_0249,35.125000039909125,40.541666506272776,Syria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,658,2646,SYR,Natural_Earth_110m_admin0,5.0,barl,Barley
+AGR_0250,-30.04166657936362,126.04166644409096,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1440,3672,AUS,Natural_Earth_110m_admin0,3.0,barl,Barley
+AGR_0251,32.70833337500003,120.12499978172733,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,687,3601,CHN,Natural_Earth_110m_admin0,14.0,rice,Rice
+AGR_0252,28.375000044818215,-0.20833346409085607,Algeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,739,2157,DZA,Natural_Earth_110m_admin0,14.0,trof,Other Tropical Fruit
+AGR_0253,10.875000057545478,-71.95833341190907,Venezuela,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,949,1296,VEN,Natural_Earth_110m_admin0,25.0,oilp,Oil Palm
+AGR_0254,-41.29166657118181,174.9583330751819,New Zealand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1575,4259,NZL,Natural_Earth_110m_admin0,1.0,ooil,Other Oil Crops
+AGR_0255,25.041666713909123,32.70833317863642,Egypt,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,779,2552,EGY,Natural_Earth_110m_admin0,27.0,sugc,Sugarcane
+AGR_0256,62.79166668645458,31.291666513000052,Finland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,326,2535,FIN,Natural_Earth_110m_admin0,4.0,whea,Wheat
+AGR_0257,-29.208333246636343,-62.70833341863634,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1430,1407,ARG,Natural_Earth_110m_admin0,18.0,cott,Cotton
+AGR_0258,-5.958333263545427,154.7916664231819,Papua New Guinea,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1151,4017,PNG,Natural_Earth_110m_admin0,18.0,maiz,Maize
+AGR_0259,38.04166670445458,90.37499980336369,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,623,3244,CHN,Natural_Earth_110m_admin0,2.0,trof,Other Tropical Fruit
+AGR_0260,20.45833338390912,45.708333169181884,Saudi Arabia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,834,2708,SAU,Natural_Earth_110m_admin0,11.0,trof,Other Tropical Fruit
+AGR_0261,51.95833336100004,45.37499983609095,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,456,2704,RUS,Natural_Earth_110m_admin0,22.0,sunf,Sunflower
+AGR_0262,46.87500003136367,127.45833310972736,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,517,3689,CHN,Natural_Earth_110m_admin0,22.0,rice,Rice
+AGR_0263,43.375000033909124,145.12499976354556,Japan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,559,3901,JPN,Natural_Earth_110m_admin0,14.0,whea,Wheat
+AGR_0264,-9.541666594272712,-51.70833342663633,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1194,1539,BRA,Natural_Earth_110m_admin0,12.0,maiz,Maize
+AGR_0265,7.37500006009094,30.04166651390915,South Sudan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,991,2520,SDS,Natural_Earth_110m_admin0,2.0,temf,Temperate Fruit
+AGR_0266,44.70833336627276,83.04166647536371,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,543,3156,CHN,Natural_Earth_110m_admin0,1.0,temf,Temperate Fruit
+AGR_0267,22.041666716090944,11.958333193727327,Niger,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,815,2303,NER,Natural_Earth_110m_admin0,3.0,pmil,Pearl Millet
+AGR_0268,20.45833338390912,15.208333191363693,Niger,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,834,2342,NER,Natural_Earth_110m_admin0,2.0,toma,Tomato
+AGR_0269,31.45833337590912,112.70833312045463,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,702,3512,CHN,Natural_Earth_110m_admin0,22.0,whea,Wheat
+AGR_0270,-6.791666596272705,24.79166651772732,Democratic Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1161,2457,COD,Natural_Earth_110m_admin0,30.0,cass,Cassava
+AGR_0271,-4.208333264818165,151.6249997588183,Papua New Guinea,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1130,3979,PNG,Natural_Earth_110m_admin0,17.0,cnut,Coconut
+AGR_0272,-41.04166657136362,-73.54166674409089,Chile,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1572,1277,CHL,Natural_Earth_110m_admin0,8.0,whea,Wheat
+AGR_0273,-51.791666563545434,-71.95833341190907,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1701,1296,ARG,Natural_Earth_110m_admin0,1.0,temf,Temperate Fruit
+AGR_0274,0.45833339845457033,-52.29166675954542,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1074,1532,BRA,Natural_Earth_110m_admin0,1.0,citr,Citrus
+AGR_0275,-18.208333254636344,-40.54166676809086,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1298,1673,BRA,Natural_Earth_110m_admin0,9.0,rcof,Robusta Coffee
+AGR_0276,62.37500002009095,39.45833317372734,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,331,2633,RUS,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0277,13.291666722454565,-88.62500006645453,El Salvador,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,920,1096,SLV,Natural_Earth_110m_admin0,22.0,maiz,Maize
+AGR_0278,-38.37499990663635,-59.958333420636336,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1540,1440,ARG,Natural_Earth_110m_admin0,13.0,soyb,Soybean
+AGR_0279,10.791666724272758,119.3749997822728,Philippines,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,950,3592,PHL,Natural_Earth_110m_admin0,23.0,cnut,Coconut
+AGR_0280,4.791666728636386,-1.958333462818132,Ghana,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1022,2136,GHA,Natural_Earth_110m_admin0,25.0,coco,Cocoa
+AGR_0281,64.95833335154549,-14.125000120636315,Iceland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,300,1990,ISL,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0282,3.541666729545483,15.374999857909131,Central African Republic,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1037,2344,CAF,Natural_Earth_110m_admin0,14.0,vege,Other Vegetables
+AGR_0283,38.37500003754549,48.70833316700006,Azerbaijan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,619,2744,AZE,Natural_Earth_110m_admin0,9.0,whea,Wheat
+AGR_0284,0.8750000648182095,102.79166646100006,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1069,3393,IDN,Natural_Earth_110m_admin0,14.0,oilp,Oil Palm
+AGR_0285,53.12500002681822,103.95833312681825,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,442,3407,RUS,Natural_Earth_110m_admin0,13.0,whea,Wheat
+AGR_0286,35.70833337281822,136.04166643681825,Japan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,651,3792,JPN,Natural_Earth_110m_admin0,16.0,vege,Other Vegetables
+AGR_0287,58.70833335609095,-93.37500006299999,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,375,1039,CAN,Natural_Earth_110m_admin0,3.0,opul,Other Pulses
+AGR_0288,-3.0416665989999814,32.70833317863642,United Republic of Tanzania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1116,2552,TZA,Natural_Earth_110m_admin0,25.0,cott,Cotton
+AGR_0289,55.125000025363676,158.95833308681827,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,418,4067,RUS,Natural_Earth_110m_admin0,6.0,pota,Potato
+AGR_0290,-4.8749999309999765,-71.70833341209088,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1138,1299,BRA,Natural_Earth_110m_admin0,4.0,bana,Banana
+AGR_0291,-39.04166657281816,177.04166640700006,New Zealand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1548,4284,NZL,Natural_Earth_110m_admin0,2.0,ooil,Other Oil Crops
+AGR_0292,-2.7083332659090757,15.291666524636412,Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1112,2343,COG,Natural_Earth_110m_admin0,27.0,cass,Cassava
+AGR_0293,-24.874999916454527,44.45833317009095,Madagascar,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1378,2693,MDG,Natural_Earth_110m_admin0,22.0,cass,Cassava
+AGR_0294,53.70833335972731,8.624999862818214,Germany,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,435,2263,DEU,Natural_Earth_110m_admin0,14.0,whea,Wheat
+AGR_0295,-32.04166657790908,25.54166651718188,South Africa,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1464,2466,ZAF,Natural_Earth_110m_admin0,13.0,maiz,Maize
+AGR_0296,3.0416667299091102,45.041666503000044,Somalia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1043,2700,SOM,Natural_Earth_110m_admin0,4.0,toma,Tomato
+AGR_0297,-32.708333244090895,135.29166643736372,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1472,3783,AUS,Natural_Earth_110m_admin0,2.0,lent,Lentil
+AGR_0298,20.208333384090935,-103.29166672245452,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,837,920,MEX,Natural_Earth_110m_admin0,12.0,maiz,Maize
+AGR_0299,-36.208333241545446,149.12499976063643,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1514,3949,AUS,Natural_Earth_110m_admin0,4.0,whea,Wheat
+AGR_0300,44.29166669990913,12.208333193545513,Italy,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,548,2306,ITA,Natural_Earth_110m_admin0,18.0,whea,Wheat
+AGR_0301,49.7083333626364,-125.04166670663636,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,483,659,,unresolved_no_polygon_match,14.0,rape,Rapeseed
+AGR_0302,-9.04166659463634,-74.04166674372725,Peru,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1188,1271,PER,Natural_Earth_110m_admin0,3.0,citr,Citrus
+AGR_0303,50.87500002845458,-56.95833342281816,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,469,1476,CAN,Natural_Earth_110m_admin0,2.0,pota,Potato
+AGR_0304,25.95833337990912,44.958333169727325,Saudi Arabia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,768,2699,SAU,Natural_Earth_110m_admin0,11.0,trof,Other Tropical Fruit
+AGR_0305,-35.4583332420909,138.54166643500005,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1505,3822,AUS,Natural_Earth_110m_admin0,17.0,whea,Wheat
+AGR_0306,49.37500002954549,120.0416664484546,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,487,3600,CHN,Natural_Earth_110m_admin0,15.0,whea,Wheat
+AGR_0307,-16.041666589545443,-57.041666756090876,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1272,1475,BRA,Natural_Earth_110m_admin0,13.0,cott,Cotton
+AGR_0308,41.12500003554549,60.70833315827278,Turkmenistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,586,2888,TKM,Natural_Earth_110m_admin0,3.0,trof,Other Tropical Fruit
+AGR_0309,56.375000024454586,92.29166646863641,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,403,3267,RUS,Natural_Earth_110m_admin0,5.0,whea,Wheat
+AGR_0310,40.12500003627276,45.95833316900004,Azerbaijan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,598,2711,AZE,Natural_Earth_110m_admin0,4.0,sunf,Sunflower
+AGR_0311,-17.874999921545438,17.208333189909126,Namibia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1294,2366,NAM,Natural_Earth_110m_admin0,12.0,pmil,Pearl Millet
+AGR_0312,-0.45833326754542725,27.958333182090968,Democratic Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1085,2495,COD,Natural_Earth_110m_admin0,2.0,cass,Cassava
+AGR_0313,42.125000034818214,-101.20833339063634,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,574,945,USA,Natural_Earth_110m_admin0,13.0,maiz,Maize
+AGR_0314,44.12500003336367,6.62499986427278,France,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,550,2239,FRA,Natural_Earth_110m_admin0,5.0,rice,Rice
+AGR_0315,19.291666718090937,57.04166649427279,Oman,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,848,2844,OMN,Natural_Earth_110m_admin0,4.0,trof,Other Tropical Fruit
+AGR_0316,45.95833336536367,-121.12500004281817,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,528,706,USA,Natural_Earth_110m_admin0,12.0,whea,Wheat
+AGR_0317,14.958333387909121,50.12499983263643,Yemen,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,900,2761,YEM,Natural_Earth_110m_admin0,1.0,cowp,Cowpea
+AGR_0318,51.125000028272765,130.0416664411819,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,466,3720,RUS,Natural_Earth_110m_admin0,1.0,whea,Wheat
+AGR_0319,5.375000061545478,-2.4583334624545046,Ghana,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1015,2130,GHA,Natural_Earth_110m_admin0,25.0,coco,Cocoa
+AGR_0320,29.875000043727304,-115.62500004681817,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,721,772,MEX,Natural_Earth_110m_admin0,3.0,whea,Wheat
+AGR_0321,16.45833338681821,-9.875000123727233,Mauritania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,882,2041,MRT,Natural_Earth_110m_admin0,1.0,whea,Wheat
+AGR_0322,-15.458333256636351,-75.04166674299998,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1265,1259,,unresolved_no_polygon_match,1.0,ooil,Other Oil Crops
+AGR_0323,-10.208333260454523,150.37499975972733,Papua New Guinea,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1202,3964,PNG,Natural_Earth_110m_admin0,20.0,cnut,Coconut
+AGR_0324,54.04166669281822,-123.9583333740909,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,431,672,CAN,Natural_Earth_110m_admin0,11.0,rape,Rapeseed
+AGR_0325,12.291666723181848,124.70833311172734,Philippines,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,932,3656,PHL,Natural_Earth_110m_admin0,20.0,cnut,Coconut
+AGR_0326,64.29166668536368,-149.20833335572726,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,308,369,USA,Natural_Earth_110m_admin0,8.0,barl,Barley
+AGR_0327,40.79166670245458,-0.4583334639090424,Spain,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,590,2154,ESP,Natural_Earth_110m_admin0,12.0,barl,Barley
+AGR_0328,-25.958333248999978,138.54166643500005,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1391,3822,AUS,Natural_Earth_110m_admin0,1.0,swpo,Sweet Potato
+AGR_0329,27.125000045727305,68.54166648590916,Pakistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,754,2982,PAK,Natural_Earth_110m_admin0,28.0,whea,Wheat
+AGR_0330,-46.541666567363634,-71.45833341227271,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1638,1302,ARG,Natural_Earth_110m_admin0,1.0,temf,Temperate Fruit
+AGR_0331,38.95833337045458,-2.4583334624545046,Spain,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,612,2130,ESP,Natural_Earth_110m_admin0,15.0,barl,Barley
+AGR_0332,4.375000062272747,27.291666515909128,Democratic Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1027,2487,COD,Natural_Earth_110m_admin0,2.0,maiz,Maize
+AGR_0333,-3.208333265545434,139.12499976790915,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1118,3829,IDN,Natural_Earth_110m_admin0,12.0,coco,Cocoa
+AGR_0334,-3.1249999322727007,-53.62500009190906,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1117,1516,BRA,Natural_Earth_110m_admin0,9.0,maiz,Maize
+AGR_0335,52.70833336045458,-105.37500005427272,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,447,895,CAN,Natural_Earth_110m_admin0,11.0,rape,Rapeseed
+AGR_0336,-18.95833325409089,139.87499976736373,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1307,3838,AUS,Natural_Earth_110m_admin0,4.0,bean,Bean
+AGR_0337,-31.791666578090897,132.95833310572735,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1461,3755,AUS,Natural_Earth_110m_admin0,9.0,whea,Wheat
+AGR_0338,24.45833338100003,93.45833313445459,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,786,3281,IND,Natural_Earth_110m_admin0,24.0,rice,Rice
+AGR_0339,24.708333380818218,54.79166649590914,United Arab Emirates,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,783,2817,ARE,Natural_Earth_110m_admin0,9.0,trof,Other Tropical Fruit
+AGR_0340,-19.041666587363622,-46.04166676409088,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1308,1607,BRA,Natural_Earth_110m_admin0,14.0,maiz,Maize
+AGR_0341,-34.54166657609089,140.70833310009098,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1494,3848,AUS,Natural_Earth_110m_admin0,4.0,temf,Temperate Fruit
+AGR_0342,46.9583333646364,92.04166646881825,Mongolia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,516,3264,MNG,Natural_Earth_110m_admin0,1.0,pota,Potato
+AGR_0343,22.125000049363663,70.04166648481825,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,814,3000,IND,Natural_Earth_110m_admin0,16.0,cott,Cotton
+AGR_0344,59.04166668918185,12.624999859909138,Sweden,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,371,2311,SWE,Natural_Earth_110m_admin0,10.0,whea,Wheat
+AGR_0345,18.95833338500003,-70.12500007990907,Dominican Republic,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,852,1318,DOM,Natural_Earth_110m_admin0,20.0,coco,Cocoa
+AGR_0346,27.708333378636397,47.791666501000066,Saudi Arabia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,747,2733,SAU,Natural_Earth_110m_admin0,11.0,trof,Other Tropical Fruit
+AGR_0347,-13.458333258090889,-40.62500010136361,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1241,1672,BRA,Natural_Earth_110m_admin0,12.0,coco,Cocoa
+AGR_0348,9.541666725181841,27.624999849000062,South Sudan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,965,2491,SDS,Natural_Earth_110m_admin0,12.0,sesa,Sesame Seed
+AGR_0349,54.62500002572731,63.70833315609096,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,424,2924,RUS,Natural_Earth_110m_admin0,20.0,whea,Wheat
+AGR_0350,37.37500003827276,-97.12500006027271,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,631,994,USA,Natural_Earth_110m_admin0,18.0,soyb,Soybean
+AGR_0351,-16.458333255909068,35.541666509909135,Mozambique,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1277,2586,MOZ,Natural_Earth_110m_admin0,26.0,maiz,Maize
+AGR_0352,43.04166670081822,53.45833316354552,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,563,2801,KAZ,Natural_Earth_110m_admin0,1.0,trof,Other Tropical Fruit
+AGR_0353,62.29166668681822,130.62499977409098,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,332,3727,RUS,Natural_Earth_110m_admin0,9.0,ocer,Other Cereals
+AGR_0354,-44.374999902272705,169.87499974554552,New Zealand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1612,4198,NZL,Natural_Earth_110m_admin0,9.0,barl,Barley
+AGR_0355,51.791666694454584,53.29166649700005,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,458,2799,RUS,Natural_Earth_110m_admin0,22.0,whea,Wheat
+AGR_0356,51.791666694454584,57.87499982700007,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,458,2854,RUS,Natural_Earth_110m_admin0,20.0,whea,Wheat
+AGR_0357,54.20833335936367,-7.12500012572724,United Kingdom,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,429,2074,GBR,Natural_Earth_110m_admin0,6.0,whea,Wheat
+AGR_0358,22.208333382636397,89.62499980390916,Bangladesh,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,813,3235,BGD,Natural_Earth_110m_admin0,23.0,rice,Rice
+AGR_0359,33.458333374454575,-116.0416667131818,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,678,767,USA,Natural_Earth_110m_admin0,19.0,rest,Rest of Crops
+AGR_0360,43.04166670081822,71.12499981736369,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,563,3013,KAZ,Natural_Earth_110m_admin0,19.0,ocer,Other Cereals
+AGR_0361,31.625000042454573,-5.458333460272684,Morocco,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,700,2094,MAR,Natural_Earth_110m_admin0,24.0,whea,Wheat
+AGR_0362,10.291666724636386,0.9583332017273278,Benin,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,956,2171,BEN,Natural_Earth_110m_admin0,23.0,maiz,Maize
+AGR_0363,46.125000031909124,0.7083332019091415,France,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,526,2168,FRA,Natural_Earth_110m_admin0,15.0,whea,Wheat
+AGR_0364,59.45833335554549,28.958333181363685,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,366,2507,RUS,Natural_Earth_110m_admin0,14.0,barl,Barley
+AGR_0365,39.45833337009094,115.45833311845465,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,606,3545,CHN,Natural_Earth_110m_admin0,24.0,temf,Temperate Fruit
+AGR_0366,46.62500003154549,111.9583331210001,Mongolia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,520,3503,MNG,Natural_Earth_110m_admin0,3.0,opul,Other Pulses
+AGR_0367,20.041666717545482,1.2083332015454857,Mali,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,839,2174,MLI,Natural_Earth_110m_admin0,2.0,citr,Citrus
+AGR_0368,-9.208333261181792,13.624999859181855,Angola,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1190,2323,AGO,Natural_Earth_110m_admin0,19.0,maiz,Maize
+AGR_0369,10.291666724636386,-63.958333417727246,Venezuela,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,956,1392,VEN,Natural_Earth_110m_admin0,8.0,coco,Cocoa
+AGR_0370,10.041666724818214,-75.54166674263634,Colombia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,959,1253,COL,Natural_Earth_110m_admin0,3.0,maiz,Maize
+AGR_0371,6.875000060454568,93.87499980081824,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,997,3286,,unresolved_no_polygon_match,8.0,cnut,Coconut
+AGR_0372,16.04166672045457,120.6249997813637,Philippines,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,887,3607,PHL,Natural_Earth_110m_admin0,17.0,rice,Rice
+AGR_0373,-9.874999927363618,25.70833318372732,Democratic Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1198,2468,COD,Natural_Earth_110m_admin0,23.0,maiz,Maize
+AGR_0374,41.29166670209094,-93.29166672972725,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,584,1040,USA,Natural_Earth_110m_admin0,13.0,soyb,Soybean
+AGR_0375,36.875000038636394,-6.375000126272681,Spain,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,637,2083,ESP,Natural_Earth_110m_admin0,22.0,temf,Temperate Fruit
+AGR_0376,-18.291666587909077,20.62499985409096,Namibia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1299,2407,NAM,Natural_Earth_110m_admin0,9.0,maiz,Maize
+AGR_0377,-17.791666588272705,27.20833318263641,Zimbabwe,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1293,2486,ZWE,Natural_Earth_110m_admin0,23.0,maiz,Maize
+AGR_0378,41.625000035181856,100.62499979590913,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,580,3367,CHN,Natural_Earth_110m_admin0,3.0,whea,Wheat
+AGR_0379,55.791666691545494,-2.0416667960908796,United Kingdom,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,410,2135,GBR,Natural_Earth_110m_admin0,8.0,whea,Wheat
+AGR_0380,-27.374999914636348,28.374999848454593,South Africa,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1408,2500,ZAF,Natural_Earth_110m_admin0,22.0,maiz,Maize
+AGR_0381,45.20833336590913,38.541666507727314,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,537,2622,RUS,Natural_Earth_110m_admin0,24.0,rice,Rice
+AGR_0382,-19.208333253909075,121.458333114091,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1310,3617,AUS,Natural_Earth_110m_admin0,3.0,temf,Temperate Fruit
+AGR_0383,34.87500004009094,106.37499979172733,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,661,3436,CHN,Natural_Earth_110m_admin0,15.0,whea,Wheat
+AGR_0384,50.37500002881822,-81.70833340481816,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,475,1179,CAN,Natural_Earth_110m_admin0,1.0,maiz,Maize
+AGR_0385,24.45833338100003,112.12499978754553,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,786,3505,CHN,Natural_Earth_110m_admin0,23.0,grou,Groundnut
+AGR_0386,43.958333366818216,135.208333104091,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,552,3782,RUS,Natural_Earth_110m_admin0,9.0,ocer,Other Cereals
+AGR_0387,-4.291666598090885,-80.95833340536362,Peru,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1131,1188,PER,Natural_Earth_110m_admin0,14.0,cass,Cassava
+AGR_0388,12.4583333897273,104.62499979300006,Cambodia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,930,3415,KHM,Natural_Earth_110m_admin0,16.0,rice,Rice
+AGR_0389,13.125000055909112,-6.041666793181776,Mali,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,922,2087,MLI,Natural_Earth_110m_admin0,25.0,pmil,Pearl Millet
+AGR_0390,-33.124999910454534,121.04166644772735,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1477,3612,AUS,Natural_Earth_110m_admin0,2.0,opul,Other Pulses
+AGR_0391,-13.458333258090889,22.874999852454607,Zambia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1241,2434,ZMB,Natural_Earth_110m_admin0,7.0,cass,Cassava
+AGR_0392,15.958333387181838,103.124999794091,Thailand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,888,3397,THA,Natural_Earth_110m_admin0,1.0,rice,Rice
+AGR_0393,-16.62499992245452,168.20833308009102,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1279,4178,,unresolved_no_polygon_match,10.0,cnut,Coconut
+AGR_0394,8.625000059181843,-76.45833340863634,Colombia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,976,1242,COL,Natural_Earth_110m_admin0,18.0,coff,Arabica Coffee
+AGR_0395,52.95833336027276,123.7083331124546,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,444,3644,CHN,Natural_Earth_110m_admin0,1.0,soyb,Soybean
+AGR_0396,9.791666725000027,8.291666529727308,Nigeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,962,2259,NGA,Natural_Earth_110m_admin0,24.0,rest,Rest of Crops
+AGR_0397,29.95833337700003,9.54166652881824,Algeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,720,2274,DZA,Natural_Earth_110m_admin0,2.0,rest,Rest of Crops
+AGR_0398,49.54166669609094,104.20833312663646,Mongolia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,485,3410,MNG,Natural_Earth_110m_admin0,4.0,whea,Wheat
+AGR_0399,-24.291666583545435,151.54166642554551,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1371,3978,AUS,Natural_Earth_110m_admin0,4.0,bean,Bean
+AGR_0400,36.375000039000035,3.0416665335455093,Algeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,643,2196,DZA,Natural_Earth_110m_admin0,12.0,ooil,Other Oil Crops
+AGR_0401,52.54166669390913,37.45833317518188,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,449,2609,RUS,Natural_Earth_110m_admin0,22.0,whea,Wheat
+AGR_0402,29.12500004427276,81.37499980990916,Nepal,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,730,3136,NPL,Natural_Earth_110m_admin0,16.0,rice,Rice
+AGR_0403,19.291666718090937,34.4583331773637,Sudan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,848,2573,SDN,Natural_Earth_110m_admin0,4.0,sorg,Sorghum
+AGR_0404,54.79166669227276,99.79166646318188,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,422,3357,RUS,Natural_Earth_110m_admin0,12.0,whea,Wheat
+AGR_0405,25.791666713363668,38.374999841181875,Saudi Arabia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,770,2620,SAU,Natural_Earth_110m_admin0,11.0,trof,Other Tropical Fruit
+AGR_0406,34.708333373545486,118.87499978263642,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,663,3586,CHN,Natural_Earth_110m_admin0,25.0,whea,Wheat
+AGR_0407,37.208333371727306,27.70833318227278,Turkey,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,633,2492,TUR,Natural_Earth_110m_admin0,24.0,rest,Rest of Crops
+AGR_0408,46.79166669809094,-53.375000092090886,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,518,1519,CAN,Natural_Earth_110m_admin0,3.0,temf,Temperate Fruit
+AGR_0409,44.875000032818214,-65.29166675009088,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,541,1376,CAN,Natural_Earth_110m_admin0,11.0,temf,Temperate Fruit
+AGR_0410,47.625000030818214,-61.54166675281816,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,508,1421,,unresolved_no_polygon_match,7.0,ocer,Other Cereals
+AGR_0411,39.70833336990913,140.62499976681826,Japan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,603,3847,JPN,Natural_Earth_110m_admin0,12.0,soyb,Soybean
+AGR_0412,61.20833335427277,5.791666531545502,Norway,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,345,2229,NOR,Natural_Earth_110m_admin0,3.0,whea,Wheat
+AGR_0413,-27.874999914272706,-70.20833341318179,Chile,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1414,1317,CHL,Natural_Earth_110m_admin0,1.0,rest,Rest of Crops
+AGR_0414,58.8750000226364,8.708333196090962,Norway,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,373,2264,NOR,Natural_Earth_110m_admin0,4.0,whea,Wheat
+AGR_0415,26.708333379363665,104.70833312627278,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,759,3416,CHN,Natural_Earth_110m_admin0,26.0,vege,Other Vegetables
+AGR_0416,10.041666724818214,43.374999837545516,Somaliland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,959,2680,SOL,Natural_Earth_110m_admin0,14.0,sesa,Sesame Seed
+AGR_0417,33.37500004118185,10.958333194454582,Tunisia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,679,2291,TUN,Natural_Earth_110m_admin0,6.0,ooil,Other Oil Crops
+AGR_0418,51.70833336118186,-67.7916667482727,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,459,1346,CAN,Natural_Earth_110m_admin0,2.0,soyb,Soybean
+AGR_0419,50.37500002881822,-91.2916667311818,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,475,1064,CAN,Natural_Earth_110m_admin0,2.0,maiz,Maize
+AGR_0420,-20.124999919909072,26.874999849545503,Botswana,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1321,2482,BWA,Natural_Earth_110m_admin0,5.0,pmil,Pearl Millet
+AGR_0421,-16.708333255727254,-67.95833341481816,Bolivia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1280,1344,BOL,Natural_Earth_110m_admin0,19.0,pota,Potato
+AGR_0422,-25.208333249545433,-66.20833341609088,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1382,1365,ARG,Natural_Earth_110m_admin0,5.0,bean,Bean
+AGR_0423,56.625000024272765,76.45833314681826,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,400,3077,RUS,Natural_Earth_110m_admin0,9.0,whea,Wheat
+AGR_0424,27.041666712454578,86.12499980645461,Nepal,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,755,3193,NPL,Natural_Earth_110m_admin0,21.0,rice,Rice
+AGR_0425,-3.4583332653636205,126.20833311063646,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1121,3674,IDN,Natural_Earth_110m_admin0,16.0,rest,Rest of Crops
+AGR_0426,36.79166670536367,34.708333177181856,Turkey,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,638,2576,TUR,Natural_Earth_110m_admin0,22.0,maiz,Maize
+AGR_0427,-37.6249999071818,-67.87500008154542,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1531,1345,ARG,Natural_Earth_110m_admin0,12.0,temf,Temperate Fruit
+AGR_0428,-24.708333249909074,113.87499978627281,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1376,3526,AUS,Natural_Earth_110m_admin0,3.0,whea,Wheat
+AGR_0429,-23.708333250636343,139.29166643445464,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1364,3831,AUS,Natural_Earth_110m_admin0,7.0,bean,Bean
+AGR_0430,7.958333393000018,1.2083332015454857,Togo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,984,2174,TGO,Natural_Earth_110m_admin0,20.0,sorg,Sorghum
+AGR_0431,-40.54166657172725,175.20833307500007,New Zealand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1566,4262,NZL,Natural_Earth_110m_admin0,10.0,vege,Other Vegetables
+AGR_0432,34.20833337390912,66.8749998204546,Afghanistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,669,2962,AFG,Natural_Earth_110m_admin0,3.0,whea,Wheat
+AGR_0433,3.7083333960909357,125.45833311118187,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1035,3665,,unresolved_no_polygon_match,18.0,cnut,Coconut
+AGR_0434,53.625000026454586,19.958333187909147,Poland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,436,2399,POL,Natural_Earth_110m_admin0,13.0,whea,Wheat
+AGR_0435,-13.874999924454528,35.541666509909135,Mozambique,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1246,2586,MOZ,Natural_Earth_110m_admin0,26.0,maiz,Maize
+AGR_0436,-8.208333261909075,117.95833311663645,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1178,3575,IDN,Natural_Earth_110m_admin0,18.0,onio,Onion
+AGR_0437,20.791666717000027,77.29166647954551,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,830,3087,IND,Natural_Earth_110m_admin0,20.0,whea,Wheat
+AGR_0438,20.791666717000027,-87.20833340081816,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,830,1113,MEX,Natural_Earth_110m_admin0,5.0,maiz,Maize
+AGR_0439,11.208333390636383,125.29166644463643,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,945,3663,,unresolved_no_polygon_match,19.0,cnut,Coconut
+AGR_0440,39.375000036818214,80.87499981027278,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,607,3130,CHN,Natural_Earth_110m_admin0,1.0,vege,Other Vegetables
+AGR_0441,-19.041666587363622,144.37499976409097,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1308,3892,AUS,Natural_Earth_110m_admin0,6.0,trof,Other Tropical Fruit
+AGR_0442,41.79166670172731,-74.45833341009089,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,578,1266,USA,Natural_Earth_110m_admin0,15.0,whea,Wheat
+AGR_0443,-6.541666596454519,38.12499984136369,United Republic of Tanzania,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1158,2617,TZA,Natural_Earth_110m_admin0,26.0,cass,Cassava
+AGR_0444,-10.291666593727257,-36.3750001044545,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1203,1723,BRA,Natural_Earth_110m_admin0,12.0,sugc,Sugarcane
+AGR_0445,-30.04166657936362,114.95833311881827,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1440,3539,,unresolved_no_polygon_match,2.0,maiz,Maize
+AGR_0446,63.29166668609095,118.45833311627283,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,320,3581,RUS,Natural_Earth_110m_admin0,9.0,ocer,Other Cereals
+AGR_0447,-14.45833325736362,168.04166641354553,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1253,4176,,unresolved_no_polygon_match,2.0,cnut,Coconut
+AGR_0448,55.2083333586364,-84.20833340299998,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,417,1149,CAN,Natural_Earth_110m_admin0,1.0,maiz,Maize
+AGR_0449,-34.95833324245453,173.20833307645464,New Zealand,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1499,4238,NZL,Natural_Earth_110m_admin0,1.0,ooil,Other Oil Crops
+AGR_0450,35.0416667066364,133.70833310518188,Japan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,659,3764,JPN,Natural_Earth_110m_admin0,19.0,rice,Rice
+AGR_0451,14.208333388454577,-91.79166673081816,Guatemala,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,909,1058,GTM,Natural_Earth_110m_admin0,14.0,oilp,Oil Palm
+AGR_0452,-9.374999927727245,159.79166641954552,Solomon Islands,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1192,4077,SLB,Natural_Earth_110m_admin0,15.0,cnut,Coconut
+AGR_0453,65.70833335100004,-19.291666783545423,Iceland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,291,1928,ISL,Natural_Earth_110m_admin0,3.0,barl,Barley
+AGR_0454,-20.291666586454525,57.458333160636414,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1323,2849,,unresolved_no_polygon_match,19.0,sugc,Sugarcane
+AGR_0455,6.541666727363662,-59.04166675463634,Guyana,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1001,1451,GUY,Natural_Earth_110m_admin0,1.0,opul,Other Pulses
+AGR_0456,57.70833335681822,105.95833312536368,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,387,3431,RUS,Natural_Earth_110m_admin0,6.0,temf,Temperate Fruit
+AGR_0457,43.2916667006364,143.2916664315455,Japan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,560,3879,JPN,Natural_Earth_110m_admin0,15.0,whea,Wheat
+AGR_0458,-1.791666599909064,112.95833312027278,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1101,3515,IDN,Natural_Earth_110m_admin0,19.0,oilp,Oil Palm
+AGR_0459,23.791666714818206,-105.0416667211818,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,794,899,MEX,Natural_Earth_110m_admin0,2.0,maiz,Maize
+AGR_0460,1.0416667313636623,35.79166650972732,Kenya,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1067,2589,KEN,Natural_Earth_110m_admin0,23.0,maiz,Maize
+AGR_0461,31.625000042454573,94.79166646681827,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,700,3297,CHN,Natural_Earth_110m_admin0,1.0,whea,Wheat
+AGR_0462,34.95833337336367,136.4583331031819,Japan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,660,3797,JPN,Natural_Earth_110m_admin0,16.0,soyb,Soybean
+AGR_0463,14.125000055181843,106.95833312463643,Cambodia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,910,3443,KHM,Natural_Earth_110m_admin0,18.0,rice,Rice
+AGR_0464,-35.624999908636354,-64.20833341754543,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1507,1389,ARG,Natural_Earth_110m_admin0,2.0,sunf,Sunflower
+AGR_0465,-25.958333248999978,-49.45833342827271,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1391,1566,BRA,Natural_Earth_110m_admin0,18.0,soyb,Soybean
+AGR_0466,61.37500002081822,17.041666523363688,Sweden,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,343,2364,SWE,Natural_Earth_110m_admin0,8.0,whea,Wheat
+AGR_0467,7.37500006009094,-80.54166673899998,Panama,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,991,1193,PAN,Natural_Earth_110m_admin0,19.0,rice,Rice
+AGR_0468,-41.12499990463634,145.62499976318188,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1573,3907,AUS,Natural_Earth_110m_admin0,5.0,onio,Onion
+AGR_0469,24.791666714090937,125.29166644463643,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,782,3663,,unresolved_no_polygon_match,20.0,sugc,Sugarcane
+AGR_0470,-3.208333265545434,134.20833310481825,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1118,3770,IDN,Natural_Earth_110m_admin0,10.0,rest,Rest of Crops
+AGR_0471,39.79166670318185,-104.70833338809089,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,602,903,USA,Natural_Earth_110m_admin0,16.0,whea,Wheat
+AGR_0472,41.20833336881822,35.7083331764546,Turkey,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,585,2588,TUR,Natural_Earth_110m_admin0,22.0,whea,Wheat
+AGR_0473,46.87500003136367,142.6249997653637,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,517,3871,RUS,Natural_Earth_110m_admin0,5.0,pota,Potato
+AGR_0474,59.375000022272765,40.0416665066364,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,367,2640,RUS,Natural_Earth_110m_admin0,16.0,barl,Barley
+AGR_0475,14.458333388272749,78.4583331453637,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,906,3101,IND,Natural_Earth_110m_admin0,30.0,chic,Chickpea
+AGR_0476,56.95833335736367,-89.87500006554544,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,396,1081,CAN,Natural_Earth_110m_admin0,1.0,opul,Other Pulses
+AGR_0477,40.79166670245458,42.54166650481824,Turkey,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,590,2670,TUR,Natural_Earth_110m_admin0,5.0,whea,Wheat
+AGR_0478,53.79166669300004,92.37499980190918,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,434,3268,RUS,Natural_Earth_110m_admin0,11.0,whea,Wheat
+AGR_0479,50.95833336172731,126.54166644372734,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,468,3678,CHN,Natural_Earth_110m_admin0,13.0,soyb,Soybean
+AGR_0480,24.45833338100003,81.79166647627281,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,786,3141,IND,Natural_Earth_110m_admin0,26.0,grou,Groundnut
+AGR_0481,49.95833336245458,73.45833314900005,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,480,3041,KAZ,Natural_Earth_110m_admin0,16.0,whea,Wheat
+AGR_0482,36.625000038818214,5.874999864818221,Algeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,640,2230,DZA,Natural_Earth_110m_admin0,14.0,whea,Wheat
+AGR_0483,20.45833338390912,44.70833316990914,Saudi Arabia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,834,2696,SAU,Natural_Earth_110m_admin0,11.0,trof,Other Tropical Fruit
+AGR_0484,2.208333397181846,9.958333195181865,Equatorial Guinea,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1053,2279,GNQ,Natural_Earth_110m_admin0,13.0,maiz,Maize
+AGR_0485,28.70833337790912,119.95833311518189,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,735,3599,CHN,Natural_Earth_110m_admin0,18.0,vege,Other Vegetables
+AGR_0486,-4.62499993118179,-38.04166676990906,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1135,1703,BRA,Natural_Earth_110m_admin0,10.0,cass,Cassava
+AGR_0487,10.541666724454572,15.541666524454598,Chad,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,953,2346,TCD,Natural_Earth_110m_admin0,19.0,sesa,Sesame Seed
+AGR_0488,23.95833338136366,115.87499978481824,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,792,3550,CHN,Natural_Earth_110m_admin0,29.0,rice,Rice
+AGR_0489,-12.124999925727252,14.874999858272787,Angola,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1225,2338,AGO,Natural_Earth_110m_admin0,15.0,maiz,Maize
+AGR_0490,13.95833338863639,12.041666527000046,Niger,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,912,2304,NER,Natural_Earth_110m_admin0,6.0,onio,Onion
+AGR_0491,43.20833336736367,-7.0416667924544925,Spain,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,561,2075,ESP,Natural_Earth_110m_admin0,9.0,whea,Wheat
+AGR_0492,45.20833336590913,42.95833317118186,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,537,2675,RUS,Natural_Earth_110m_admin0,23.0,whea,Wheat
+AGR_0493,5.041666728454572,97.29166646500008,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1019,3327,IDN,Natural_Earth_110m_admin0,12.0,oilp,Oil Palm
+AGR_0494,33.37500004118185,1.1249998682727664,Algeria,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,679,2173,DZA,Natural_Earth_110m_admin0,4.0,vege,Other Vegetables
+AGR_0495,52.79166669372731,13.124999859545511,Germany,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,446,2317,DEU,Natural_Earth_110m_admin0,14.0,ocer,Other Cereals
+AGR_0496,-40.624999904999996,-62.875000085181796,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1567,1405,ARG,Natural_Earth_110m_admin0,4.0,whea,Wheat
+AGR_0497,-20.874999919363617,127.54166644300008,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1330,3690,AUS,Natural_Earth_110m_admin0,1.0,sunf,Sunflower
+AGR_0498,-13.791666591181794,131.3749997735455,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1245,3736,AUS,Natural_Earth_110m_admin0,5.0,cott,Cotton
+AGR_0499,37.29166670500003,21.95833318645458,Greece,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,632,2423,GRC,Natural_Earth_110m_admin0,10.0,temf,Temperate Fruit
+AGR_0500,-10.04166659390907,124.45833311190918,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1200,3653,IDN,Natural_Earth_110m_admin0,23.0,maiz,Maize
+AGR_0501,65.2916666846364,-14.375000120454501,Iceland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,296,1987,ISL,Natural_Earth_110m_admin0,3.0,barl,Barley
+AGR_0502,33.29166670790912,77.70833314590917,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,680,3092,IND,Natural_Earth_110m_admin0,7.0,pmil,Pearl Millet
+AGR_0503,66.29166668390913,23.958333185000043,Finland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,284,2447,FIN,Natural_Earth_110m_admin0,2.0,whea,Wheat
+AGR_0504,29.12500004427276,21.29166652027277,Libya,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,730,2415,LBY,Natural_Earth_110m_admin0,16.0,ooil,Other Oil Crops
+AGR_0505,1.208333397909115,124.62499977845462,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1065,3655,IDN,Natural_Earth_110m_admin0,18.0,cnut,Coconut
+AGR_0506,-26.124999915545445,141.3749997662728,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1393,3856,AUS,Natural_Earth_110m_admin0,7.0,bean,Bean
+AGR_0507,-17.374999921909065,30.62499984681824,Zimbabwe,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1288,2527,ZWE,Natural_Earth_110m_admin0,27.0,maiz,Maize
+AGR_0508,30.291666710090936,57.04166649427279,Iran,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,716,2844,IRN,Natural_Earth_110m_admin0,27.0,whea,Wheat
+AGR_0509,24.125000047909126,23.4583331853637,Libya,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,790,2441,LBY,Natural_Earth_110m_admin0,15.0,ooil,Other Oil Crops
+AGR_0510,27.791666711909123,97.04166646518186,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,746,3324,IND,Natural_Earth_110m_admin0,9.0,maiz,Maize
+AGR_0511,34.95833337336367,-120.54166670990908,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,660,713,USA,Natural_Earth_110m_admin0,19.0,rest,Rest of Crops
+AGR_0512,46.9583333646364,86.45833313954554,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,516,3197,CHN,Natural_Earth_110m_admin0,1.0,vege,Other Vegetables
+AGR_0513,42.95833336754549,59.62499982572734,Uzbekistan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,564,2875,UZB,Natural_Earth_110m_admin0,15.0,cott,Cotton
+AGR_0514,-25.291666582818166,115.20833311863643,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1383,3542,AUS,Natural_Earth_110m_admin0,2.0,whea,Wheat
+AGR_0515,49.625000029363676,46.7083331684546,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,484,2720,RUS,Natural_Earth_110m_admin0,19.0,whea,Wheat
+AGR_0516,-34.04166657645453,-65.12500008354543,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1488,1378,ARG,Natural_Earth_110m_admin0,15.0,maiz,Maize
+AGR_0517,42.62500003445458,128.37499977572733,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,568,3700,CHN,Natural_Earth_110m_admin0,24.0,maiz,Maize
+AGR_0518,65.54166668445458,-22.291666781363602,Iceland,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,293,1892,ISL,Natural_Earth_110m_admin0,3.0,barl,Barley
+AGR_0519,-22.374999918272707,133.62499977190916,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1348,3763,AUS,Natural_Earth_110m_admin0,1.0,trof,Other Tropical Fruit
+AGR_0520,-2.958333265727248,105.29166645918187,Indonesia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1115,3423,IDN,Natural_Earth_110m_admin0,18.0,oilp,Oil Palm
+AGR_0521,53.3750000266364,158.4583330871819,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,439,4061,RUS,Natural_Earth_110m_admin0,6.0,pota,Potato
+AGR_0522,38.95833337045458,-121.29166670936362,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,612,704,USA,Natural_Earth_110m_admin0,22.0,rest,Rest of Crops
+AGR_0523,11.125000057363664,-3.375000128454502,Burkina Faso,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,946,2119,BFA,Natural_Earth_110m_admin0,23.0,sorg,Sorghum
+AGR_0524,43.54166670045458,92.37499980190918,China,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,557,3268,CHN,Natural_Earth_110m_admin0,2.0,vege,Other Vegetables
+AGR_0525,55.791666691545494,-112.0416667160909,Canada,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,410,815,CAN,Natural_Earth_110m_admin0,5.0,opul,Other Pulses
+AGR_0526,35.62500003954548,-87.45833340063635,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,652,1110,USA,Natural_Earth_110m_admin0,14.0,soyb,Soybean
+AGR_0527,16.54166672009093,77.54166647936373,India,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,881,3090,IND,Natural_Earth_110m_admin0,26.0,cott,Cotton
+AGR_0528,16.291666720272758,119.79166644863645,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,884,3597,,unresolved_no_polygon_match,17.0,rice,Rice
+AGR_0529,-20.291666586454525,17.7083331895455,Namibia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1323,2372,NAM,Natural_Earth_110m_admin0,3.0,maiz,Maize
+AGR_0530,-38.45833323990907,-70.37500007972724,Argentina,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1541,1315,ARG,Natural_Earth_110m_admin0,5.0,temf,Temperate Fruit
+AGR_0531,29.208333377545486,-97.7083333931818,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,729,987,USA,Natural_Earth_110m_admin0,3.0,cott,Cotton
+AGR_0532,-15.208333256818165,131.9583331064546,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1262,3743,AUS,Natural_Earth_110m_admin0,3.0,cott,Cotton
+AGR_0533,-20.791666586090898,46.79166650172732,Madagascar,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1329,2721,MDG,Natural_Earth_110m_admin0,23.0,cass,Cassava
+AGR_0534,9.291666725363669,14.291666525363695,Chad,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,968,2331,TCD,Natural_Earth_110m_admin0,33.0,coco,Cocoa
+AGR_0535,4.87500006190912,-8.291666791545424,Liberia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1021,2060,LBR,Natural_Earth_110m_admin0,19.0,rubb,Rubber
+AGR_0536,48.95833336318185,55.70833316190914,Kazakhstan,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,492,2828,KAZ,Natural_Earth_110m_admin0,7.0,barl,Barley
+AGR_0537,54.79166669227276,81.124999810091,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,422,3133,RUS,Natural_Earth_110m_admin0,14.0,whea,Wheat
+AGR_0538,11.45833339045457,92.62499980172734,UNRESOLVED,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,942,3271,,unresolved_no_polygon_match,11.0,rest,Rest of Crops
+AGR_0539,41.54166670190912,-79.45833340645453,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,581,1206,USA,Natural_Earth_110m_admin0,17.0,maiz,Maize
+AGR_0540,45.95833336536367,95.5416664662728,Mongolia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,528,3306,MNG,Natural_Earth_110m_admin0,1.0,ocer,Other Cereals
+AGR_0541,40.95833336900003,-120.70833337645453,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,588,711,USA,Natural_Earth_110m_admin0,4.0,ocer,Other Cereals
+AGR_0542,16.708333386636397,-3.125000128636316,Mali,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,879,2122,MLI,Natural_Earth_110m_admin0,4.0,pmil,Pearl Millet
+AGR_0543,-35.54166657536362,143.79166643118188,Australia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1506,3885,AUS,Natural_Earth_110m_admin0,4.0,bean,Bean
+AGR_0544,36.04166670590912,-93.95833339590908,United States of America,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,647,1032,USA,Natural_Earth_110m_admin0,14.0,soyb,Soybean
+AGR_0545,19.958333384272763,-105.29166672099998,Mexico,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,840,896,MEX,Natural_Earth_110m_admin0,19.0,trof,Other Tropical Fruit
+AGR_0546,-19.54166658699998,-63.87500008445451,Bolivia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1314,1393,BOL,Natural_Earth_110m_admin0,21.0,maiz,Maize
+AGR_0547,-4.458333264636337,-40.54166676809086,Brazil,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1133,1673,BRA,Natural_Earth_110m_admin0,13.0,maiz,Maize
+AGR_0548,-3.8749999317272454,12.624999859909138,Republic of the Congo,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1126,2311,COG,Natural_Earth_110m_admin0,29.0,cass,Cassava
+AGR_0549,-10.374999926999976,29.458333181000057,Zambia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,1204,2513,ZMB,Natural_Earth_110m_admin0,16.0,maiz,Maize
+AGR_0550,64.3750000186364,46.12499983554551,Russia,MAPSPAM_2020_crop_active_5arcmin_grid_cell,2020,5,9.3,grid,-1,307,2713,RUS,Natural_Earth_110m_admin0,2.0,pota,Potato
