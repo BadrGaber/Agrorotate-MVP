@@ -98,7 +98,7 @@ function offlinePrecache(): Plugin {
 }
 
 export default defineConfig({
-  base: "./",
+  base: "/",
   plugins: [react(), offlinePrecache()],
   server: {
     port: 5173,

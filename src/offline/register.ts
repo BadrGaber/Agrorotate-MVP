@@ -34,20 +34,17 @@ export function registerOfflineSupport(): void {
   if (registration) return;
 
   registration = new Promise((resolve) => {
-    const start = () => {
-      navigator.serviceWorker
-        .register(serviceWorkerUrl(), { scope: import.meta.env.BASE_URL || "/" })
-        .then((reg) => {
-          if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
-          resolve(reg);
-        })
-        .catch(() => resolve(null));
-    };
-    if (document.readyState === "complete") {
-      start();
-    } else {
-      window.addEventListener("load", start, { once: true });
-    }
+    navigator.serviceWorker
+      .register(serviceWorkerUrl(), {
+        scope: import.meta.env.BASE_URL || "/",
+        updateViaCache: "none",
+      })
+      .then((reg) => {
+        if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+        reg.update().catch(() => undefined);
+        resolve(reg);
+      })
+      .catch(() => resolve(null));
   });
 }
 

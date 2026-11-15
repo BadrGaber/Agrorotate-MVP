@@ -1,4 +1,4 @@
-const VERSION = "agrorotate-offline-v2";
+const VERSION = "agrorotate-offline-v3";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
 const MODEL_CACHE = "agrorotate-ai-models-v2";
@@ -39,21 +39,41 @@ async function precacheAll() {
   const cache = await caches.open(SHELL_CACHE);
   const manifest = await readManifest();
   const files = Array.from(
-    new Set([...CORE_ASSETS, ...((manifest && manifest.files) || [])]),
-  ).filter((file) => !String(file).endsWith("/sw.js"));
+    new Set(
+      [...CORE_ASSETS, ...((manifest && manifest.files) || [])].map(
+        (file) => `/${String(file).replace(/^\/+/, "")}`,
+      ),
+    ),
+  ).filter((file) => !file.endsWith("/sw.js"));
 
-  const results = await Promise.allSettled(
+  // index.html must always be re-fetched: a cached shell can point at assets
+  // from a previous deploy that are about to be pruned.
+  const fetched = await Promise.all(
     files.map(async (file) => {
       const url = scopeUrl(file);
-      if (await cache.match(url)) return;
-      const response = await fetch(new Request(url, { cache: "reload" }));
-      if (!response.ok) throw new Error(`${response.status} ${url}`);
-      await cache.put(url, response.clone());
+      const isDynamic = file === "/index.html" || file.startsWith("/models/");
+      if (!isDynamic && (await cache.match(url))) return { url, response: null };
+      try {
+        const response = await fetch(new Request(url, { cache: "reload" }));
+        if (!response.ok) return null;
+        return { url, response };
+      } catch {
+        return null;
+      }
     }),
   );
 
+  const failed = fetched.filter((item) => !item).length;
 
+  // All-or-nothing: a partial snapshot would let a new shell reference files
+  // that were never stored, which is exactly the offline white screen.
+  if (failed > 0) {
+    return { ok: false, failed, total: files.length, manifest };
+  }
 
+  for (const item of fetched) {
+    if (item && item.response) await cache.put(item.url, item.response);
+  }
 
   const keep = new Set(files.map(scopeUrl));
   const metaUrl = scopeUrl(META_KEY);
@@ -66,18 +86,18 @@ async function precacheAll() {
   const meta = {
     version: VERSION,
     total: files.length,
-    failed: results.filter((result) => result.status === "rejected").length,
+    failed: 0,
     manifestVersion: (manifest && manifest.version) || null,
     generatedAtIso: (manifest && manifest.generatedAtIso) || new Date().toISOString(),
     cachedAtIso: new Date().toISOString(),
   };
   await cache.put(
-    scopeUrl(META_KEY),
+    metaUrl,
     new Response(JSON.stringify(meta), {
       headers: { "Content-Type": "application/json" },
     }),
   );
-  return meta;
+  return { ok: true, meta };
 }
 
 
@@ -92,16 +112,17 @@ async function syncManifest() {
   const stored = await cache.match(scopeUrl(META_KEY));
   if (stored) {
     const meta = await stored.json().catch(() => null);
-    if (meta && meta.manifestVersion === manifest.version) return;
+    if (meta && meta.manifestVersion === manifest.version && meta.failed === 0) return;
   }
   await precacheAll();
 }
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    precacheAll()
-      .catch(() => undefined)
-      .then(() => self.skipWaiting()),
+    precacheAll().then((result) => {
+      if (!result.ok) throw new Error(`precache incomplete: ${result.failed}/${result.total}`);
+      return self.skipWaiting();
+    }),
   );
 });
 
@@ -115,6 +136,7 @@ self.addEventListener("activate", (event) => {
           .map((name) => caches.delete(name)),
       );
       await self.clients.claim();
+      await syncManifest().catch(() => undefined);
     })(),
   );
 });
