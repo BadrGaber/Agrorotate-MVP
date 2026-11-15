@@ -1,4 +1,5 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { AppShell } from "./app/AppShell";
 import { useRoute } from "./app/router";
 import { WorkspaceProvider } from "./state/workspace";
@@ -124,6 +125,8 @@ export function App() {
           />
         </Suspense>
       )}
+
+      <Analytics />
     </WorkspaceProvider>
   );
 }

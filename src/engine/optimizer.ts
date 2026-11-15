@@ -1281,6 +1281,22 @@ export function runNeuralSurrogateInference(
   };
 }
 
+export interface TrajectoryContextFactors {
+  espPct?: number;
+  caco3Pct?: number;
+  no3nPpm?: number;
+  olsenPPpm?: number;
+  exchangeableKPpm?: number;
+  heatDays35?: number;
+  annualPrecipMm?: number;
+  slopePct?: number;
+  elevationM?: number;
+  sarw?: number;
+  waterNo3nPpm?: number;
+  waterSystem?: string;
+  irrigationEff?: number;
+}
+
 /**
  * Evaluates a complete 6-season sequence of crops, computing mass balances,
  * economic returns, water savings, and soil health scores.
@@ -1294,6 +1310,7 @@ export function evaluateCropTrajectory(
   initialSomPct: number,
   waterEcwDsm: number,
   surrogateWeights?: SurrogateWeights | null,
+  contextFactors?: TrajectoryContextFactors,
 ): {
   netReturnScore: number;
   waterSavingScore: number;
