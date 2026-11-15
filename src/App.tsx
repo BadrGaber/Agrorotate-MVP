@@ -86,7 +86,7 @@ export function App() {
         <PlanPage navigate={navigate} />
       </SetupGate>
     ) : route === "crops" ? (
-      <CropsPage navigate={navigate} />
+      <CropsPage />
     ) : route === "evidence" ? (
       <EvidencePage />
     ) : route === "sources" ? (

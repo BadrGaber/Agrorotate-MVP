@@ -9,7 +9,6 @@ import {
   SALINITY_VERIFIED_COUNT,
 } from "../data/catalog";
 import { EVIDENCE_CLAIMS, EVIDENCE_CROPS } from "../data/evidence/generated";
-import type { RouteKey } from "../app/router";
 
 const STATUS_CLASS = (status: string) =>
   status.startsWith("SUPPORTED")
@@ -38,7 +37,7 @@ const STATUS_LABEL = (status: string) =>
     .replace("SPECIES MISMATCH", "Species mismatch")
     .replace("CONDITIONAL MATCH", "Conditional match");
 
-export function CropsPage({ navigate }: { navigate: (route: RouteKey) => void }) {
+export function CropsPage() {
   const [query, setQuery] = useState("");
   const [family, setFamily] = useState("all");
   const [season, setSeason] = useState("all");
@@ -306,15 +305,6 @@ export function CropsPage({ navigate }: { navigate: (route: RouteKey) => void })
                   <strong>Activation rule:</strong> {selectedEvidence.activationGate}
                 </Note>
 
-                <div className="row" style={{ marginTop: 12 }}>
-                  <button
-                    type="button"
-                    className="btn btn--small btn--primary"
-                    onClick={() => navigate("plan")}
-                  >
-                    Use in the rotation board
-                  </button>
-                </div>
               </Card>
 
               <Card
