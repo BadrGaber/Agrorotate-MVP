@@ -16,14 +16,7 @@ export interface EoGibsLayer {
 }
 
 export interface EoProductDefinition {
-  id:
-    | "hls"
-    | "smap"
-    | "gpm"
-    | "srtm"
-    | "modis"
-    | "ecostress"
-    | "soilgrids";
+  id: "srtm" | "soilgrids";
   name: string;
   provider: string;
   resolution: string;
@@ -38,88 +31,6 @@ export interface EoProductDefinition {
 }
 
 export const EO_PRODUCTS: EoProductDefinition[] = [
-  {
-    id: "hls",
-    name: "HLS / Landsat",
-    provider: "NASA LP DAAC · Harmonized Landsat Sentinel-2 v2.0",
-    resolution: "30 m",
-    cadence: "2–3 days (Landsat 8/9 + Sentinel-2)",
-    role: "Reflectance and NDVI history — crop condition, residue and cover.",
-    caveat:
-      "GIBS reflectance tiles are visual context only. Numeric NDVI/EVI2 needs granules, QA masks and an Earthdata token.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
-        matrix: "GoogleMapsCompatible_Level12",
-        maxNativeZoom: 12,
-        label: "HLS S30 · Sentinel-2",
-      },
-      {
-        id: "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
-        matrix: "GoogleMapsCompatible_Level12",
-        maxNativeZoom: 12,
-        label: "HLS L30 · Landsat",
-      },
-    ],
-    docsUrl: "https://www.earthdata.nasa.gov/data/projects/hls",
-    methodNote:
-      "30 m reflectance tiles on the map; numeric NDVI history needs an Earthdata token.",
-  },
-  {
-    id: "smap",
-    name: "SMAP L4",
-    provider: "NASA NSIDC DAAC · SPL4SMGP v008",
-    resolution: "9 km EASE-Grid 2.0",
-    cadence: "3-hourly / daily",
-    role: "Surface and root-zone moisture context — never a field probe.",
-    caveat:
-      "A 9 km pixel averages many fields. The layer is context; numeric wetness percentiles need an Earthdata token.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
-        matrix: "GoogleMapsCompatible_Level6",
-        maxNativeZoom: 6,
-        label: "SMAP L4 · root zone",
-      },
-      {
-        id: "SMAP_L4_Analyzed_Surface_Soil_Moisture",
-        matrix: "GoogleMapsCompatible_Level6",
-        maxNativeZoom: 6,
-        label: "SMAP L4 · surface",
-      },
-    ],
-    docsUrl: "https://nsidc.org/data/spl4smgp/versions/8",
-    methodNote:
-      "9 km root-zone and surface tiles on the map; numeric values are token-gated.",
-  },
-  {
-    id: "gpm",
-    name: "GPM IMERG",
-    provider: "NASA GES DISC · GPM_3IMERGDF / GPM_3IMERGHH",
-    resolution: "0.1° (~10 km)",
-    cadence: "30 min / daily",
-    role: "Satellite rainfall estimates — not irrigation delivery.",
-    caveat:
-      "IMERG is a satellite estimate with latency. It complements POWER rainfall but does not measure water applied at the field.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "IMERG_Precipitation_Rate",
-        matrix: "GoogleMapsCompatible_Level6",
-        maxNativeZoom: 6,
-        label: "GPM IMERG · precipitation rate",
-      },
-    ],
-    docsUrl:
-      "https://www.earthdata.nasa.gov/data/catalog/ges-disc-gpm-3imergdf-07",
-    methodNote:
-      "IMERG precipitation-rate tiles on the map; numeric totals need an Earthdata token.",
-  },
   {
     id: "srtm",
     name: "SRTM DEM",
@@ -143,47 +54,6 @@ export const EO_PRODUCTS: EoProductDefinition[] = [
       "https://www.earthdata.nasa.gov/data/catalog/lpcloud-srtmgl1-003",
     methodNote:
       "Elevation and plane-fit slope from a 5×5 DEM sample grid. Slope is a model input; elevation is climate context.",
-  },
-  {
-    id: "modis",
-    name: "MODIS MOD13Q1",
-    provider: "NASA LP DAAC · MOD13Q1 v061",
-    resolution: "250 m",
-    cadence: "16-day composite",
-    role: "Vegetation-index context and seasonal anomaly.",
-    caveat:
-      "The 16-day composite is context, not a yield measurement. GIBS shows the rendered index; numeric values need granules and an Earthdata token.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "MODIS_Terra_L3_NDVI_16Day",
-        matrix: "GoogleMapsCompatible_Level9",
-        maxNativeZoom: 9,
-        label: "MODIS · NDVI 16-day",
-      },
-    ],
-    docsUrl:
-      "https://www.earthdata.nasa.gov/data/catalog/lpcloud-mod13q1-061",
-    methodNote:
-      "250 m / 16-day NDVI tiles on the map; numeric index values are token-gated.",
-  },
-  {
-    id: "ecostress",
-    name: "ECOSTRESS / MOD16",
-    provider: "NASA LP DAAC · ECO_L3T_ET_ALEXI / MOD16A2",
-    resolution: "70 m (ECOSTRESS) / 500 m (MOD16)",
-    cadence: "irregular ISS overpass / 8-day",
-    role: "Actual ET and evaporative-stress research layers.",
-    caveat:
-      "There is no public GIBS layer for ECOSTRESS ET. Numeric retrieval is irregular, cloud-sensitive and needs an Earthdata token.",
-    status: "token",
-    numeric: "token",
-    gibs: [],
-    docsUrl:
-      "https://www.earthdata.nasa.gov/data/catalog/lpcloud-eco-l3t-et-alexi-002",
-    methodNote:
-      "No public visual layer; numeric ET requires an Earthdata token and granule processing.",
   },
   {
     id: "soilgrids",
@@ -216,66 +86,6 @@ export interface EoOverlay {
 
 /** Verified against the GIBS WMTS capabilities on 12 Nov 2026. */
 export const EO_OVERLAYS: EoOverlay[] = [
-  {
-    id: "modis16",
-    label: "MODIS NDVI · 16-day",
-    layer: "MODIS_Terra_L3_NDVI_16Day",
-    matrix: "GoogleMapsCompatible_Level9",
-    extension: "png",
-    maxNativeZoom: 9,
-    attribution: "NASA GIBS / EOSDIS · MODIS NDVI (16-day)",
-    note: "250 m · 16-day composite",
-  },
-  {
-    id: "smapRoot",
-    label: "SMAP L4 · root zone",
-    layer: "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
-    matrix: "GoogleMapsCompatible_Level6",
-    extension: "png",
-    maxNativeZoom: 6,
-    attribution: "NASA GIBS / EOSDIS · SMAP L4 root-zone moisture",
-    note: "9 km · root-zone context",
-  },
-  {
-    id: "smapSurface",
-    label: "SMAP L4 · surface",
-    layer: "SMAP_L4_Analyzed_Surface_Soil_Moisture",
-    matrix: "GoogleMapsCompatible_Level6",
-    extension: "png",
-    maxNativeZoom: 6,
-    attribution: "NASA GIBS / EOSDIS · SMAP L4 surface moisture",
-    note: "9 km · surface context",
-  },
-  {
-    id: "imerg",
-    label: "GPM IMERG · rain rate",
-    layer: "IMERG_Precipitation_Rate",
-    matrix: "GoogleMapsCompatible_Level6",
-    extension: "png",
-    maxNativeZoom: 6,
-    attribution: "NASA GIBS / EOSDIS · GPM IMERG precipitation",
-    note: "~10 km · rainfall context",
-  },
-  {
-    id: "hlsS30",
-    label: "HLS S30 · Sentinel-2",
-    layer: "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
-    matrix: "GoogleMapsCompatible_Level12",
-    extension: "png",
-    maxNativeZoom: 12,
-    attribution: "NASA GIBS / EOSDIS · HLS S30 reflectance",
-    note: "30 m · Sentinel-2 HLS",
-  },
-  {
-    id: "hlsL30",
-    label: "HLS L30 · Landsat",
-    layer: "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
-    matrix: "GoogleMapsCompatible_Level12",
-    extension: "png",
-    maxNativeZoom: 12,
-    attribution: "NASA GIBS / EOSDIS · HLS L30 reflectance",
-    note: "30 m · Landsat HLS",
-  },
   {
     id: "srtm",
     label: "SRTM · colour relief",

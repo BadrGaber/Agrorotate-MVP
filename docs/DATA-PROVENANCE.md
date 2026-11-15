@@ -38,10 +38,9 @@ of inventing a series.
 
 ## What is *not* wired
 
-The registry lists planned ingestion layers (HLS/Landsat NDVI, SMAP, IMERG,
-MODIS/ECOSTRESS ET, SRTM). They are shown as `visual` or `next` in the product
-list and are **not** inputs to the rotation score. Only NASA POWER daily
-agroclimatology is wired into the decision in this build.
+Only NASA POWER daily agroclimatology is wired into the decision in this build.
+No token-gated numeric granule product is listed or presented as available: if a
+layer is not implemented, it is not advertised as a product input.
 
 ## Verification
 

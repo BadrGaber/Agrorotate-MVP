@@ -385,9 +385,8 @@ export function MethodPage() {
             <Note tone="sky" glyph="info" style={{ marginTop: 12 }}>
               <strong>Visual is not numeric.</strong> The map layers are rendered
               imagery; the engine never reads a number out of a pixel. SoilGrids and
-              the SRTM terrain metrics are live public data. Numeric HLS, SMAP, GPM,
-              MODIS and ECOSTRESS values need an Earthdata token on the server — the
-              browser never holds it.
+              the SRTM terrain metrics are live public data. No token-gated granule
+              product is part of this build.
             </Note>
           </Card>
 

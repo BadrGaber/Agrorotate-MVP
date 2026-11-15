@@ -42,10 +42,6 @@ The AI neural surrogate model is the primary engine for predicting multi-season 
 | Source       | Product / endpoint                                                         | What we take                                                                    | Role                                                                  |
 | ------------ | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | --------------------------------------------------------------------- |
 | NASA POWER      | `https://power.larc.nasa.gov/api/temporal/daily/point` with `community=AG` | `T2M`, `T2M_MAX`, `T2M_MIN`, `RH2M`, `WS2M`, `ALLSKY_SFC_SW_DWN`, `PRECTOTCORR` | Monthly/seasonal climate, heat days, dry days, frost days, FAO-56 ETo |
-| NASA GIBS HLS   | WMTS `HLS_S30_Nadir_BRDF_Adjusted_Reflectance`, `HLS_L30_Nadir_BRDF_Adjusted_Reflectance` | rendered 30 m reflectance tiles (`GoogleMapsCompatible_Level12`) | Visual crop-condition context; numeric NDVI/EVI2 is token-gated |
-| NASA GIBS SMAP  | WMTS `SMAP_L4_Analyzed_Root_Zone_Soil_Moisture`, `SMAP_L4_Analyzed_Surface_Soil_Moisture` | rendered 9 km moisture tiles (`Level6`) | Visual moisture context; numeric values are token-gated |
-| NASA GIBS GPM   | WMTS `IMERG_Precipitation_Rate` | rendered precipitation-rate tiles (`Level6`) | Visual rainfall context; numeric totals are token-gated |
-| NASA GIBS MODIS | WMTS `MODIS_Terra_L3_NDVI_16Day` (MOD13Q1 context), `MODIS_Terra_NDVI_8Day` | rendered 250 m NDVI tiles (`Level9`) | Visual vegetation context; numeric index values are token-gated |
 | NASA GIBS SRTM  | WMTS `SRTM_Color_Index` | rendered relief tiles (`Level12`) | Visual terrain context |
 | SRTM terrain    | Open-Meteo elevation API (Copernicus DEM / SRTM-backed) | 5x5 sample grid across the parcel bbox | Live elevation and plane-fit slope. Slope is a model input; elevation is climate context. The API also returns flow/TWI screening metrics, which the plan does not use |
 | ISRIC SoilGrids | REST `https://rest.isric.org/soilgrids/v2.0/properties/query` | clay, sand, silt, pH, SOC, CEC, bulk density, coarse fragments, water retention at 10/33/1500 kPa | Live 250 m mapped soil priors; depth-weighted 0-30 / 0-100 cm, with uncertainty. Never a lab test |
@@ -60,11 +56,6 @@ toolbar exposes one GIBS product at a time and labels the native zoom.
 
 | Source          | Product                                           | Resolution / cadence         | Feature it contributes                                        |
 | --------------- | ------------------------------------------------- | ---------------------------- | ------------------------------------------------------------- |
-| NASA SMAP       | `SPL3SMP_E` L3 enhanced; `SPL4SMGP` L4 root-zone  | 9 km, daily / 3-hourly       | surface and root-zone soil moisture, anomalies, dry-down      |
-| NASA GPM        | `GPM_3IMERGDF` daily; `GPM_3IMERGHH` half-hourly  | 0.1 deg, daily / 30 min         | rainfall totals, intensity, dry-spell length, heavy-rain days |
-| NASA MODIS      | `MOD13Q1` NDVI/EVI; `MOD09Q1` surface reflectance | 250 m, 16-day / 8-day        | vegetation vigour, seasonal anomaly, phenology timing         |
-| NASA ECOSTRESS  | `ECO3ETPTJPL` ET; `ECO4ESIALEXI` ESI              | 70 m, irregular ISS overpass | actual ET and evaporative stress where coverage exists        |
-| NASA HLS        | `HLSL30` / `HLSS30`                               | 30 m, 2-3 days               | cloud-free crop condition and residue/cover                   |
 | NASA SRTM       | `SRTMGL1`                                         | 30 m                         | elevation, slope, flow accumulation proxy                     |
 | NASA GRACE-FO   | mascon solutions                                  | ~300 km, monthly             | regional groundwater trend, **not** a field measurement       |
 | ISRIC SoilGrids | 250 m                                             | static                       | texture, SOC, pH, CEC, bulk density priors                    |
@@ -74,11 +65,11 @@ Access notes:
 
 - POWER, GIBS, the Open-Meteo terrain samples and the ISRIC SoilGrids REST API are
   public; no Earthdata login is required for the endpoints the app calls today.
-- SMAP, GPM, MODIS, ECOSTRESS, HLS and SRTM **numeric granules** are distributed
-  through NASA Earthdata (GES DISC / LP DAAC / NSIDC). The server needs an
-  Earthdata token, username/password pair or `~/.netrc` entry; the browser must
-  never hold that credential. `server/eo.mjs` reports only the configured boolean
-  and source label.
+- No token-gated granule product is required by the current product: POWER,
+  GIBS, the Open-Meteo terrain samples and the ISRIC SoilGrids REST API are
+  public. `server/eo.mjs` can report whether an Earthdata credential is
+  configured, but it never turns that credential into a promised value. The
+  browser never holds the credential.
 - The unified `POST /api/v1/eo` response labels every product as `live`,
   `visual` or `token`. A token does not create a value by itself: a numeric
   value appears only after a real granule extraction returns one.
@@ -283,7 +274,7 @@ Request:
   ],
   "season": { "year": 2027, "name": "cool" },
   "decisionDate": "2026-10-01",
-  "products": ["POWER", "SMAP", "GPM", "MODIS", "SRTM"]
+  "products": ["POWER", "SRTM"]
 }
 ```
 
@@ -296,20 +287,18 @@ Response:
     "seasonEtoMm": 310,
     "waterGapMm": 269,
     "heatDays35": 0,
-    "drySpellMaxDays": 12,
-    "smRootzoneP10": 0.08,
-    "ndviAnomaly": -0.06
+    "drySpellMaxDays": 12
   },
   "provenance": [
     {
       "feature": "seasonRainMm",
-      "product": "GPM_3IMERGDF",
-      "version": "07",
+      "product": "POWER",
+      "version": "v2",
       "window": "2026-09-01/2026-11-30",
       "requestUrl": "https://..."
     }
   ],
-  "missing": ["ECO3ETPTJPL: no overpass in this window"],
+  "missing": ["soil moisture: not part of this build"],
   "cached": true
 }
 ```
@@ -318,7 +307,7 @@ Rules:
 
 - `missing` is mandatory. An absent feature is never returned as `0`.
 - Every numeric feature carries provenance.
-- The endpoint is server-side only; it holds the Earthdata credential.
+- The endpoint is server-side only; it never exposes a credential to the browser.
 - Responses are `Cache-Control: private, no-store` when they include a user field.
 
 ### `POST /api/v1/assistant` (later)
@@ -459,8 +448,8 @@ The observation-to-number substitutions that remain are defined once in
 
 | Now (front-end + basic API)                                  | After the freeze                             |
 | ------------------------------------------------------------ | -------------------------------------------- |
-| Leaflet field drawing, Esri imagery, GIBS NDVI/SMAP overlays | SMAP/GPM/MODIS feature extraction            |
-| NASA POWER climate context and FAO-56 ETo                    | ECOSTRESS/HLS/GRACE ingestion                |
+| Leaflet field drawing, Esri imagery, GIBS NDVI/relief overlays | Additional satellite feature extraction     |
+| NASA POWER climate context and FAO-56 ETo                    | GRACE-FO groundwater context                 |
 | Local autosave + optional plan sync                          | Accounts, server-scoped fields               |
 | Rule-based board, 3-rotation compare, plan summary           | Calibrated season-outcome models             |
 | Five-step preview, evidence drawer, method page               | Evidence-grounded assistant                  |
@@ -476,11 +465,6 @@ it with a measured or modelled value and show its source.
 
 - NASA POWER: <https://power.larc.nasa.gov/>
 - NASA GIBS: <https://www.earthdata.nasa.gov/eosdis/science-system-description/eosdis-components/gibs>
-- SMAP: <https://smap.jpl.nasa.gov/>
-- GPM IMERG: <https://gpm.nasa.gov/data/imerg>
-- MODIS vegetation indices: <https://modis.gsfc.nasa.gov/data/dataprod/mod13.php>
-- ECOSTRESS: <https://ecostress.jpl.nasa.gov/>
-- HLS: <https://hls.gsfc.nasa.gov/>
 - SRTM: <https://www.earthdata.nasa.gov/data/instruments/srtm>
 - GRACE-FO: <https://gracefo.jpl.nasa.gov/>
 - SoilGrids: <https://soilgrids.org/>

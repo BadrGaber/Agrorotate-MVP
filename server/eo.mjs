@@ -28,82 +28,6 @@ export const SOILGRIDS_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 /** Product registry shared by the API and the UI. */
 export const EO_PRODUCTS = [
   {
-    id: "hls",
-    name: "HLS / Landsat",
-    provider: "NASA LP DAAC · Harmonized Landsat Sentinel-2 v2.0",
-    resolution: "30 m",
-    cadence: "2–3 days (Landsat 8/9 + Sentinel-2)",
-    role: "Reflectance and NDVI history — crop condition, residue and cover.",
-    caveat:
-      "GIBS reflectance tiles are visual context only. Numeric NDVI/EVI2 needs granules, QA masks and an Earthdata token.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "HLS_S30_Nadir_BRDF_Adjusted_Reflectance",
-        matrix: "GoogleMapsCompatible_Level12",
-        maxNativeZoom: 12,
-        label: "HLS S30 · Sentinel-2",
-      },
-      {
-        id: "HLS_L30_Nadir_BRDF_Adjusted_Reflectance",
-        matrix: "GoogleMapsCompatible_Level12",
-        maxNativeZoom: 12,
-        label: "HLS L30 · Landsat",
-      },
-    ],
-    docsUrl: "https://www.earthdata.nasa.gov/data/projects/hls",
-  },
-  {
-    id: "smap",
-    name: "SMAP L4",
-    provider: "NASA NSIDC DAAC · SPL4SMGP v008",
-    resolution: "9 km EASE-Grid 2.0",
-    cadence: "3-hourly / daily",
-    role: "Surface and root-zone moisture context — never a field probe.",
-    caveat:
-      "A 9 km pixel averages many fields. The visual layer is context; numeric wetness percentiles need an Earthdata token.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "SMAP_L4_Analyzed_Root_Zone_Soil_Moisture",
-        matrix: "GoogleMapsCompatible_Level6",
-        maxNativeZoom: 6,
-        label: "SMAP L4 · root zone",
-      },
-      {
-        id: "SMAP_L4_Analyzed_Surface_Soil_Moisture",
-        matrix: "GoogleMapsCompatible_Level6",
-        maxNativeZoom: 6,
-        label: "SMAP L4 · surface",
-      },
-    ],
-    docsUrl: "https://nsidc.org/data/spl4smgp/versions/8",
-  },
-  {
-    id: "gpm",
-    name: "GPM IMERG",
-    provider: "NASA GES DISC · GPM_3IMERGDF / GPM_3IMERGHH",
-    resolution: "0.1° (~10 km)",
-    cadence: "30 min / daily",
-    role: "Satellite rainfall estimates — not irrigation delivery.",
-    caveat:
-      "IMERG is a satellite estimate with a latency. It complements POWER rainfall but does not measure water applied at the field.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "IMERG_Precipitation_Rate",
-        matrix: "GoogleMapsCompatible_Level6",
-        maxNativeZoom: 6,
-        label: "GPM IMERG · precipitation rate",
-      },
-    ],
-    docsUrl:
-      "https://www.earthdata.nasa.gov/data/catalog/ges-disc-gpm-3imergdf-07",
-  },
-  {
     id: "srtm",
     name: "SRTM DEM",
     provider: "NASA SRTM GL1 · sampled through Open-Meteo elevation",
@@ -124,43 +48,6 @@ export const EO_PRODUCTS = [
     ],
     docsUrl:
       "https://www.earthdata.nasa.gov/data/catalog/lpcloud-srtmgl1-003",
-  },
-  {
-    id: "modis",
-    name: "MODIS MOD13Q1",
-    provider: "NASA LP DAAC · MOD13Q1 v061",
-    resolution: "250 m",
-    cadence: "16-day composite",
-    role: "Vegetation-index context and seasonal anomaly.",
-    caveat:
-      "The 16-day composite is context, not a yield measurement. GIBS shows the rendered index; numeric values need granules and an Earthdata token.",
-    status: "visual",
-    numeric: "token",
-    gibs: [
-      {
-        id: "MODIS_Terra_L3_NDVI_16Day",
-        matrix: "GoogleMapsCompatible_Level9",
-        maxNativeZoom: 9,
-        label: "MODIS · NDVI 16-day",
-      },
-    ],
-    docsUrl:
-      "https://www.earthdata.nasa.gov/data/catalog/lpcloud-mod13q1-061",
-  },
-  {
-    id: "ecostress",
-    name: "ECOSTRESS / MOD16",
-    provider: "NASA LP DAAC · ECO_L3T_ET_ALEXI / MOD16A2",
-    resolution: "70 m (ECOSTRESS) / 500 m (MOD16)",
-    cadence: "irregular ISS overpass / 8-day",
-    role: "Actual ET and evaporative-stress research layers.",
-    caveat:
-      "There is no public GIBS layer for ECOSTRESS ET. Numeric retrieval is irregular, cloud-sensitive and needs an Earthdata token.",
-    status: "token",
-    numeric: "token",
-    gibs: [],
-    docsUrl:
-      "https://www.earthdata.nasa.gov/data/catalog/lpcloud-eco-l3t-et-alexi-002",
   },
   {
     id: "soilgrids",
@@ -1069,7 +956,7 @@ export async function buildEoSnapshot({
       : null,
     limitations: [
       "GIBS layers are pictures; the decision engine never reads a number out of a pixel.",
-      "SMAP, GPM, HLS, MODIS and ECOSTRESS numeric values require Earthdata authentication and granule processing.",
+      "No token-gated granule product is part of this build; GIBS is visual and the numeric EO inputs are terrain and SoilGrids.",
       "SoilGrids values are 250 m mapped priors, not laboratory measurements.",
     ],
   };

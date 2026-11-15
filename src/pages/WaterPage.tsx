@@ -42,10 +42,6 @@ const SOURCES: { value: WaterSource; label: string; note: string }[] = [
 const NASA_PRODUCTS: [string, string, string, "wired" | "visual" | "next"][] = [
   ["POWER daily AG", "temperature, rain, humidity, wind, solar, ETo", "S03", "wired"],
   ["MODIS NDVI", "8-day vegetation greenness via NASA GIBS", "S08", "visual"],
-  ["SMAP surface moisture", "L3 passive day soil moisture via NASA GIBS", "S09", "visual"],
-  ["SMAP L4 root zone", "0–100 cm modelled profile moisture", "S09", "next"],
-  ["GPM IMERG", "~10 km satellite rainfall estimates", "S10", "next"],
-  ["ECOSTRESS / MOD16", "evapotranspiration and water-stress layers", "S11–S12", "next"],
 ];
 
 export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void }) {
@@ -466,8 +462,7 @@ export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void })
             </div>
             <p className="small" style={{ marginTop: 10 }}>
               POWER is the only climate layer that enters a calculation today. GIBS
-              layers are visual only; SMAP L4, GPM IMERG and ECOSTRESS are the next
-              data joins for the AI feature store.
+              layers are visual only; no satellite granule is part of this build.
             </p>
           </Card>
         </div>

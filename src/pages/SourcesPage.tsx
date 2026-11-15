@@ -9,7 +9,7 @@ const EXTRA_GIBS_ROWS = [
     label: "MODIS · NDVI 8-day",
     id: "MODIS_Terra_NDVI_8Day",
     zoom: 9,
-    use: "Rolling 8-day greenness context; the 16-day composite is the registered MOD13Q1 product.",
+    use: "Rolling 8-day greenness context for the map; visual only.",
   },
   {
     product: "True-colour base",
@@ -54,7 +54,7 @@ export function SourcesPage() {
 
       <div className="grid grid--4" style={{ marginBottom: 20 }}>
         <Stat value="NASA POWER" label="Climate engine" foot="daily AG · 7 parameters" tone="forest" />
-        <Stat value="NASA GIBS" label="Visual layers" foot="HLS · SMAP · GPM · MODIS · SRTM" />
+        <Stat value="NASA GIBS" label="Visual layers" foot="SRTM · static relief" />
         <Stat value="SoilGrids" label="Live soil priors" foot="250 m · ISRIC REST" tone="harvest" />
         <Stat value="FAO 56" label="Water & salinity" foot="Kc · threshold · slope" tone="harvest" />
       </div>
@@ -143,7 +143,7 @@ export function SourcesPage() {
             EPSG:3857 · <span className="mono">image/png</span>. The URL carries style then
             time, e.g. <span className="mono">/&#123;layer&#125;/default/default/&#123;matrix&#125;/&#123;z&#125;/&#123;y&#125;/&#123;x&#125;.png</span>.
             The base map uses the GIBS WMS endpoint. Browse imagery is visual context only:
-            the engine never reads a number out of a pixel, and SMAP/GPM pixels are much
+            the engine never reads a number out of a pixel, and a GIBS pixel is much
             coarser than a field.
           </p>
           <div className="row" style={{ marginTop: 10 }}>
@@ -181,7 +181,7 @@ export function SourcesPage() {
                 </tr>
                 <tr>
                   <td>Unified EO snapshot</td>
-                  <td><span className="mono">POST /api/v1/eo</span> returns terrain, SoilGrids, GIBS layer registry and the server-side Earthdata token status in one response. Accepts a boundary or a lat/lon point.</td>
+                  <td><span className="mono">POST /api/v1/eo</span> returns terrain, SoilGrids and the GIBS layer registry in one response. Accepts a boundary or a lat/lon point.</td>
                 </tr>
                 <tr>
                   <td>Browser location</td>
@@ -246,9 +246,9 @@ export function SourcesPage() {
 
         <Card
           glyph="lock"
-          title="Earthdata-gated numeric products"
-          hint="HLS, SMAP, GPM, MODIS and ECOSTRESS numeric values need NASA Earthdata authentication on the server."
-          aside={<span className="badge badge--none">token · server-side</span>}
+          title="Numeric earth-observation inputs"
+          hint="SRTM terrain and SoilGrids priors are the only numeric EO inputs in this build; both are public."
+          aside={<span className="badge badge--soft badge--meas">live</span>}
         >
           <div className="table-wrap">
             <table className="data">
@@ -281,22 +281,10 @@ export function SourcesPage() {
             </table>
           </div>
           <p className="small" style={{ marginTop: 10 }}>
-            The server checks <span className="mono">EARTHDATA_TOKEN</span>,{" "}
-            <span className="mono">EARTHDATA_BEARER_TOKEN</span>,{" "}
-            <span className="mono">EARTHDATA_USERNAME</span> +{" "}
-            <span className="mono">EARTHDATA_PASSWORD</span>, or a{" "}
-            <span className="mono">~/.netrc</span> entry for{" "}
-            <span className="mono">urs.earthdata.nasa.gov</span>. It exposes only
-            booleans and a source label; the browser never receives the credential.
-            When no token is present, the visual layer stays available and the numeric
-            value stays empty.
+            No Earthdata-token granule product is wired in this build, so no numeric
+            value depends on a credential. The server may still report whether one is
+            configured, without exposing it to the browser.
           </p>
-          <Note tone="sky" glyph="info" style={{ marginTop: 10 }}>
-            <strong>Token detected? Numeric adapters are still explicit.</strong>{" "}
-            The snapshot reports the credential status, but it does not submit a
-            granule task automatically. A numeric value appears only after a real
-            extraction job returns it.
-          </Note>
         </Card>
 
         <Card
