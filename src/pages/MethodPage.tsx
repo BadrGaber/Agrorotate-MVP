@@ -404,7 +404,7 @@ export function MethodPage() {
                 "Crops with no training row use the biophysical floor alone; the card then says Physics floor instead of Trained yield head.",
                 "The water, soil and risk terms are sourced rules: season window, family break, legume effect, FAO salinity response and your exclusions.",
                 "Your four priority sliders (yield, water, soil, risk from 0 to 5) directly configure the dynamic multi-objective vector [w_yield, w_water, w_soil, w_risk] in [0.0, 1.0].",
-                "Tensor MCTS Search Steering: The tree search exploitation term Exploitation = ∑(w_i × Score_i) / (visits + ε) is weighted by these sliders across 900+ simulation branches, guiding candidate exploration toward your financial, water, soil, or risk goals.",
+                "Biophysical MCTS Search Steering: The tree search exploitation term Exploitation = ∑(w_i × Score_i) / (visits + ε) is dynamically steered across 900 simulation rollouts within the 32-dimensional biophysical state space, guiding candidate exploration toward your financial, water, soil, or risk goals.",
                 "Risk Guardrail: When Risk & pest break is set to 3.5 or higher, the maximum economic return trajectory automatically prunes high-margin crops that introduce severe salinization hazards or root-knot nematode vulnerabilities.",
                 "Opening the rotation board runs this same hybrid for Year 1 (warm first, then cool so the family break sees the first pick) and selects Season 1 so its Best 3 card appears immediately.",
               ].map((line) => (

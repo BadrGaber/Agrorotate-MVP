@@ -131,7 +131,7 @@ export function RotationCompare({
         <div>
           <h2 className="h2">AI Multi-Objective Pareto Rotations</h2>
           <p className="small">
-            Evaluated by the NASA Biophysical Floor + Batched Tensor MCTS engine. Four
+            Evaluated by the NASA Biophysical Floor + Multi-Objective MCTS engine with Saxton–Rawls state dynamics. Four
             divergent Pareto-optimal pathways: baseline vs economic return vs water
             conservation vs soil regeneration.
           </p>

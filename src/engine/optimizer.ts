@@ -1,5 +1,5 @@
 /**
- * AgroRotate — Unified Biophysical Floor, Batched Tensor MCTS & Mass-Balance Optimization Engine
+ * AgroRotate — Unified Biophysical Floor, Multi-Objective MCTS & Mass-Balance Optimization Engine
  *
  * Conforms strictly to:
  *  - NASA Space Apps Challenge "Field Shift: Adapting Farms with NASA Data"
@@ -1570,8 +1570,9 @@ function createSeededPrng(seedStr: string): () => number {
 }
 
 /**
- * Batched Tensor Monte Carlo Tree Search (MCTS) Engine
- * Searches through millions of potential 6-season rotation branches to extract
+ * Multi-Objective Monte Carlo Tree Search (MCTS) Engine
+ * Explores the 6-season combinatorial trajectory space (~11.4 million branches)
+ * using a 32-dimensional biophysical state vector and UCB1 exploration to extract
  * the 4 Pareto solutions conforming strictly to NASA challenge specs.
  */
 export function runBatchedOptimization(
