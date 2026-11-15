@@ -11,6 +11,7 @@
  */
 
 import type { DataProvenance, NormalizedAgronomicVector } from "../state/model";
+import { parseNumericInput } from "./numericInput.ts";
 
 export type IssueSeverity = "error" | "warning" | "info";
 
@@ -108,7 +109,7 @@ export const PHYSICAL_BOUNDS: Record<string, PhysicalBound> = {
     label: "Saturated paste salinity (ECe)",
   },
   espPercent: {
-    min: 0.5,
+    min: 0.0,
     max: 65.0,
     unit: "%",
     label: "Exchangeable sodium percentage (ESP)",
@@ -138,19 +139,19 @@ export const PHYSICAL_BOUNDS: Record<string, PhysicalBound> = {
     label: "Cation exchange capacity (CEC)",
   },
   availableNPpm: {
-    min: 2.0,
+    min: 0.0,
     max: 150.0,
     unit: "ppm",
     label: "Available mineral nitrogen (NO₃-N)",
   },
   availablePPpm: {
-    min: 1.0,
+    min: 0.0,
     max: 100.0,
     unit: "ppm",
     label: "Olsen available phosphorus",
   },
   availableKPpm: {
-    min: 15.0,
+    min: 0.0,
     max: 900.0,
     unit: "ppm",
     label: "Exchangeable potassium",
@@ -187,7 +188,7 @@ export const PHYSICAL_BOUNDS: Record<string, PhysicalBound> = {
   },
   ph: { min: 3.5, max: 10.5, unit: "pH", label: "Soil reaction pH" },
   espPct: {
-    min: 0.5,
+    min: 0.0,
     max: 65.0,
     unit: "%",
     label: "Exchangeable sodium percentage (ESP)",
@@ -211,19 +212,19 @@ export const PHYSICAL_BOUNDS: Record<string, PhysicalBound> = {
     label: "Cation exchange capacity (CEC)",
   },
   no3nPpm: {
-    min: 2.0,
+    min: 0.0,
     max: 150.0,
     unit: "ppm",
     label: "Available mineral nitrogen (NO₃-N)",
   },
   olsenPPpm: {
-    min: 1.0,
+    min: 0.0,
     max: 100.0,
     unit: "ppm",
     label: "Olsen available phosphorus",
   },
   exchangeableKPpm: {
-    min: 15.0,
+    min: 0.0,
     max: 900.0,
     unit: "ppm",
     label: "Exchangeable potassium",
@@ -251,11 +252,21 @@ export function validateSingleField(
   value: number | string | null | undefined,
 ): ValidationIssue | null {
   if (value === null || value === undefined || value === "") return null;
-  const numVal =
-    typeof value === "number"
-      ? value
-      : Number(String(value).trim().replace(",", "."));
-  if (!Number.isFinite(numVal)) {
+  const bound = PHYSICAL_BOUNDS[fieldKey];
+  if (!bound) return null;
+
+  const parsed = parseNumericInput(value, {
+    key: fieldKey,
+    label: bound.label,
+    unit: bound.unit,
+    min: bound.min,
+    max: bound.max,
+  });
+
+  if (parsed.ok) return null;
+
+  const code = parsed.issue?.code;
+  if (code === "not_a_number" || code === "not_finite") {
     return {
       id: `${fieldKey}_not_number`,
       field: fieldKey,
@@ -265,22 +276,19 @@ export function validateSingleField(
     };
   }
 
-  const bound = PHYSICAL_BOUNDS[fieldKey];
-  if (!bound) return null;
-
-  if (numVal < bound.min || numVal > bound.max) {
-    return {
-      id: `${fieldKey}_out_of_bounds`,
-      field: fieldKey,
-      severity: "error",
-      title: `${bound.label} out of physical range`,
-      message: `${bound.label} must be between ${bound.min} and ${bound.max} ${bound.unit}. Entered: ${numVal} ${bound.unit}.`,
-      bounds: bound,
-      suggestedAction: `Check the lab report for typo or ensure value is within [${bound.min}, ${bound.max}].`,
-    };
-  }
-
-  return null;
+  return {
+    id: `${fieldKey}_out_of_bounds`,
+    field: fieldKey,
+    severity: "error",
+    title: `${bound.label} out of physical range`,
+    message: `${bound.label} must be between ${bound.min} and ${bound.max} ${bound.unit}. Entered: ${
+      typeof value === "number"
+        ? value
+        : Number(String(value).trim().replace(",", "."))
+    } ${bound.unit}.`,
+    bounds: bound,
+    suggestedAction: `Check the lab report for typo or ensure value is within [${bound.min}, ${bound.max}].`,
+  };
 }
 
 /**

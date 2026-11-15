@@ -36,14 +36,18 @@ AgroRotate is built AI-first. A pre-trained neural surrogate network evaluates m
 - **Automated Discrepancy Override:** If an AI prediction diverges significantly (greater than 25 percentage points) from established physical laws (such as Maas-Hoffman salinity toxicity, FAO-56 thermal thresholds, or hydraulic wilting limits), the system automatically defaults to grounded biophysical calculations. You get the predictive power of advanced machine learning backed by the fail-safe certainty of physical science.
 - **Peer-Reviewed Soil Hydraulics:** Derives continuous saturated hydraulic conductivity, field capacity, permanent wilting point, and available water capacity directly using Saxton & Rawls (2006) equations.
 
-### 3. Four Pareto-Optimal Strategies for Every Field
+### 3. Four Rotation Strategies for Every Field
 
-Farm management is never one-size-fits-all. AgroRotate evaluates millions of seasonal combinations using a high-performance Batched Monte Carlo Tree Search (MCTS) engine running in background browser workers, presenting four balanced pathways:
+Farm management is never one-size-fits-all. AgroRotate runs a high-performance Batched Monte Carlo Tree Search (MCTS) engine in a background browser worker with a fixed budget of **900 rollouts per run**. That is a budgeted sample, not an enumeration: with the full 30-crop pool the ordered 6-season space is 11,390,625 sequences, but the engine only evaluates the unique rotations its budget actually reaches. Every result reports both numbers separately, plus the measured elapsed time — see `docs/BENCHMARK.md`.
+
+The four pathways are the best alternatives the search found among the rotations it evaluated:
 
 - **Maximum Profit:** Targets the highest net economic return while screening for transport risk and seasonal market windows.
 - **Water Conservation:** Minimizes total seasonal water consumption and prioritizes drought-resilient crops without sacrificing baseline margins.
 - **Soil Regeneration:** Restores exhausted parcels by scheduling strategic nitrogen-fixing legumes and organic matter building sequences.
 - **Regional Baseline:** Visualizes standard historical rotations for the region so you can benchmark projected improvements against status-quo farming.
+
+These are not claimed to be globally Pareto-optimal. The app shows whether the non-baseline solutions are mutually non-dominated **within the evaluated set**, and ranks them by the grower's four weights.
 
 #### Dynamic Priority Steering and the Risk Guardrail
 
@@ -59,8 +63,8 @@ w_yield, w_water, w_soil, w_risk in [0.0, 1.0]
 The Tensor MCTS tree search directly integrates these weights into its Upper Confidence Bound (UCB1) exploitation equation:
 Exploitation = sum(w_i * Score_i) / (visits + epsilon)
 
-- **Targeted Exploration:** Raising the Risk slider to 5 immediately steers the tree search toward biofumigant mustards, parasitic weed trap crops (such as Orobanche suicidal germination stimulants), and proven salt-tolerant cultivars. Raising the Water slider shifts exploration toward coarse grains and water-efficient pulses.
-- **Automated Profit Risk Guardrail:** If the grower selects an elevated risk aversion setting (risk >= 3.5), the Maximum Profit algorithm automatically enforces a strict vulnerability filter. Rotations containing severe salinization hazards or monoculture vascular wilt risks are pruned from consideration, guaranteeing that high commercial paper margins never compromise the long-term biological viability of the farm.
+- **Targeted Exploration:** Raising the Risk slider to 5 steers the tree search toward biofumigant mustards, parasitic weed trap crops (such as Orobanche suicidal germination stimulants), and proven salt-tolerant cultivars. Raising the Water slider shifts exploration toward coarse grains and water-efficient pulses. Because exploration is stochastic and budgeted, changing the weights changes which rotations are reached and how they rank — it does not prove a global optimum.
+- **Profit Risk Guardrail:** If the grower selects an elevated risk aversion setting (risk >= 3.5), the Maximum Profit candidate must also pass a strict vulnerability filter. Rotations containing severe salinization hazards or monoculture vascular wilt risks are not accepted as the profit candidate. This is a screening rule inside the evaluated set, not a guarantee of biological or financial viability.
 
 ### 4. Biological Pest and Disease Defense
 

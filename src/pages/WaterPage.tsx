@@ -232,6 +232,19 @@ export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void })
                         </td>
                       </tr>
                       <tr>
+                        <td className="mono">ET₀ input coverage</td>
+                        <td>
+                          {climate.summary.etoStatus === "complete"
+                            ? "Every required POWER variable present on every day"
+                            : climate.summary.etoStatus === "partial"
+                              ? "Some days miss a required POWER variable and are excluded"
+                              : "No day had all required variables"}
+                        </td>
+                        <td>
+                          {climate.summary.etoDaysComputed}/{climate.summary.etoDaysTotal} days
+                        </td>
+                      </tr>
+                      <tr>
                         <td className="mono">Window</td>
                         <td>
                           {climate.summary.startDate} → {climate.summary.endDate}
@@ -242,12 +255,25 @@ export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void })
                         <td className="mono">Fetched</td>
                         <td>{new Date(climate.fetchedAtIso ?? "").toLocaleString()}</td>
                         <td>
-                          {climate.cache === "server_cache" ? "served from local cache" : "live request"}
+                          {climate.cache === "server_cache"
+                            ? "served from local cache — may be older than the field"
+                            : "live request"}
                         </td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
+
+                {climate.summary.etoStatus !== "complete" && (
+                  <Note tone="harvest" glyph="info">
+                    <strong>ET₀ is estimated from partial records.</strong> Only{" "}
+                    {climate.summary.etoDaysComputed} of {climate.summary.etoDaysTotal} daily
+                    records had every FAO-56 input ({climate.summary.etoRequiredInputs.join(", ")}).
+                    Missing days are excluded; this is not presented as a complete FAO-56
+                    series, and an unavailable ETo stays unavailable rather than being
+                    replaced by a measured-looking number.
+                  </Note>
+                )}
 
                 <div className="row" style={{ gap: 8 }}>
                   <ProofChip

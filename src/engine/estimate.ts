@@ -1119,7 +1119,9 @@ export function workspaceToAgronomicVector(
   eoPriorOverride?: Partial<NormalizeInputOptions["eoPrior"]>
 ): NormalizedAgronomicVector {
   const parseNumHelper = (val: string | number | null | undefined): number | undefined => {
-    if (val === null || val === undefined || val === "") return undefined;
+    if (val === null || val === undefined) return undefined;
+    // A whitespace-only field is empty, not 0 (Number(" ") is 0).
+    if (typeof val === "string" && val.trim() === "") return undefined;
     const n = typeof val === "number" ? val : Number(String(val).trim().replace(",", "."));
     return Number.isFinite(n) ? n : undefined;
   };
@@ -1184,14 +1186,29 @@ export function workspaceToAgronomicVector(
   };
   const slopePercent = field.slopeClass ? slopeMap[field.slopeClass] ?? 1.5 : 1.5;
 
-  // Normalized weights
+  // Normalized weights. NaN never enters the total, and an all-zero choice is a
+  // deliberate "no preference" (equal weights), not a missing field.
   const w = state.priorities?.weights ?? { yield: 3, water: 3, soil: 3, risk: 3 };
-  const wTotal = (w.yield ?? 3) + (w.water ?? 3) + (w.soil ?? 3) + (w.risk ?? 3) || 12;
+  const weightOr = (value: number | undefined): number =>
+    Number.isFinite(value) ? (value as number) : 3;
+  const rawWeights = [
+    weightOr(w.yield),
+    weightOr(w.water),
+    weightOr(w.soil),
+    weightOr(w.risk),
+  ];
+  const weightSum = rawWeights.reduce((sum, value) => sum + value, 0);
+  const allWeightsZero = weightSum === 0;
+  const wTotal = allWeightsZero ? 12 : weightSum;
+  const normalizedWeight = (index: number): number =>
+    (allWeightsZero ? 3 : rawWeights[index]) / wTotal;
 
   const centroid =
     field.centroidLat !== null && field.centroidLon !== null
       ? { lat: field.centroidLat, lon: field.centroidLon }
       : null;
+
+  const quotaMm = parseNumHelper(water.quotaMm);
 
   const climateYears = climate?.days ? Math.max(1, climate.days / 365.25) : 1;
   const annualHeatDays = climate?.heatDays35 !== undefined
@@ -1215,7 +1232,7 @@ export function workspaceToAgronomicVector(
       availableNPpm: parseNumHelper(lab.no3nPpm),
       availablePPpm: parseNumHelper(lab.olsenPPpm),
       availableKPpm: parseNumHelper(lab.exchangeableKPpm),
-      seasonalWaterQuotaM3Ha: parseNumHelper(water.quotaMm) ? parseNumHelper(water.quotaMm)! * 10 : undefined,
+      seasonalWaterQuotaM3Ha: quotaMm === undefined ? undefined : quotaMm * 10,
       irrigationEcwDsm: parseNumHelper(water.ecwDsm),
       irrigationSarw: parseNumHelper(water.sarw),
       irrigationNo3NPpm: parseNumHelper(water.no3nPpm),
@@ -1243,10 +1260,10 @@ export function workspaceToAgronomicVector(
       ...(eoPriorOverride ?? {}),
     },
     priorities: {
-      yield: Number(((w.yield ?? 3) / wTotal).toFixed(3)),
-      water: Number(((w.water ?? 3) / wTotal).toFixed(3)),
-      soil: Number(((w.soil ?? 3) / wTotal).toFixed(3)),
-      risk: Number(((w.risk ?? 3) / wTotal).toFixed(3)),
+      yield: Number(normalizedWeight(0).toFixed(3)),
+      water: Number(normalizedWeight(1).toFixed(3)),
+      soil: Number(normalizedWeight(2).toFixed(3)),
+      risk: Number(normalizedWeight(3).toFixed(3)),
     },
     provenanceSources: {
       areaSource: field.areaSource,

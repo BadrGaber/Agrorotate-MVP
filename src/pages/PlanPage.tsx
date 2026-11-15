@@ -198,8 +198,8 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
           {view === "compare" && (
             <Card
               glyph="scales"
-              title="Compare Pareto Rotations"
-              hint="Evaluate the 4 Pareto-optimal AI trajectories (Baseline, Max Profit, Water Saving, Soil Regeneration) side by side."
+              title="Compare rotation alternatives"
+              hint="Compare the 4 best AI trajectories the budgeted search actually evaluated (Baseline, Max Profit, Water Saving, Soil Regeneration), with its simulation count and elapsed time shown."
             >
               <RotationCompare
                 state={state}

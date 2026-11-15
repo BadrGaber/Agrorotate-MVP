@@ -76,6 +76,29 @@ test("fao56PenmanMonteith reference evapotranspiration returns physically sound 
   assert.equal(etoMissing, null, "Should return null on missing required input");
 });
 
+test("FAO-56 Example 18 (Uccle, 6 July) reproduces the published 3.88 mm/day within ±0.05", () => {
+  // Allen et al. (1998), FAO-56 Chapter 4, Example 18. Published values:
+  // Tmax 21.5 °C, Tmin 12.3 °C, RHmax 84 %, RHmin 63 %, wind 10 km/h at 10 m
+  // (u2 = 2.078 m/s), Rs = 22.07 MJ/m²/day, lat 50.8°N, elevation 100 m, ETo = 3.88.
+  // This implementation takes RHmean; Example 18's ea = 1.409 kPa and es = 1.997 kPa
+  // correspond to RHmean = 70.556 %, not the arithmetic mean of RHmax/RHmin.
+  const eto = fao56PenmanMonteith({
+    tmax: 21.5,
+    tmin: 12.3,
+    rhMean: (1.409 / 1.997) * 100,
+    wind2m: 2.078,
+    solarRadiation: 22.07,
+    isoDate: "2026-07-06",
+    latitude: 50.8,
+    elevationM: 100,
+  });
+  assert.ok(eto !== null);
+  assert.ok(
+    Math.abs(eto - 3.88) <= 0.05,
+    `Example 18 ETo must match 3.88 ± 0.05 mm/day, got ${eto}`,
+  );
+});
+
 test("summarisePower scales annual rainfall and ETo by spanDays / 365.25", () => {
   // Construct NASA POWER mock payload for 730 days (2 non-leap years)
   // Daily rain = 1.0 mm, constant weather producing stable ETo
@@ -131,6 +154,9 @@ test("summarisePower scales annual rainfall and ETo by spanDays / 365.25", () =>
 
   // ETo is positive and annual scale is consistent
   assert.ok(summary.etoAnnualMm !== null && summary.etoAnnualMm > 1000);
+  assert.equal(summary.etoStatus, "complete");
+  assert.equal(summary.etoDaysComputed, countDays);
+  assert.equal(summary.etoDaysTotal, countDays);
 
   // Verify monthly scaling
   assert.equal(summary.monthly.length, 12);
@@ -151,9 +177,31 @@ test("summarisePower handles edge cases: empty list and missing parameter maps",
   assert.equal(summarisePower({ properties: { parameter: {} } }, 30, 30), null);
 });
 
+test("summarisePower labels a partial ETo series instead of presenting it as complete", () => {
+  const payload = {
+    properties: {
+      parameter: {
+        T2M_MAX: { "20260101": 30, "20260102": 31 },
+        T2M_MIN: { "20260101": 18, "20260102": 19 },
+        PRECTOTCORR: { "20260101": 0, "20260102": 0 },
+        RH2M: { "20260101": 50 }, // day 2 missing
+        WS2M: { "20260101": 2, "20260102": 2 },
+        ALLSKY_SFC_SW_DWN: { "20260101": 22, "20260102": 22 },
+      },
+    },
+  };
+  const result = summarisePower(payload, 30.5, 31.0, 50);
+  assert.ok(result !== null);
+  assert.equal(result.summary.etoStatus, "partial");
+  assert.equal(result.summary.etoDaysComputed, 1);
+  assert.equal(result.summary.etoDaysTotal, 2);
+  assert.match(result.summary.etoRequiredInputs.join(","), /RH2M/);
+});
+
 test("finiteOrNull filters non-finite numbers and preserves valid values", () => {
   assert.equal(finiteOrNull(42.5), 42.5);
   assert.equal(finiteOrNull(0), 0);
+  assert.equal(finiteOrNull(-0), -0);
   assert.equal(finiteOrNull(NaN), null);
   assert.equal(finiteOrNull(Infinity), null);
   assert.equal(finiteOrNull(-Infinity), null);

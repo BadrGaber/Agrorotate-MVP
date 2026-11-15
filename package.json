@@ -14,7 +14,8 @@
     "test": "node --test \"tests/**/*.test.mjs\"",
     "audit:inputs": "node scripts/audit-input-usage.mjs",
     "audit:decision": "node scripts/audit-decision-sensitivity.mjs",
-    "audit:offline": "node scripts/audit-offline-cache.mjs"
+    "audit:offline": "node scripts/audit-offline-cache.mjs",
+    "benchmark:optimizer": "node scripts/benchmark-optimizer.mjs"
   },
   "dependencies": {
     "@geoman-io/leaflet-geoman-free": "^2.20.6",

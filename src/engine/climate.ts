@@ -47,6 +47,17 @@ export interface PmInputs {
 
 /**
  * FAO-56 Penman–Monteith daily reference evapotranspiration (Eq. 6).
+ *
+ * Inputs and units actually used here:
+ *  - tmax, tmin (°C)                    NASA POWER T2M_MAX / T2M_MIN
+ *  - rhMean (%)                         NASA POWER RH2M (mean, not RHmax/RHmin)
+ *  - wind2m (m/s at 2 m)                NASA POWER WS2M (already at 2 m)
+ *  - solarRadiation (MJ m⁻² day⁻¹)      NASA POWER ALLSKY_SFC_SW_DWN
+ *  - elevationM (m)                     field elevation (DEM or user)
+ *  - latitude (decimal degrees)         parcel centroid
+ *  - isoDate                            record date, for Ra (Eq. 21)
+ *
+ * ea is derived from RHmean and es, not from the RHmax/RHmin form of Eq. 17.
  * Returns null when a required input is missing rather than substituting a
  * different method silently.
  */
@@ -278,6 +289,9 @@ export function summarisePower(
     srad: record.srad,
   }));
 
+  const etoStatus: ClimateSummary["etoStatus"] =
+    etoDays === 0 ? "unavailable" : etoDays >= records.length ? "complete" : "partial";
+
   return {
     summary: {
       days: records.length,
@@ -291,6 +305,19 @@ export function summarisePower(
       etoAnnualMm:
         etoDays > 0 ? Number(((etoTotal / spanDays) * 365.25).toFixed(0)) : null,
       etoMethod: "fao56_pm",
+      etoDaysComputed: etoDays,
+      etoDaysTotal: records.length,
+      etoStatus,
+      etoRequiredInputs: [
+        "T2M_MAX",
+        "T2M_MIN",
+        "RH2M",
+        "WS2M",
+        "ALLSKY_SFC_SW_DWN",
+        "elevationM",
+        "latitude",
+        "date",
+      ],
       latitude,
       longitude,
       elevationM: elevationM ?? 0,

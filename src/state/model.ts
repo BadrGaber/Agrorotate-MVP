@@ -378,12 +378,50 @@ export interface AiParetoSolution {
   projectedNetReturnScore: number;
   waterSavingScore: number;
   soilHealthScore: number;
+  riskScore: number;
   confidenceBandPercent: number;
+}
+
+/** What the budgeted search actually did. Numbers, not marketing claims. */
+export interface AiSearchTelemetry {
+  method: "mcts_ucb1";
+  searchType: "approximate_budgeted_sample";
+  simulationBudgetUnit: "rollout";
+  budgetSimulations: number;
+  simulationsExecuted: number;
+  candidatesGenerated: number;
+  uniqueRotationsEvaluated: number;
+  duplicateRolloutsSkipped: number;
+  /** Ordered 6-season sequences with this candidate pool, family rule ignored. */
+  theoreticalSearchSpace: number;
+  theoreticalSearchSpaceLabel: string;
+  elapsedMs: number;
+  blocked: boolean;
+}
+
+export interface AiParetoAssessment {
+  basis: "best_per_objective_over_evaluated_set";
+  label: string;
+  objectives: Array<"netReturn" | "waterSaving" | "soilHealth" | "risk">;
+  nonDominatedWithinEvaluatedSet: boolean;
+  /** Ranked by the farmer's four weights, not a global optimality claim. */
+  rankingByUserWeights: Array<{ solutionId: string; weightedScore: number }>;
+  note: string;
+}
+
+export interface AiInputIssue {
+  field: string;
+  message: string;
+  severity: "error";
 }
 
 export interface AiOutputContract {
   schemaVersion: "agrorotate.ai.output/v1";
   fieldId: string;
+  status: "ok" | "blocked_invalid_inputs";
+  inputIssues: AiInputIssue[];
+  search: AiSearchTelemetry;
+  paretoAssessment: AiParetoAssessment;
   paretoSolutions: AiParetoSolution[];
   causalAttributionLedger: Array<{
     season: number;
@@ -519,6 +557,11 @@ export interface ClimateSummary {
   annualPrecipMm: number;
   etoAnnualMm: number | null;
   etoMethod: "fao56_pm";
+  /** Daily records for which every FAO-56 PM input was available. */
+  etoDaysComputed: number;
+  etoDaysTotal: number;
+  etoStatus: "complete" | "partial" | "unavailable";
+  etoRequiredInputs: string[];
   latitude: number;
   longitude: number;
   elevationM: number;

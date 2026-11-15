@@ -12,6 +12,7 @@
  */
 
 import {
+  type AiInputIssue,
   type AiOutputContract,
   type AiParetoSolution,
   type AiParetoSlot,
@@ -20,6 +21,7 @@ import {
   type BotanicalFamily,
   inferRegionalBaselineRotation,
 } from "../state/model";
+import { INPUT_SPECS, finiteOr, resolveNumericInput, type NumericInputSpec } from "./numericInput.ts";
 import { workspaceToAgronomicVector } from "./estimate";
 
 export interface CropAgronomicProfile {
@@ -964,6 +966,26 @@ function unit(x: number): number {
   return Number.isFinite(x) ? Math.max(0, Math.min(1, x)) : 0;
 }
 
+function nowMs(): number {
+  return typeof performance !== "undefined" && typeof performance.now === "function"
+    ? performance.now()
+    : Date.now();
+}
+
+/** True when a is at least as good on every objective and better on one. */
+function dominates(a: AiParetoSolution, b: AiParetoSolution): boolean {
+  const pairs: Array<[number, number]> = [
+    [a.projectedNetReturnScore, b.projectedNetReturnScore],
+    [a.waterSavingScore, b.waterSavingScore],
+    [a.soilHealthScore, b.soilHealthScore],
+    [a.riskScore, b.riskScore],
+  ];
+  return (
+    pairs.every(([left, right]) => left >= right) &&
+    pairs.some(([left, right]) => left > right)
+  );
+}
+
 /**
  * Converts the UI agronomic vector (src/engine/estimate.ts semantics) into the
  * 32 state dimensions of the 40-dim contract the neural surrogate was trained on
@@ -1690,43 +1712,85 @@ function createSeededPrng(seedStr: string): () => number {
 }
 
 /**
- * Multi-Objective Monte Carlo Tree Search (MCTS) Engine
- * Explores the 6-season combinatorial trajectory space (~11.4 million branches)
- * using a 32-dimensional biophysical state vector and UCB1 exploration to extract
- * the 4 Pareto solutions conforming strictly to NASA challenge specs.
+ * Multi-Objective Monte Carlo Tree Search (MCTS) Engine.
+ *
+ * Runs a fixed budget of 900 UCB1 rollouts over the 6-season space. That is a
+ * budgeted approximation of the search space, not an enumeration: the ordered
+ * upper bound for the full 30-crop pool is 11,390,625 sequences, but only the
+ * unique rotations the budget actually evaluates are scored. Every run reports
+ * both numbers separately in `search`.
+ *
+ * The three non-baseline solutions are the best trajectories found for net
+ * return, water saving and soil health among those evaluated. They are not a
+ * proof of global Pareto optimality; `paretoAssessment` states whether they are
+ * mutually non-dominated within the evaluated set.
  */
 export function runBatchedOptimization(
   workspace: WorkspaceState,
   options?: OptimizationOptions,
 ): AiOutputContract {
+  const startedAtMs = nowMs();
+  const inputIssues: AiInputIssue[] = [];
+
+  /**
+   * Reads one UI field. A valid zero is kept as zero. Invalid text is recorded
+   * and the search is blocked below, so it cannot reach the evaluation.
+   */
+  const readInput = (
+    raw: unknown,
+    spec: NumericInputSpec,
+    fallbackWhenAbsent: number,
+  ): number => {
+    const resolved = resolveNumericInput(raw, spec, fallbackWhenAbsent);
+    if (resolved.issue) {
+      inputIssues.push({
+        field: resolved.issue.field,
+        message: resolved.issue.message,
+        severity: "error",
+      });
+    }
+    return resolved.value;
+  };
+
   const normVector = workspaceToAgronomicVector(workspace);
   const continuousVector32 = normVector.continuousVector32;
 
   // Extract environmental baselines:
   const isRainfed = workspace.water.regime === "rainfed";
-  const waterQuota =
-    Number(workspace.water.quotaMm) || (isRainfed ? 1500 : 5500);
-  const waterEcw = Number(workspace.water.ecwDsm) || 1.1;
+  const waterQuota = readInput(
+    workspace.water.quotaMm,
+    INPUT_SPECS.waterQuotaMm,
+    isRainfed ? 1500 : 5500,
+  );
+  const waterEcw = readInput(workspace.water.ecwDsm, INPUT_SPECS.waterEcwDsm, 1.1);
 
   // Raw soil parameters:
-  const initialEce = normVector.soilChemical.eceDsm || 2.1;
-  const initialSom = normVector.soilChemical.somPercent || 1.2;
+  const initialEce = finiteOr(normVector.soilChemical.eceDsm, 2.1);
+  const initialSom = finiteOr(normVector.soilChemical.somPercent, 1.2);
 
   // Active biophysical context factors:
   const lab = workspace.soil?.lab;
-  const espPct = Number(lab?.espPct) || 6.0;
-  const caco3Pct = Number(lab?.caco3Pct) || 6.0;
-  const no3nPpm = Number(lab?.no3nPpm) || 18.0;
-  const olsenPPpm = Number(lab?.olsenPPpm) || 12.0;
-  const exchangeableKPpm = Number(lab?.exchangeableKPpm) || 150.0;
-  const heatDays35 = Number(workspace.climate?.summary?.heatDays35) ?? 30;
-  const annualPrecipMm = Number(workspace.climate?.summary?.annualPrecipMm) ?? 45;
+  const espPct = readInput(lab?.espPct, INPUT_SPECS.espPct, 6.0);
+  const caco3Pct = readInput(lab?.caco3Pct, INPUT_SPECS.caco3Pct, 6.0);
+  const no3nPpm = readInput(lab?.no3nPpm, INPUT_SPECS.no3nPpm, 18.0);
+  const olsenPPpm = readInput(lab?.olsenPPpm, INPUT_SPECS.olsenPPpm, 12.0);
+  const exchangeableKPpm = readInput(
+    lab?.exchangeableKPpm,
+    INPUT_SPECS.exchangeableKPpm,
+    150.0,
+  );
+  const heatDays35 = finiteOr(workspace.climate?.summary?.heatDays35, 30);
+  const annualPrecipMm = finiteOr(workspace.climate?.summary?.annualPrecipMm, 45);
   const slopeClass = workspace.field?.slopeClass ?? "flat";
   const slopeMap: Record<string, number> = { flat: 1.0, slight: 3.5, moderate: 7.0, steep: 15.0 };
   const slopePct = slopeMap[slopeClass] ?? 1.5;
-  const elevationM = Number(workspace.field?.elevationM) || 10;
-  const sarw = Number(workspace.water?.sarw) || 2.0;
-  const waterNo3nPpm = Number(workspace.water?.no3nPpm) || 2.0;
+  const elevationM = finiteOr(workspace.field?.elevationM, 10);
+  const sarw = readInput(workspace.water?.sarw, INPUT_SPECS.waterSarw, 2.0);
+  const waterNo3nPpm = readInput(
+    workspace.water?.no3nPpm,
+    INPUT_SPECS.waterNo3nPpm,
+    2.0,
+  );
   const waterSystem = workspace.water?.system ?? "drip";
   const systemEffMap: Record<string, number> = { drip: 0.90, sprinkler: 0.75, surface: 0.60, pivot: 0.82, none: 1.0 };
   const irrigationEff = systemEffMap[waterSystem] ?? 0.85;
@@ -1799,16 +1863,25 @@ export function runBatchedOptimization(
     soil: 3,
     risk: 3,
   };
-  const rawYield = Math.max(0, Number(farmerWeights.yield) ?? 3);
-  const rawWater = Math.max(0, Number(farmerWeights.water) ?? 3);
-  const rawSoil = Math.max(0, Number(farmerWeights.soil) ?? 3);
-  const rawRisk = Math.max(0, Number(farmerWeights.risk) ?? 3);
-  const sumWeights = rawYield + rawWater + rawSoil + rawRisk || 12;
+  const rawYield = readInput(farmerWeights.yield, INPUT_SPECS.priorityWeight, 3);
+  const rawWater = readInput(farmerWeights.water, INPUT_SPECS.priorityWeight, 3);
+  const rawSoil = readInput(farmerWeights.soil, INPUT_SPECS.priorityWeight, 3);
+  const rawRisk = readInput(farmerWeights.risk, INPUT_SPECS.priorityWeight, 3);
+  // All four sliders at 0 is a deliberate "no preference" setting: score with
+  // equal weights instead of dividing by zero. Missing weights already became 3.
+  const weightsAreZero = rawYield + rawWater + rawSoil + rawRisk === 0;
+  const sumWeights = weightsAreZero ? 4 : rawYield + rawWater + rawSoil + rawRisk;
 
-  const wYield = rawYield / sumWeights;
-  const wWater = rawWater / sumWeights;
-  const wSoil = rawSoil / sumWeights;
-  const wRisk = rawRisk / sumWeights;
+  const wYield = weightsAreZero ? 0.25 : rawYield / sumWeights;
+  const wWater = weightsAreZero ? 0.25 : rawWater / sumWeights;
+  const wSoil = weightsAreZero ? 0.25 : rawSoil / sumWeights;
+  const wRisk = weightsAreZero ? 0.25 : rawRisk / sumWeights;
+
+  // An invalid text value must never reach the evaluation. Stop here and report
+  // the exact field; the UI renders the issues instead of a recommendation.
+  if (inputIssues.length > 0) {
+    return blockedContract(workspace, inputIssues, nowMs() - startedAtMs);
+  }
 
   // Deterministic PRNG seeded from field context, priorities, and management inputs:
   const seedKey = [
@@ -1837,6 +1910,9 @@ export function runBatchedOptimization(
     workspace.priorities?.previousCropId ?? "",
   ].join("|");
   const rng = createSeededPrng(seedKey);
+
+  const theoreticalSearchSpace =
+    warmCandidates.length ** 3 * coolCandidates.length ** 3;
 
   // Monte Carlo evaluation pool:
   let bestProfitScore = -1;
@@ -1909,6 +1985,10 @@ export function runBatchedOptimization(
   const rootNode = createMCTSNode(null, 0, null);
   const MCTS_SIMULATION_BUDGET = 900;
 
+  let simulationsExecuted = 0;
+  let candidatesGenerated = 0;
+  let duplicateRolloutsSkipped = 0;
+
   // Track diverse candidate rotations evaluated:
   const evaluatedRotations = new Set<string>();
 
@@ -1916,6 +1996,7 @@ export function runBatchedOptimization(
   evaluatedRotations.add(baselineCrops.map((c) => c.id).join(","));
 
   for (let iter = 0; iter < MCTS_SIMULATION_BUDGET; iter++) {
+    simulationsExecuted += 1;
     let node = rootNode;
     const currentPath: CropAgronomicProfile[] = [];
 
@@ -1971,6 +2052,7 @@ export function runBatchedOptimization(
     }
 
     // 4. EVALUATE COMPLETE 6-SEASON TRAJECTORY:
+    candidatesGenerated += 1;
     const key = currentPath.map((c) => c.id).join(",");
     if (!evaluatedRotations.has(key)) {
       evaluatedRotations.add(key);
@@ -2024,6 +2106,8 @@ export function runBatchedOptimization(
         currBack.totalWeightedScore += compositeScore;
         currBack = currBack.parent;
       }
+    } else {
+      duplicateRolloutsSkipped += 1;
     }
   }
 
@@ -2057,6 +2141,7 @@ export function runBatchedOptimization(
       projectedNetReturnScore: baselineEval.netReturnScore,
       waterSavingScore: baselineEval.waterSavingScore,
       soilHealthScore: baselineEval.soilHealthScore,
+      riskScore: baselineEval.riskScore,
       confidenceBandPercent: Math.min(
         98,
         Math.max(
@@ -2080,6 +2165,7 @@ export function runBatchedOptimization(
       projectedNetReturnScore: bestProfitEval.netReturnScore,
       waterSavingScore: bestProfitEval.waterSavingScore,
       soilHealthScore: bestProfitEval.soilHealthScore,
+      riskScore: bestProfitEval.riskScore,
       confidenceBandPercent: Math.min(
         98,
         Math.max(
@@ -2103,6 +2189,7 @@ export function runBatchedOptimization(
       projectedNetReturnScore: bestWaterEval.netReturnScore,
       waterSavingScore: bestWaterEval.waterSavingScore,
       soilHealthScore: bestWaterEval.soilHealthScore,
+      riskScore: bestWaterEval.riskScore,
       confidenceBandPercent: Math.min(
         98,
         Math.max(
@@ -2126,6 +2213,7 @@ export function runBatchedOptimization(
       projectedNetReturnScore: bestSoilEval.netReturnScore,
       waterSavingScore: bestSoilEval.waterSavingScore,
       soilHealthScore: bestSoilEval.soilHealthScore,
+      riskScore: bestSoilEval.riskScore,
       confidenceBandPercent: Math.min(
         98,
         Math.max(
@@ -2183,14 +2271,104 @@ export function runBatchedOptimization(
     },
   }));
 
+  const elapsedMs = Number((nowMs() - startedAtMs).toFixed(2));
+  const compared = solutions.filter((solution) => !solution.isBaseline);
+  const nonDominatedWithinEvaluatedSet = compared.every(
+    (solution) =>
+      !compared.some(
+        (other) => other !== solution && dominates(other, solution),
+      ),
+  );
+  const rankingByUserWeights = solutions
+    .map((solution) => ({
+      solutionId: solution.id,
+      weightedScore: Number(
+        (
+          wYield * solution.projectedNetReturnScore +
+          wWater * solution.waterSavingScore +
+          wSoil * solution.soilHealthScore +
+          wRisk * solution.riskScore
+        ).toFixed(2),
+      ),
+    }))
+    .sort((a, b) => b.weightedScore - a.weightedScore);
+
   return {
     schemaVersion: "agrorotate.ai.output/v1",
     fieldId: workspace.field.name || "field-01",
+    status: "ok",
+    inputIssues: [],
+    search: {
+      method: "mcts_ucb1",
+      searchType: "approximate_budgeted_sample",
+      simulationBudgetUnit: "rollout",
+      budgetSimulations: MCTS_SIMULATION_BUDGET,
+      simulationsExecuted,
+      candidatesGenerated,
+      // The baseline sequence is scored separately and reported as its own pathway.
+      uniqueRotationsEvaluated: Math.max(0, evaluatedRotations.size - 1),
+      duplicateRolloutsSkipped,
+      theoreticalSearchSpace,
+      theoreticalSearchSpaceLabel:
+        "Ordered 6-season sequences from the season candidate pools, family-repeat rule ignored; a theoretical upper bound, not the number of rotations evaluated.",
+      elapsedMs,
+      blocked: false,
+    },
+    paretoAssessment: {
+      basis: "best_per_objective_over_evaluated_set",
+      label: "Best alternatives found by the budgeted search",
+      objectives: ["netReturn", "waterSaving", "soilHealth", "risk"],
+      nonDominatedWithinEvaluatedSet,
+      rankingByUserWeights,
+      note: "These are the best trajectories the 900-rollout search actually evaluated for each objective. They are not a proof of global Pareto optimality, and the scores are model estimates under the declared assumptions, not measured farm outcomes.",
+    },
     paretoSolutions: solutions,
     causalAttributionLedger: causalLedger,
     confidenceIntervals: {
       overallUncertaintyPct: dynUncertainty,
       basisTier,
+    },
+  };
+}
+
+/** Returned when an input is not a valid number: no search, no recommendation. */
+function blockedContract(
+  workspace: WorkspaceState,
+  inputIssues: AiInputIssue[],
+  elapsedMs: number,
+): AiOutputContract {
+  return {
+    schemaVersion: "agrorotate.ai.output/v1",
+    fieldId: workspace.field.name || "field-01",
+    status: "blocked_invalid_inputs",
+    inputIssues,
+    search: {
+      method: "mcts_ucb1",
+      searchType: "approximate_budgeted_sample",
+      simulationBudgetUnit: "rollout",
+      budgetSimulations: 0,
+      simulationsExecuted: 0,
+      candidatesGenerated: 0,
+      uniqueRotationsEvaluated: 0,
+      duplicateRolloutsSkipped: 0,
+      theoreticalSearchSpace: 0,
+      theoreticalSearchSpaceLabel: "Not computed: input validation blocked the search.",
+      elapsedMs: Number(elapsedMs.toFixed(2)),
+      blocked: true,
+    },
+    paretoAssessment: {
+      basis: "best_per_objective_over_evaluated_set",
+      label: "No ranking produced",
+      objectives: ["netReturn", "waterSaving", "soilHealth", "risk"],
+      nonDominatedWithinEvaluatedSet: false,
+      rankingByUserWeights: [],
+      note: "The search did not run because at least one input is not a valid number.",
+    },
+    paretoSolutions: [],
+    causalAttributionLedger: [],
+    confidenceIntervals: {
+      overallUncertaintyPct: 0,
+      basisTier: "HYBRID",
     },
   };
 }

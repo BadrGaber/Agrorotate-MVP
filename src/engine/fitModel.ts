@@ -7,6 +7,7 @@
  * loaded the physics floor alone answers, and the UI says which one ran.
  */
 import { workspaceToAgronomicVector } from "./estimate";
+import { INPUT_SPECS, finiteOr, resolveNumericInput } from "./numericInput.ts";
 import {
   CROP_PROFILES_30,
   checkCropBiophysicalFloor,
@@ -135,10 +136,20 @@ export function slotFitModel(
   const vector = workspaceToAgronomicVector(state);
   const continuous = vector.continuousVector32;
   const isRainfed = state.water.regime === "rainfed";
-  const quota = Number(state.water.quotaMm) || (isRainfed ? 1500 : 5500);
-  const ece = vector.soilChemical.eceDsm || 2.1;
-  const som = vector.soilChemical.somPercent || 1.2;
-  const ecw = Number(state.water.ecwDsm) || 1.1;
+  // resolveNumericInput keeps a valid 0 (e.g. a zero quota) and only falls back
+  // when the field is genuinely empty. The optimizer gate reports invalid text.
+  const quota = resolveNumericInput(
+    state.water.quotaMm,
+    INPUT_SPECS.waterQuotaMm,
+    isRainfed ? 1500 : 5500,
+  ).value;
+  const ece = finiteOr(vector.soilChemical.eceDsm, 2.1);
+  const som = finiteOr(vector.soilChemical.somPercent, 1.2);
+  const ecw = resolveNumericInput(
+    state.water.ecwDsm,
+    INPUT_SPECS.waterEcwDsm,
+    1.1,
+  ).value;
   const isWarm = slotIndex % 2 === 0;
   const prev = previousProfile(state, slotIndex);
 

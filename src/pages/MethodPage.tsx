@@ -205,8 +205,12 @@ export function MethodPage() {
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; / [Δ + γ (1 + 0.34 u₂)]
                 </p>
                 <p className="small" style={{ marginTop: 4 }}>
-                  FAO-56 Penman–Monteith, daily, from POWER Tmax/Tmin/RH/WS/solar
-                  radiation. G = 0 for daily steps. ETo is climate demand — not irrigation
+                  FAO-56 Penman–Monteith, daily, from POWER Tmax/Tmin (T2M_MAX/T2M_MIN),
+                  mean RH2M, WS2M at 2 m and ALLSKY_SFC_SW_DWN solar radiation, with the
+                  parcel latitude and elevation for Ra and air pressure. G = 0 for daily
+                  steps. If any required value is missing for a day, that day is excluded
+                  and the water step labels the series partial instead of presenting it as
+                  a complete FAO-56 calculation. ETo is climate demand — not irrigation
                   delivery and not a crop requirement.
                 </p>
               </div>
@@ -440,7 +444,7 @@ export function MethodPage() {
                 "Crops with no training row use the biophysical floor alone; the card then says Physics floor instead of Trained yield head.",
                 "The water, soil and risk terms are sourced rules: season window, family break, legume effect, FAO salinity response and your exclusions.",
                 "Your four priority sliders (yield, water, soil, risk from 0 to 5) directly configure the dynamic multi-objective vector [w_yield, w_water, w_soil, w_risk] in [0.0, 1.0].",
-                "Biophysical MCTS Search Steering: The tree search exploitation term Exploitation = ∑(w_i × Score_i) / (visits + ε) is dynamically steered across 900 simulation rollouts within the 32-dimensional biophysical state space, guiding candidate exploration toward your financial, water, soil, or risk goals.",
+                "Budgeted MCTS search: the UCB1 exploitation term ∑(w_i × Score_i) / (visits + ε) steers a fixed 900-rollout budget. This is an approximate sample of the 6-season space, not an exhaustive scan: every result states how many simulations ran, how many unique rotations were actually evaluated, the theoretical sequence count, and the measured elapsed time. Changing the sliders changes which rotations the search reaches and how it ranks them; it is not evidence of a global optimum.",
                 "Risk Guardrail: When Risk & pest break is set to 3.5 or higher, the maximum economic return trajectory automatically prunes high-margin crops that introduce severe salinization hazards or root-knot nematode vulnerabilities.",
                 "Opening the rotation board runs this same hybrid for all 3 years (6 seasons sequentially, so each subsequent pick respects family breaks, water quotas, and soil carryovers) and selects Season 1 so its Best 3 card appears immediately.",
               ].map((line) => (

@@ -124,22 +124,47 @@ export function RotationCompare({
   }, [state]);
 
   const solutions: AiParetoSolution[] = optimization?.paretoSolutions ?? [];
+  const blocked = optimization?.status === "blocked_invalid_inputs";
+  const search = optimization?.search;
 
   return (
     <div className="compare">
       <div className="compare__head">
         <div>
-          <h2 className="h2">AI Multi-Objective Pareto Rotations</h2>
+          <h2 className="h2">AI Multi-Objective Rotation Alternatives</h2>
           <p className="small">
-            Evaluated by the NASA Biophysical Floor + Multi-Objective MCTS engine with Saxton–Rawls state dynamics. Four
-            divergent Pareto-optimal pathways: baseline vs economic return vs water
-            conservation vs soil regeneration.
+            Evaluated by the NASA Biophysical Floor + Multi-Objective MCTS engine with Saxton–Rawls state dynamics.
+            The search runs a fixed simulation budget and reports the unique rotations it
+            actually evaluated. The four pathways are the best alternatives it found — baseline,
+            economic return, water conservation and soil regeneration — not a proof of global
+            Pareto optimality.
           </p>
         </div>
         <span className="badge badge--soft badge--sky">
-          <Glyph name="sparkle" size={12} /> {isCalculating ? "Optimizing..." : "NASA MCTS Optimized"}
+          <Glyph name="sparkle" size={12} />
+          {isCalculating ? "Optimizing..." : `Budgeted MCTS · ${search?.budgetSimulations ?? 900} rollouts`}
         </span>
       </div>
+
+      {blocked && (
+        <div className="note note--danger" style={{ marginTop: 12 }}>
+          <Glyph name="alert" size={14} className="note__icon" />
+          <div>
+            <strong>The search was stopped because an input is not a valid number.</strong>
+            <ul style={{ margin: "6px 0 0 18px" }}>
+              {(optimization?.inputIssues ?? []).map((issue) => (
+                <li key={issue.field} className="small">
+                  <span className="mono">{issue.field}</span>: {issue.message}
+                </li>
+              ))}
+            </ul>
+            <p className="small" style={{ marginTop: 6 }}>
+              Correct the field on its setup step and reopen this comparison. No
+              recommendation is shown while a value is invalid.
+            </p>
+          </div>
+        </div>
+      )}
 
       <div className="compare__grid">
         {solutions.map((solution) => {
@@ -155,7 +180,7 @@ export function RotationCompare({
               <header>
                 <div className="row" style={{ justifyContent: "space-between", alignItems: "center" }}>
                   <span className="eyebrow">
-                    {isBaseline ? "Current Practice" : "Pareto Frontier"}
+                    {isBaseline ? "Current Practice" : "Best found (evaluated set)"}
                   </span>
                   <span className="badge badge--soft badge--meas" title="Empirical Conformal Coverage">
                     {solution.confidenceBandPercent}% Conf
@@ -249,12 +274,26 @@ export function RotationCompare({
         })}
       </div>
 
+      {search && !blocked && (
+        <p className="small" style={{ marginTop: 12 }}>
+          <strong>Search transparency:</strong> {search.simulationsExecuted} of {search.budgetSimulations} budgeted
+          {" "}rollouts executed; {search.uniqueRotationsEvaluated} unique rotations evaluated
+          ({search.duplicateRolloutsSkipped} duplicate rollouts skipped); measured elapsed time{" "}
+          {search.elapsedMs} ms. The theoretical ordered space with this candidate pool is{" "}
+          {search.theoreticalSearchSpace.toLocaleString()} sequences — a theoretical upper bound,
+          not the number of rotations evaluated.
+        </p>
+      )}
+
       <p className="small compare__foot" style={{ marginTop: 16 }}>
-        All four Pareto pathways combine the trained yield-gap prior with sourced
+        All four pathways combine the trained yield-gap prior with sourced
         biophysical constraints: Maas-Hoffman osmotic salinity limits, soil texture
         infiltration capacities, biological nitrogen credit, and EPPO/FAO pathogen host
         interruption cycles. The neural prior covers yield only, for the 22 crops with real
-        training rows.
+        training rows. Scores are decision-support estimates under the stated weights and
+        inputs — not measured farm outcomes, and not a guarantee of profit, water saving or
+        pest control. Review fertilisation, irrigation and pest decisions with a local
+        agronomist.
       </p>
     </div>
   );

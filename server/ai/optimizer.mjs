@@ -977,8 +977,119 @@ export function inferRegionalBaseline(workspace) {
 
 function parseNumeric(value) {
   if (typeof value === "number") return Number.isFinite(value) ? value : null;
-  const parsed = Number.parseFloat(String(value ?? ""));
+  if (value === null || value === undefined) return null;
+  const text = String(value).trim();
+  // Blank is absent; trailing garbage ("12abc") is not silently truncated.
+  if (text === "") return null;
+  const parsed = Number(text.replace(",", "."));
   return Number.isFinite(parsed) ? parsed : null;
+}
+
+/** Field-specific bounds for the values the optimizer reads (zero is allowed
+ * wherever it is physically meaningful, e.g. a zero quota or zero slope). */
+const OPT_INPUT_SPECS = {
+  quotaMm: { key: "water.quotaMm", label: "Seasonal water quota", unit: "mm / season (the unit the app stores)", min: 0, max: 18000 },
+  ecwDsm: { key: "water.ecwDsm", label: "Irrigation water salinity (ECw)", unit: "dS/m", min: 0.1, max: 15 },
+  sarw: { key: "water.sarw", label: "Irrigation sodium adsorption ratio (SARw)", unit: "ratio", min: 0, max: 35 },
+  waterNo3: { key: "water.no3nPpm", label: "Irrigation-water nitrate nitrogen", unit: "ppm", min: 0, max: 150 },
+  ece: { key: "soil.eceDsm", label: "Saturated-paste salinity (ECe)", unit: "dS/m", min: 0.1, max: 50 },
+  ph: { key: "soil.ph", label: "Soil reaction pH", unit: "pH", min: 3.5, max: 10.5 },
+  esp: { key: "soil.espPct", label: "Exchangeable sodium percentage (ESP)", unit: "%", min: 0, max: 65 },
+  caco3: { key: "soil.caco3Pct", label: "Calcium carbonate (CaCO₃)", unit: "%", min: 0, max: 65 },
+  no3n: { key: "soil.no3nPpm", label: "Available mineral nitrogen (NO₃-N)", unit: "ppm", min: 0, max: 150 },
+  olsenP: { key: "soil.olsenPPpm", label: "Olsen available phosphorus", unit: "ppm", min: 0, max: 100 },
+  exchK: { key: "soil.exchangeableKPpm", label: "Exchangeable potassium", unit: "ppm", min: 0, max: 900 },
+  weight: { key: "priorities.weight", label: "Priority weight", unit: "0–5", min: 0, max: 5 },
+};
+
+/** Returns an issue for non-empty, non-finite or out-of-range input; null otherwise. */
+function numericInputIssue(raw, spec) {
+  if (raw === null || raw === undefined) return null;
+  if (typeof raw === "string" && raw.trim() === "") return null;
+  const value = typeof raw === "number" ? raw : Number(String(raw).trim().replace(",", "."));
+  if (!Number.isFinite(value)) {
+    return {
+      field: spec.key,
+      severity: "error",
+      message: `${spec.label} must be a finite number in ${spec.unit}; received "${String(raw)}".`,
+    };
+  }
+  if (value < spec.min || value > spec.max) {
+    return {
+      field: spec.key,
+      severity: "error",
+      message: `${spec.label} must be between ${spec.min} and ${spec.max} ${spec.unit}; received ${value}.`,
+    };
+  }
+  return null;
+}
+
+function collectInputIssues(workspace) {
+  const lab = workspace.soil?.lab ?? {};
+  const water = workspace.water ?? {};
+  const weights = workspace.priorities?.weights ?? {};
+  const checks = [
+    [water.quotaMm, OPT_INPUT_SPECS.quotaMm],
+    [water.ecwDsm, OPT_INPUT_SPECS.ecwDsm],
+    [water.sarw, OPT_INPUT_SPECS.sarw],
+    [water.no3nPpm, OPT_INPUT_SPECS.waterNo3],
+    [lab.eceDsm, OPT_INPUT_SPECS.ece],
+    [lab.ph, OPT_INPUT_SPECS.ph],
+    [lab.espPct, OPT_INPUT_SPECS.esp],
+    [lab.caco3Pct, OPT_INPUT_SPECS.caco3],
+    [lab.no3nPpm, OPT_INPUT_SPECS.no3n],
+    [lab.olsenPPpm, OPT_INPUT_SPECS.olsenP],
+    [lab.exchangeableKPpm, OPT_INPUT_SPECS.exchK],
+    [weights.yield, { ...OPT_INPUT_SPECS.weight, key: "priorities.yield" }],
+    [weights.water, { ...OPT_INPUT_SPECS.weight, key: "priorities.water" }],
+    [weights.soil, { ...OPT_INPUT_SPECS.weight, key: "priorities.soil" }],
+    [weights.risk, { ...OPT_INPUT_SPECS.weight, key: "priorities.risk" }],
+  ];
+  return checks.map(([raw, spec]) => numericInputIssue(raw, spec)).filter(Boolean);
+}
+
+function dominates(a, b) {
+  const pairs = [
+    [a.projectedNetReturnScore, b.projectedNetReturnScore],
+    [a.waterSavingScore, b.waterSavingScore],
+    [a.soilHealthScore, b.soilHealthScore],
+    [a.riskScore, b.riskScore],
+  ];
+  return pairs.every(([left, right]) => left >= right) && pairs.some(([left, right]) => left > right);
+}
+
+function blockedContract(workspace, inputIssues, elapsedMs) {
+  return {
+    schemaVersion: "agrorotate.ai.output/v1",
+    fieldId: workspace.field?.name || "field-01",
+    status: "blocked_invalid_inputs",
+    inputIssues,
+    search: {
+      method: "mcts_ucb1",
+      searchType: "approximate_budgeted_sample",
+      simulationBudgetUnit: "rollout",
+      budgetSimulations: 0,
+      simulationsExecuted: 0,
+      candidatesGenerated: 0,
+      uniqueRotationsEvaluated: 0,
+      duplicateRolloutsSkipped: 0,
+      theoreticalSearchSpace: 0,
+      theoreticalSearchSpaceLabel: "Not computed: input validation blocked the search.",
+      elapsedMs: Number(elapsedMs.toFixed(2)),
+      blocked: true,
+    },
+    paretoAssessment: {
+      basis: "best_per_objective_over_evaluated_set",
+      label: "No ranking produced",
+      objectives: ["netReturn", "waterSaving", "soilHealth", "risk"],
+      nonDominatedWithinEvaluatedSet: false,
+      rankingByUserWeights: [],
+      note: "The search did not run because at least one input is not a valid number.",
+    },
+    paretoSolutions: [],
+    causalAttributionLedger: [],
+    confidenceIntervals: { overallUncertaintyPct: 0, basisTier: "HYBRID" },
+  };
 }
 
 /** Saxton & Rawls (2006), identical to AI/pipeline/contract.py. */
@@ -1381,11 +1492,19 @@ function createSeededPrng(seedStr) {
 }
 
 export function optimizeWorkspace(workspace) {
+  const startedAt = typeof performance !== "undefined" ? performance.now() : Date.now();
+  // An invalid text value must never reach the evaluation. Stop here and report
+  // the exact field; the API returns no recommendation for this request.
+  const inputIssues = collectInputIssues(workspace);
+  if (inputIssues.length > 0) {
+    return blockedContract(workspace, inputIssues, (typeof performance !== "undefined" ? performance.now() : Date.now()) - startedAt);
+  }
+
   const isRainfed = workspace.water?.regime === "rainfed";
-  const waterQuota = Number(workspace.water?.quotaMm) || (isRainfed ? 1500 : 5500);
-  const waterEcw = Number(workspace.water?.ecwDsm) || 1.1;
-  const initialEce = Number(workspace.soil?.lab?.eceDsm) || 2.1;
-  const phInitial = Number(workspace.soil?.lab?.ph) || 7.8;
+  const waterQuota = parseNumeric(workspace.water?.quotaMm) ?? (isRainfed ? 1500 : 5500);
+  const waterEcw = parseNumeric(workspace.water?.ecwDsm) ?? 1.1;
+  const initialEce = parseNumeric(workspace.soil?.lab?.eceDsm) ?? 2.1;
+  const phInitial = parseNumeric(workspace.soil?.lab?.ph) ?? 7.8;
 
   // Excluded crops are not candidates anywhere in this search, baseline included.
   const excludedCrops = workspace.priorities?.excluded ?? {};
@@ -1415,16 +1534,22 @@ export function optimizeWorkspace(workspace) {
     soil: 3,
     risk: 3,
   };
-  const rawYield = Math.max(0, Number(farmerWeights.yield) ?? 3);
-  const rawWater = Math.max(0, Number(farmerWeights.water) ?? 3);
-  const rawSoil = Math.max(0, Number(farmerWeights.soil) ?? 3);
-  const rawRisk = Math.max(0, Number(farmerWeights.risk) ?? 3);
-  const sumWeights = rawYield + rawWater + rawSoil + rawRisk || 12;
+  const readWeight = (value) => {
+    const parsed = parseNumeric(value);
+    return parsed === null ? 3 : Math.max(0, Math.min(5, parsed));
+  };
+  const rawYield = readWeight(farmerWeights.yield);
+  const rawWater = readWeight(farmerWeights.water);
+  const rawSoil = readWeight(farmerWeights.soil);
+  const rawRisk = readWeight(farmerWeights.risk);
+  // All four at 0 is a deliberate "no preference": equal weights, not NaN.
+  const weightsAreZero = rawYield + rawWater + rawSoil + rawRisk === 0;
+  const sumWeights = weightsAreZero ? 4 : rawYield + rawWater + rawSoil + rawRisk;
 
-  const wYield = rawYield / sumWeights;
-  const wWater = rawWater / sumWeights;
-  const wSoil = rawSoil / sumWeights;
-  const wRisk = rawRisk / sumWeights;
+  const wYield = weightsAreZero ? 0.25 : rawYield / sumWeights;
+  const wWater = weightsAreZero ? 0.25 : rawWater / sumWeights;
+  const wSoil = weightsAreZero ? 0.25 : rawSoil / sumWeights;
+  const wRisk = weightsAreZero ? 0.25 : rawRisk / sumWeights;
 
   // Deterministic PRNG seeded from workspace inputs:
   const seedKey = [
@@ -1511,11 +1636,16 @@ export function optimizeWorkspace(workspace) {
   }
 
   const rootNode = createMCTSNode(null, 0, null);
-  const MCTS_ROUNDS = 800;
+  const MCTS_ROUNDS = 900;
   const evaluatedRotations = new Set();
+  const theoreticalSearchSpace = warmCandidates.length ** 3 * coolCandidates.length ** 3;
+  let simulationsExecuted = 0;
+  let candidatesGenerated = 0;
+  let duplicateRolloutsSkipped = 0;
   evaluatedRotations.add(baselineCrops.map((c) => c.id).join(","));
 
   for (let r = 0; r < MCTS_ROUNDS; r++) {
+    simulationsExecuted += 1;
     let node = rootNode;
     const currentPath = [];
 
@@ -1563,6 +1693,7 @@ export function optimizeWorkspace(workspace) {
     }
 
     // 4. EVALUATE:
+    candidatesGenerated += 1;
     const key = currentPath.map((c) => c.id).join(",");
     if (!evaluatedRotations.has(key)) {
       evaluatedRotations.add(key);
@@ -1599,6 +1730,8 @@ export function optimizeWorkspace(workspace) {
         currBack.totalWeightedScore += compositeScore;
         currBack = currBack.parent;
       }
+    } else {
+      duplicateRolloutsSkipped += 1;
     }
   }
 
@@ -1607,8 +1740,10 @@ export function optimizeWorkspace(workspace) {
   const soilEval = bestSoilEval;
 
   // Dynamic Uncertainty & Confidence calibrated against WoSIS vs SoilGrids
-  const hasLab = Boolean(workspace.soil?.lab?.eceDsm && workspace.soil?.lab?.ph);
-  const basisTier = hasLab ? "MEAS" : (workspace.soil?.lab?.eceDsm ? "EST" : (workspace.field?.centroidLat ? "EO_PRIOR" : "HYBRID"));
+  const hasEce = parseNumeric(workspace.soil?.lab?.eceDsm) !== null;
+  const hasPh = parseNumeric(workspace.soil?.lab?.ph) !== null;
+  const hasLab = hasEce && hasPh;
+  const basisTier = hasLab ? "MEAS" : (hasEce ? "EST" : (workspace.field?.centroidLat ? "EO_PRIOR" : "HYBRID"));
   
   // Conformal half widths (dS/m) from empirical ISRIC calibration
   const eceHalfWidth = conformalCalibration?.conformal_half_widths?.[basisTier] ??
@@ -1636,6 +1771,7 @@ export function optimizeWorkspace(workspace) {
       projectedNetReturnScore: baselineEval.netReturnScore,
       waterSavingScore: baselineEval.waterSavingScore,
       soilHealthScore: baselineEval.soilHealthScore,
+      riskScore: baselineEval.riskScore,
       confidenceBandPercent: Math.max(72, Math.min(98, baseConf - 2)),
     },
     {
@@ -1653,6 +1789,7 @@ export function optimizeWorkspace(workspace) {
       projectedNetReturnScore: profitEval.netReturnScore,
       waterSavingScore: profitEval.waterSavingScore,
       soilHealthScore: profitEval.soilHealthScore,
+      riskScore: profitEval.riskScore,
       confidenceBandPercent: Math.max(72, Math.min(98, baseConf)),
     },
     {
@@ -1670,6 +1807,7 @@ export function optimizeWorkspace(workspace) {
       projectedNetReturnScore: waterEval.netReturnScore,
       waterSavingScore: waterEval.waterSavingScore,
       soilHealthScore: waterEval.soilHealthScore,
+      riskScore: waterEval.riskScore,
       confidenceBandPercent: Math.max(72, Math.min(98, baseConf + 2)),
     },
     {
@@ -1687,9 +1825,31 @@ export function optimizeWorkspace(workspace) {
       projectedNetReturnScore: soilEval.netReturnScore,
       waterSavingScore: soilEval.waterSavingScore,
       soilHealthScore: soilEval.soilHealthScore,
+      riskScore: soilEval.riskScore,
       confidenceBandPercent: Math.max(72, Math.min(98, baseConf + 1)),
     },
   ];
+
+  const compared = paretoSolutions.filter((solution) => !solution.isBaseline);
+  const nonDominatedWithinEvaluatedSet = compared.every(
+    (solution) => !compared.some((other) => other !== solution && dominates(other, solution))
+  );
+  const rankingByUserWeights = paretoSolutions
+    .map((solution) => ({
+      solutionId: solution.id,
+      weightedScore: Number(
+        (
+          wYield * solution.projectedNetReturnScore +
+          wWater * solution.waterSavingScore +
+          wSoil * solution.soilHealthScore +
+          wRisk * solution.riskScore
+        ).toFixed(2)
+      ),
+    }))
+    .sort((a, b) => b.weightedScore - a.weightedScore);
+  const elapsedMs = Number(
+    ((typeof performance !== "undefined" ? performance.now() : Date.now()) - startedAt).toFixed(2)
+  );
 
   // Mass-Balance Causal Attribution Ledger covering all 6 soil-borne pathogens:
   const causalAttributionLedger = soilEval.slots.map((s, idx) => ({
@@ -1713,6 +1873,32 @@ export function optimizeWorkspace(workspace) {
   return {
     schemaVersion: "agrorotate.ai.output/v1",
     fieldId: workspace.field?.name || "field-01",
+    status: "ok",
+    inputIssues: [],
+    search: {
+      method: "mcts_ucb1",
+      searchType: "approximate_budgeted_sample",
+      simulationBudgetUnit: "rollout",
+      budgetSimulations: MCTS_ROUNDS,
+      simulationsExecuted,
+      candidatesGenerated,
+      // The baseline sequence is scored separately and reported as its own pathway.
+      uniqueRotationsEvaluated: Math.max(0, evaluatedRotations.size - 1),
+      duplicateRolloutsSkipped,
+      theoreticalSearchSpace,
+      theoreticalSearchSpaceLabel:
+        "Ordered 6-season sequences from the season candidate pools, family-repeat rule ignored; a theoretical upper bound, not the number of rotations evaluated.",
+      elapsedMs,
+      blocked: false,
+    },
+    paretoAssessment: {
+      basis: "best_per_objective_over_evaluated_set",
+      label: "Best alternatives found by the budgeted search",
+      objectives: ["netReturn", "waterSaving", "soilHealth", "risk"],
+      nonDominatedWithinEvaluatedSet,
+      rankingByUserWeights,
+      note: "These are the best trajectories the 900-rollout search actually evaluated for each objective. They are not a proof of global Pareto optimality, and the scores are model estimates under the declared assumptions, not measured farm outcomes.",
+    },
     paretoSolutions,
     causalAttributionLedger,
     confidenceIntervals: {
