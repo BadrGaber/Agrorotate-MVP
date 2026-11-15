@@ -442,7 +442,7 @@ export function MethodPage() {
                 "Your four priority sliders (yield, water, soil, risk from 0 to 5) directly configure the dynamic multi-objective vector [w_yield, w_water, w_soil, w_risk] in [0.0, 1.0].",
                 "Biophysical MCTS Search Steering: The tree search exploitation term Exploitation = ∑(w_i × Score_i) / (visits + ε) is dynamically steered across 900 simulation rollouts within the 32-dimensional biophysical state space, guiding candidate exploration toward your financial, water, soil, or risk goals.",
                 "Risk Guardrail: When Risk & pest break is set to 3.5 or higher, the maximum economic return trajectory automatically prunes high-margin crops that introduce severe salinization hazards or root-knot nematode vulnerabilities.",
-                "Opening the rotation board runs this same hybrid for Year 1 (warm first, then cool so the family break sees the first pick) and selects Season 1 so its Best 3 card appears immediately.",
+                "Opening the rotation board runs this same hybrid for all 3 years (6 seasons sequentially, so each subsequent pick respects family breaks, water quotas, and soil carryovers) and selects Season 1 so its Best 3 card appears immediately.",
               ].map((line) => (
                 <div key={line} style={{ display: "flex", alignItems: "flex-start", gap: 8 }}>
                   <span style={{ color: "var(--forest)", marginTop: 2, flexShrink: 0 }}>

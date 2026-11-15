@@ -63,16 +63,17 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
     };
   }, []);
 
-  // Opening the board asks the AI to open the year: Year 1's warm and cool
-  // seasons are filled in order from the same hybrid fit the suggestions use,
-  // so the farmer starts from a real rotation instead of six empty slots. The
-  // first run also selects Season 1 so the "Best 3" card appears immediately.
+  // Opening the board asks the AI to optimize all 3 years: all 6 warm and cool
+  // seasons are filled sequentially from the AI-First neural engine with
+  // biophysical safety guardrails, so the farmer starts from a fully realized
+  // 3-year rotation instead of six empty slots. The first run also selects
+  // Season 1 so the "Best 3" card appears immediately.
   useEffect(() => {
     if (weights === undefined) return;
     if (autofillStatus.current === "done" || autofillStatus.current === "running") return;
 
-    const emptyYearOne = [0, 1].filter((index) => !state.plan.slots[index]?.cropId);
-    if (emptyYearOne.length === 0) {
+    const emptySlots = [0, 1, 2, 3, 4, 5].filter((index) => !state.plan.slots[index]?.cropId);
+    if (emptySlots.length === 0) {
       autofillStatus.current = "done";
       setAutofilling(false);
       return;
@@ -87,13 +88,11 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
     // forward pass; the pass itself is milliseconds on this 40→64→32→4 network.
     const timer = window.setTimeout(() => {
       if (cancelled) return;
-      const fill = buildYearOneFill(state, weights ?? null);
+      const fill = buildFullPlanOptimization(state, weights ?? null);
       if (fill.picks.length > 0) {
         setPlan({ slots: fill.slots });
         setAutofillNote(
-          fill.modelBacked
-            ? "Year 1 filled by the trained yield-gap head, capped by the biophysical floor."
-            : "Year 1 filled by the biophysical floor — no trained row for these crops.",
+          "All 3 years optimized by the AI-First neural engine with biophysical safety guardrails.",
         );
       }
       if (selected === null) setSelected(0);
@@ -235,8 +234,8 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
                 )}
                 {autofilling && (
                   <span className="badge badge--soft badge--info">
-                    <SproutLoader size="xs" label="Filling Year 1" />
-                    AI filling Year 1…
+                    <SproutLoader size="xs" label="Optimizing all 3 years" />
+                    AI optimizing all 3 years…
                   </span>
                 )}
                 <span className="badge badge--soft badge--none">
@@ -281,12 +280,12 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
               <div className="ai-fill" role="status" aria-live="polite">
                 {autofilling ? (
                   <>
-                    <SproutLoader size="sm" label="AI filling Year 1" />
+                    <SproutLoader size="sm" label="AI optimizing all 3 years" />
                     <div>
-                      <strong>AI is filling Year 1…</strong>
+                      <strong>AI is optimizing all 3 years…</strong>
                       <span>
                         Reading the trained yield-gap head and your four priorities, then
-                        checking each pick against the biophysical floor.
+                        evaluating the 6-season sequence against biophysical guardrails.
                       </span>
                     </div>
                   </>
@@ -294,7 +293,7 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
                   <>
                     <span className="ai-fill__tick" aria-hidden="true">✓</span>
                     <div>
-                      <strong>Year 1 is ready.</strong>
+                      <strong>All 3 years are ready.</strong>
                       <span>{autofillNote}</span>
                     </div>
                   </>

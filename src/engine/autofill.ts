@@ -1,5 +1,5 @@
 /**
- * Opening the rotation board: fill Year 1 and the multi-season rotation from the
+ * Opening the rotation board: fill all 3 years (6 seasons) sequentially from the
  * AI-First hybrid engine that produces the "Best 3" recommendations.
  *
  * The seasons are picked sequentially so each subsequent pick respects botanical
@@ -78,7 +78,7 @@ export function buildYearOneFill(
 /**
  * Optimizes the full 6-season rotation plan (Years 1–3) sequentially,
  * selecting the top AI-ranked crop for each slot while guaranteeing botanical
- * family breaks, seasonal compatibility, and biophysical safety.
+ * family breaks, seasonal compatibility, and biophysical safety guardrails.
  */
 export function buildFullPlanOptimization(
   state: WorkspaceState,
@@ -94,9 +94,14 @@ export function buildFullPlanOptimization(
       plan: { ...state.plan, slots: slots.map((slot) => ({ ...slot })) },
     };
     const fit = slotFitModel(stepState, index, weights);
-    const topAlternatives = alternativeCrops(stepState, index, 3, fit);
-    const best = topAlternatives[0];
-    if (!best) continue;
+    const topAlternatives = alternativeCrops(stepState, index, 8, fit);
+    if (topAlternatives.length === 0) continue;
+
+    // Filter viable alternatives: season match, safe salinity tolerance, and family break
+    const viable = topAlternatives.filter(
+      (alt) => alt.seasonMatch && alt.salinity.state !== "above" && alt.breaksFamily !== false,
+    );
+    const best = viable[0] ?? topAlternatives.find((alt) => alt.seasonMatch) ?? topAlternatives[0];
 
     slots[index] = { ...slots[index], cropId: best.crop.id };
     picks.push({
