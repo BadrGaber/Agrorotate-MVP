@@ -329,7 +329,7 @@ export function summarisePower(
         "ALLSKY_SFC_SW_DWN",
         "PRECTOTCORR",
       ],
-      timeStandard: "UTC (NASA POWER daily)",
+      timeStandard: "LST (NASA POWER daily, local solar time)",
       summer: seasonMonths([6, 7, 8]),
       winter: seasonMonths([12, 1, 2]),
       monthly,

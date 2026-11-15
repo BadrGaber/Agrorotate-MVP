@@ -35,6 +35,10 @@ export interface FeatureProvenanceMeta {
   rawValue?: number;
   normalizedValue?: number;
   timestamp?: string;
+  isDerived?: boolean;
+  derivationEquation?: string;
+  rawInputParameter?: string;
+  rawInputValue?: number;
 }
 
 export type UsdaTextureClass =
@@ -636,12 +640,12 @@ export const EMPTY_LAB: LabSoil = {
 };
 
 export const SLOT_META = [
-  { year: 1, season: "warm" as const, label: "Season 1", months: "Apr – Sep" },
-  { year: 1, season: "cool" as const, label: "Season 2", months: "Oct – Mar" },
-  { year: 2, season: "warm" as const, label: "Season 3", months: "Apr – Sep" },
-  { year: 2, season: "cool" as const, label: "Season 4", months: "Oct – Mar" },
-  { year: 3, season: "warm" as const, label: "Season 5", months: "Apr – Sep" },
-  { year: 3, season: "cool" as const, label: "Season 6", months: "Oct – Mar" },
+  { year: 1, season: "warm" as const, label: "Season 1", months: "Apr – Sep (Default)" },
+  { year: 1, season: "cool" as const, label: "Season 2", months: "Oct – Mar (Default)" },
+  { year: 2, season: "warm" as const, label: "Season 3", months: "Apr – Sep (Default)" },
+  { year: 2, season: "cool" as const, label: "Season 4", months: "Oct – Mar (Default)" },
+  { year: 3, season: "warm" as const, label: "Season 5", months: "Apr – Sep (Default)" },
+  { year: 3, season: "cool" as const, label: "Season 6", months: "Oct – Mar (Default)" },
 ];
 
 export const DEFAULT_WORKSPACE: WorkspaceState = {

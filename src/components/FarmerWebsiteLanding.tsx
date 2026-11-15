@@ -91,7 +91,7 @@ export function FarmerWebsiteLanding({
             </button>
           </div>
           <div className="landing__proof">
-            <span>Live NASA POWER</span>
+            <span>On-demand NASA POWER</span>
             <span>30 crop profiles · source-labeled</span>
             <span>No invented numbers</span>
           </div>

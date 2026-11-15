@@ -193,7 +193,7 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
         }
       />
 
-      <div className="plan-work">
+      <div className="plan-work" id="season-checks">
         <div className="stack">
           {view === "compare" && (
             <Card

@@ -103,14 +103,14 @@ export const EO_OVERLAYS: EoOverlay[] = [
 
 export interface EoStatusRow {
   name: string;
-  status: "Live" | "Computed" | "Visual" | "Token";
+  status: "On-demand" | "Computed" | "Visual" | "Token";
   note: string;
 }
 
 export const EO_STATUS_ROWS: EoStatusRow[] = [
   {
     name: "NASA POWER daily (AG)",
-    status: "Live",
+    status: "On-demand",
     note: "Temperature, humidity, wind, solar radiation, precipitation; cached with request metadata.",
   },
   {
@@ -122,10 +122,20 @@ export const EO_STATUS_ROWS: EoStatusRow[] = [
     name: product.name,
     status:
       product.status === "live"
-        ? ("Live" as const)
+        ? ("On-demand" as const)
         : product.status === "visual"
           ? ("Visual" as const)
           : ("Token" as const),
     note: product.methodNote,
   })),
+  ...EO_OVERLAYS.map((overlay) => ({
+    name: overlay.label,
+    status: "Visual" as const,
+    note: `${overlay.note}; rendered imagery only — the engine never reads a number out of a pixel.`,
+  })),
+  {
+    name: "MODIS Terra · true-colour base",
+    status: "Visual",
+    note: "Satellite base imagery under the parcel (WMS); visual context only, never a number.",
+  },
 ];

@@ -318,7 +318,7 @@ export function FieldPage({
                 <Glyph name="cloud" size={12} />{" "}
                 {analysis.climate.cache === "server_cache"
                   ? "server cache"
-                  : "live"}
+                  : "on-demand"}
               </span>
             }
           >
@@ -494,7 +494,7 @@ export function FieldPage({
                   )}
                 />
                 <span className="badge badge--soft badge--est">
-                  {climate.cache === "server_cache" ? "server cache" : "live"}
+                  {climate.cache === "server_cache" ? "server cache" : "on-demand"}
                 </span>
               </div>
             </Card>

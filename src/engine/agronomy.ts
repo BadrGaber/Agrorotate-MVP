@@ -277,10 +277,10 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
 
   dimensions.push({
     key: "water",
-    label: "Crop water demand",
+    label: "seasonal crop water demand (fixed per-crop, mm)",
     status: "unassessed",
     detail:
-      "Water demand is computed as ETc = Kc × ETo with live FAO-56 ETo from NASA POWER; stage-based Kc is calibrated locally per crop and season.",
+      "The plan compares your recorded quota with a seasonal crop water demand (fixed per-crop, mm) per crop.",
   });
   dimensions.push({
     key: "nutrients",

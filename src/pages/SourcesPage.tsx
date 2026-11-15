@@ -55,16 +55,17 @@ export function SourcesPage() {
       <div className="grid grid--4" style={{ marginBottom: 20 }}>
         <Stat value="NASA POWER" label="Climate engine" foot="daily AG · 7 parameters" tone="forest" />
         <Stat value="NASA GIBS" label="Visual layers" foot="SRTM · static relief" />
-        <Stat value="SoilGrids" label="Live soil priors" foot="250 m · ISRIC REST" tone="harvest" />
+        <Stat value="SoilGrids" label="On-demand soil priors" foot="250 m · ISRIC REST" tone="harvest" />
         <Stat value="FAO 56" label="Water & salinity" foot="Kc · threshold · slope" tone="harvest" />
       </div>
 
       <div className="stack" style={{ gap: 18 }}>
         <Card
+          id="nasa-power"
           glyph="sun"
           title="NASA POWER · daily agroclimatology"
           hint="The climate engine. Called with the exact centroid of the drawn parcel."
-          aside={<span className="badge badge--soft badge--meas">measured · live</span>}
+          aside={<span className="badge badge--soft badge--meas">measured · on-demand</span>}
         >
           <div className="table-wrap">
             <table className="data">
@@ -81,7 +82,7 @@ export function SourcesPage() {
                 </tr>
                 <tr>
                   <td>Community</td>
-                  <td>AG (agroclimatology) · JSON · daily UTC</td>
+                  <td>AG (agroclimatology) · JSON · daily LST</td>
                 </tr>
                 <tr>
                   <td>Parameters</td>
@@ -89,7 +90,11 @@ export function SourcesPage() {
                 </tr>
                 <tr>
                   <td>Window</td>
-                  <td>Rolling 5-year window, ending 3 days before today (POWER daily lag)</td>
+                  <td>Rolling 5-year window (latest available records)</td>
+                </tr>
+                <tr>
+                  <td>Latency / Lag</td>
+                  <td>Latest available: ~2–3 days lag for meteorology (MERRA-2) and ~5–7 days lag for solar radiation (CERES flash-flux)</td>
                 </tr>
                 <tr>
                   <td>Derived on device</td>
@@ -195,8 +200,8 @@ export function SourcesPage() {
         <Card
           glyph="layers"
           title="SoilGrids (ISRIC) · mapped soil priors"
-          hint="Live public data for the field centroid. A 250 m mapped prediction, explicitly not a laboratory test."
-          aside={<span className="badge badge--soft badge--meas">live · mapped prior</span>}
+          hint="On-demand public data (latest available) for the field centroid. A 250 m mapped prediction, explicitly not a laboratory test."
+          aside={<span className="badge badge--soft badge--meas">on-demand · mapped prior</span>}
         >
           <div className="table-wrap">
             <table className="data">
@@ -245,10 +250,11 @@ export function SourcesPage() {
         </Card>
 
         <Card
+          id="eo-registry"
           glyph="lock"
           title="Numeric earth-observation inputs"
           hint="SRTM terrain and SoilGrids priors are the only numeric EO inputs in this build; both are public."
-          aside={<span className="badge badge--soft badge--meas">live</span>}
+          aside={<span className="badge badge--soft badge--meas">on-demand</span>}
         >
           <div className="table-wrap">
             <table className="data">
@@ -269,7 +275,7 @@ export function SourcesPage() {
                       </div>
                     </td>
                     <td>
-                      {product.numeric === "live" ? "live" : "token required"}
+                      {product.numeric === "live" ? "on-demand" : "token required"}
                     </td>
                     <td>
                       {product.methodNote}
@@ -435,9 +441,10 @@ export function SourcesPage() {
           Nothing in this register is decorative: every card maps one-to-one to a call or
           a table the running app actually uses. Where a value is estimated instead of
           measured, the badge next to it says so — and the Method tab explains the limit.
-          The seven EO products now have an explicit state: <strong>live</strong> for
-          SoilGrids and SRTM terrain, <strong>visual</strong> for the four GIBS layers,
-          and <strong>token</strong> where numeric NASA access is still missing.
+          Each connected product now has an explicit state: <strong>on-demand / latest available</strong> for the
+          numeric feeds (POWER, SRTM terrain, SoilGrids), <strong>visual</strong> for the
+          three GIBS layers rendered on the map, and <strong>computed</strong> for the FAO-56
+          ETo derived on device. No token-gated granule product is wired in this build.
         </Note>
       </div>
     </main>

@@ -154,7 +154,11 @@ export function SoilPage({ navigate }: { navigate: (route: RouteKey) => void }) 
     vector.soilPhysical.clayPercent,
   );
   const provenanceLabel = (key: string) => {
-    const source = vector.provenance[key]?.source;
+    const meta = vector.provenance[key];
+    if (meta?.isDerived && meta?.derivationEquation) {
+      return `derived/estimate: ${meta.derivationEquation} (raw ${meta.rawInputParameter}: ${meta.rawInputValue})`;
+    }
+    const source = meta?.source;
     if (source === "MEAS") return "MEAS · lab";
     if (source === "EST") return "EST · field/derived";
     if (source === "EO_PRIOR") return "prior/default";
@@ -213,6 +217,7 @@ export function SoilPage({ navigate }: { navigate: (route: RouteKey) => void }) 
       <div className="split">
         <div className="stack">
           <Card
+            id="soil-lab"
             glyph="book"
             title="The soil notebook"
             hint="Answer what you can actually see. The number the engine substitutes is shown beside every answer."

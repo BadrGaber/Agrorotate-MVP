@@ -101,7 +101,7 @@ export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void })
             Rain is not irrigation. <em>Heat</em> is not water.
           </>
         }
-        lede="One live NASA request supplies climate context. Water quality and allocation come from you, because no satellite measures the water coming out of your pump."
+        lede="One on-demand NASA request supplies climate context (latest available). Water quality and allocation come from you, because no satellite measures the water coming out of your pump."
         actions={
           <div className="row">
             <span className="badge badge--soft badge--model">
@@ -122,9 +122,10 @@ export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void })
       <div className="split">
         <div className="stack">
           <Card
+            id="nasa-window"
             glyph="sun"
             title="Climate context"
-            hint="A single live request for this field's coordinates, cached by the local API when it is running."
+            hint="A single on-demand request for this field's coordinates (latest available data), cached by the local API when it is running."
             aside={
               <div className="row" style={{ gap: 6 }}>
                 {climate.summary && (
@@ -253,8 +254,20 @@ export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void })
                         <td>
                           {climate.cache === "server_cache"
                             ? "served from local cache — may be older than the field"
-                            : "live request"}
+                            : "on-demand request (latest available)"}
                         </td>
+                      </tr>
+                      <tr>
+                        <td className="mono">Latency / Lag</td>
+                        <td>Latest available data: ~2–3 days lag for meteorology (MERRA-2), ~5–7 days lag for solar radiation (CERES flash-flux)</td>
+                        <td>Observation time-lag inherent to satellite and assimilation products</td>
+                      </tr>
+                      <tr>
+                        <td className="mono">Parameters</td>
+                        <td className="mono" style={{ fontSize: 10.5, lineHeight: 1.5 }}>
+                          {climate.summary.parameters.join(" · ")}
+                        </td>
+                        <td>Exact NASA POWER parameter codes requested for this field</td>
                       </tr>
                     </tbody>
                   </table>
@@ -414,6 +427,7 @@ export function WaterPage({ navigate }: { navigate: (route: RouteKey) => void })
 
         <div className="stack">
           <Card
+            id="water-quality"
             glyph="flask"
             title="Water quality"
             hint="No satellite measures the EC in your canal. Type the measured number from your water report; leave it empty to use the source default."

@@ -688,13 +688,22 @@ export function normalizeFieldInputsToScientificVector(
 
   let eceDsm: number;
   let eceSource: DataProvenance;
+  let eceEquation: string | undefined;
+  let eceRawVal: number | undefined;
+  let eceRawParam: string | undefined;
+
   if (meas.eceDsm !== undefined) {
     eceDsm = clamp(Math.max(meas.eceDsm, irrigationEcwDsm), 0.1, 50.0);
     eceSource = "MEAS";
+    eceRawVal = meas.eceDsm;
+    eceRawParam = "ECe";
   } else if (meas.ec1to5Dsm !== undefined) {
     const kTex = clayPercent > 35 ? 6.5 : sandPercent > 65 ? 12.5 : 9.0;
     eceDsm = clamp(Math.max(meas.ec1to5Dsm * kTex, irrigationEcwDsm), 0.1, 50.0);
-    eceSource = "MEAS";
+    eceSource = "EST";
+    eceEquation = `ECe ≈ EC1:5 × ${kTex} (${clayPercent > 35 ? "clay >35%" : sandPercent > 65 ? "sand >65%" : "medium texture"})`;
+    eceRawVal = meas.ec1to5Dsm;
+    eceRawParam = "EC1:5";
   } else if (est.salinityClass) {
     eceDsm = Math.max(SALINITY_ECE[est.salinityClass], steadyStateSalinityFloorDsm * 0.85);
     eceSource = "EST";
@@ -702,17 +711,32 @@ export function normalizeFieldInputsToScientificVector(
     eceDsm = Math.max(1.2, steadyStateSalinityFloorDsm);
     eceSource = "EO_PRIOR";
   }
-  provenance.eceDsm = buildMeta(eceDsm, eceSource, eceSource === "MEAS" ? 0.05 : 0.25);
+  provenance.eceDsm = {
+    ...buildMeta(eceDsm, eceSource, eceSource === "MEAS" ? 0.05 : 0.25),
+    isDerived: eceEquation !== undefined,
+    derivationEquation: eceEquation,
+    rawInputParameter: eceRawParam,
+    rawInputValue: eceRawVal,
+  };
 
   let espPercent: number;
   let espSource: DataProvenance;
+  let espEquation: string | undefined;
+  let espRawVal: number | undefined;
+  let espRawParam: string | undefined;
+
   if (meas.espPercent !== undefined) {
     espPercent = clamp(meas.espPercent, 0.5, 65.0);
     espSource = "MEAS";
+    espRawVal = meas.espPercent;
+    espRawParam = "ESP";
   } else if (meas.sareRatio !== undefined) {
     const x = -0.0126 + 0.01475 * meas.sareRatio;
     espPercent = clamp((100 * x) / (1 + x), 0.5, 65.0);
-    espSource = "MEAS";
+    espSource = "EST";
+    espEquation = "ESP ≈ (100 × x) / (1 + x) where x = -0.0126 + 0.01475 × SARe (USSL Richards 1954)";
+    espRawVal = meas.sareRatio;
+    espRawParam = "SARe";
   } else if (est.sodicityClass) {
     const sodMap: Record<SimplifiedSodicityClass, number> = {
       NON_SODIC_FLOCCULATED: 3.5,
@@ -726,7 +750,13 @@ export function normalizeFieldInputsToScientificVector(
     espPercent = phH2o > 8.5 ? 16.0 : irrigationSarw > 10 ? 12.0 : 4.0;
     espSource = "EO_PRIOR";
   }
-  provenance.espPercent = buildMeta(espPercent, espSource, espSource === "MEAS" ? 0.06 : 0.25);
+  provenance.espPercent = {
+    ...buildMeta(espPercent, espSource, espSource === "MEAS" ? 0.06 : 0.25),
+    isDerived: espEquation !== undefined,
+    derivationEquation: espEquation,
+    rawInputParameter: espRawParam,
+    rawInputValue: espRawVal,
+  };
 
   let caco3Percent: number;
   let caco3Source: DataProvenance;

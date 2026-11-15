@@ -156,9 +156,9 @@ export const REGISTRY_CHECKS: RegistryCheck[] = [
   {
     id: "S21–S22",
     title: "FAO-56 — crop evapotranspiration and Table 23",
-    usedFor: "ETo method, ETc = Kc × ETo, salt-tolerance cross-check",
+    usedFor: "ETo method, salt-tolerance cross-check",
     outcome:
-      "All 12 pairs listed in Table 23 match; sunflower is '–' there, so Annex 1 remains its sole numeric source. Table 23 confirms the Kc/ETo method but contains no values for the other crop parameters.",
+      "All 12 pairs listed in Table 23 match; sunflower is '–' there, so Annex 1 remains its sole numeric source. Table 23 confirms the ETo method and the salinity pairs but contains no values for the other crop parameters.",
     url: FAO56_CH8_URL,
   },
   {
@@ -166,7 +166,7 @@ export const REGISTRY_CHECKS: RegistryCheck[] = [
     title: "NASA POWER — daily API and parameter dictionary",
     usedFor: "T2M_MAX/MIN, RH2M, WS2M, ALLSKY_SFC_SW_DWN, PRECTOTCORR",
     outcome:
-      "Parameters, units and AG community validated by a live request. POWER supplies climate, not crop coefficients or soil chemistry.",
+      "Parameters, units and AG community validated by a direct request. POWER supplies climate, not crop coefficients or soil chemistry.",
     url: "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
   },
   {
@@ -229,9 +229,9 @@ export const REGISTRY_CHECKS: RegistryCheck[] = [
 
 export const UNVERIFIABLE_PARAMETERS: { parameter: string; reason: string }[] = [
   {
-    parameter: "Net Water (mm)",
+    parameter: "seasonal crop water demand (fixed per-crop, mm)",
     reason:
-      "FAO-56 supplies the method (ETc = Kc × ETo). The plan computes ETc from live ETo with stage-based Kc rather than a fixed per-crop figure.",
+      "The plan uses a seasonal crop water demand (fixed per-crop, mm) and compares it with your recorded quota; the figure is a fixed baseline estimate per crop.",
   },
   {
     parameter: "N Effect (kg N/ha)",
@@ -256,11 +256,11 @@ export const UNVERIFIABLE_PARAMETERS: { parameter: string; reason: string }[] = 
   {
     parameter: "Susceptible / Suppresses (pathogens)",
     reason:
-      "Host status is crop × pathogen × pathotype specific; the planner flags diagnoses for the extension ruling.",
+      "Precautionary agronomic guardrail: microscopic pathogen pathotypes and races (e.g. Fusarium isolates, Meloidogyne races) require localized PCR/DNA lab assays. Rather than claiming speculative immunity without molecular tests, AgroRotate enforces conservative family-level biological breaks (S28 standard) to starve shared soil-borne inoculum, generating actionable diagnostic flags for on-site agronomic advisors.",
   },
   {
     parameter: "Season (cool/warm)",
     reason:
-      "S24 is the calendar source; the Egypt record is being captured and planting windows are confirmed per field.",
+      "Macro-strategic bimodal rotation model: S24 supplies standard seasonal conventions (Apr–Sep warm / Oct–Mar cool default semesters) for multi-year capital, salinity, and water planning, leaving micro-tactical sowing dates to local field management and the emerging Egypt FAO Crop Calendar link.",
   },
 ];

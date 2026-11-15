@@ -1,6 +1,7 @@
 import { Card, Note, PageHead, Stat } from "../ui/kit";
 import { Glyph } from "../ui/icons";
-import { ProofChip, PROOFS } from "../ui/proof";
+import { ProofChip, PROOFS, VerifyLink } from "../ui/proof";
+import type { RouteKey } from "../app/router";
 import {
   UNVERIFIABLE_PARAMETERS,
   VERIFICATION_LABEL,
@@ -11,7 +12,12 @@ import { EO_STATUS_ROWS } from "../data/eo";
 import { useOfflineStatus } from "../offline/useOfflineStatus";
 import { formatBytes, precacheNow } from "../offline/register";
 
-const PIPELINE = [
+const PIPELINE: {
+  step: string;
+  title: string;
+  body: string;
+  verify?: { to: RouteKey; focus?: string; label: string };
+}[] = [
   {
     step: "1",
     title: "Field & terrain",
@@ -21,11 +27,13 @@ const PIPELINE = [
     step: "2",
     title: "Soil evidence",
     body: "Observations kept as classes. Lab numbers stored separately with method and date.",
+    verify: { to: "soil", focus: "soil-lab", label: "Open the lab record" },
   },
   {
     step: "3",
     title: "Climate & water",
-    body: "One live NASA POWER window, plus water quality and allocation from you.",
+    body: "One on-demand NASA POWER window, plus water quality and allocation from you.",
+    verify: { to: "sources", focus: "nasa-power", label: "Open the request contract" },
   },
   {
     step: "4",
@@ -36,11 +44,13 @@ const PIPELINE = [
     step: "5",
     title: "Season checks",
     body: "Only defensible rules fire: sourced salinity, family break, calendar convention, exclusions.",
+    verify: { to: "crops", focus: "crop-registry", label: "Open the crop rules" },
   },
   {
     step: "6",
     title: "Explain",
     body: "Each verdict lists the checks made, the checks missing, and the source behind each one.",
+    verify: { to: "plan", focus: "season-checks", label: "Open a verdict's reasons" },
   },
 ];
 
@@ -49,7 +59,7 @@ const PIPELINE = [
 
 
 const STATUS_BADGE: Record<string, string> = {
-  Live: "badge--meas",
+  "On-demand": "badge--meas",
   Computed: "badge--meas",
   Visual: "badge--est",
   Token: "badge--none",
@@ -67,7 +77,7 @@ export function MethodPage() {
             Every verdict has a <em>source</em>.
           </>
         }
-        lede="AgroRotate runs a live, source-scoped decision engine: NASA POWER drives the climate, FAO tables drive the crop checks, and every value carries its provenance."
+        lede="AgroRotate runs an on-demand, source-scoped decision engine: NASA POWER drives the climate, FAO tables drive the crop checks, and every value carries its provenance."
         actions={
           <div className="row">
             <ProofChip proof={PROOFS.faoSalinity("a tabulated species")} />
@@ -76,30 +86,63 @@ export function MethodPage() {
         }
       />
 
+      <Note tone="sky" glyph="compass" style={{ marginBottom: 18 }}>
+        <strong>This page is the summary; every number links to its proof.</strong> The
+        “Verify” pointer beside a value opens the screen that actually holds the data — the
+        thirty crop records, the thirteen-row FAO salinity table, the NASA request window,
+        the earth-observation product states, the season verdicts. Nothing here asks you to
+        accept a number on trust.
+      </Note>
+
       <div className="grid grid--4" style={{ marginBottom: 22 }}>
         <Stat
           value="30"
           label="Crop profiles"
           foot="one evidence record each"
           tone="forest"
+          action={
+            <VerifyLink to="crops" focus="crop-registry">
+              Open the 30 records
+            </VerifyLink>
+          }
         />
         <Stat
           value={SALINITY_VERIFIED_COUNT}
           label="Crops with FAO salinity pair"
           foot="exact species + endpoint"
+          action={
+            <VerifyLink to="evidence" focus="salinity-pairs">
+              Open the 13 pairs
+            </VerifyLink>
+          }
         />
         <Stat
-          value="7"
+          value={EO_STATUS_ROWS.length}
           label="Connected EO products"
-          foot="2 live · 4 visual · 1 token"
+          foot="3 numeric · 3 visual · 1 computed"
           tone="harvest"
+          action={
+            <VerifyLink to="sources" focus="eo-registry">
+              Open each product state
+            </VerifyLink>
+          }
         />
-        <Stat value="6" label="Checks per season" foot="salinity · family · season · exclusion · water · priorities" tone="forest" />
+        <Stat
+          value="6"
+          label="Checks per season"
+          foot="salinity · family · season · exclusion · water · priorities"
+          tone="forest"
+          action={
+            <VerifyLink to="plan" focus="season-checks">
+              Open a season's checks
+            </VerifyLink>
+          }
+        />
       </div>
 
       <Note tone="forest" glyph="check" style={{ marginBottom: 22 }}>
         <strong>Independent verification pass — {VERIFICATION_LABEL}.</strong> The{" "}
-        {VERIFICATION_SUMMARY.supportedClaims} source-scoped claims were reopened in the live
+        {VERIFICATION_SUMMARY.supportedClaims} source-scoped claims were reopened in the
         FAO Annex 1 table: {VERIFICATION_SUMMARY.confirmedClaims} of{" "}
         {VERIFICATION_SUMMARY.supportedClaims} match value-for-value, and{" "}
         {VERIFICATION_SUMMARY.fao56CrossCheckedCrops} of{" "}
@@ -109,6 +152,20 @@ export function MethodPage() {
         <br />
         Endpoint caveat: maize's pair is ear fresh weight, not grain yield, and the forages are
         shoot dry weight. The proof drawer prints each table's actual yield basis.
+        <div className="row" style={{ marginTop: 8, gap: 12, flexWrap: "wrap" }}>
+          <VerifyLink to="evidence" focus="salinity-pairs">
+            Open the 13-row table ({VERIFICATION_SUMMARY.confirmedClaims}/
+            {VERIFICATION_SUMMARY.supportedClaims} values)
+          </VerifyLink>
+          <a
+            className="verify-link"
+            href="https://www.fao.org/4/Y4263E/y4263e0e.htm"
+            target="_blank"
+            rel="noreferrer"
+          >
+            FAO Annex 1 source ↗
+          </a>
+        </div>
       </Note>
 
       <Card glyph="book" title="How each parameter family is calibrated" hint="Per field, per season.">
@@ -182,6 +239,13 @@ export function MethodPage() {
                     <p className="small" style={{ marginTop: 2 }}>
                       {stage.body}
                     </p>
+                    {stage.verify && (
+                      <div style={{ marginTop: 4 }}>
+                        <VerifyLink to={stage.verify.to} focus={stage.verify.focus}>
+                          {stage.verify.label}
+                        </VerifyLink>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -213,19 +277,28 @@ export function MethodPage() {
                   a complete FAO-56 calculation. ETo is climate demand — not irrigation
                   delivery and not a crop requirement.
                 </p>
+                <div style={{ marginTop: 6, display: "flex", gap: 12, flexWrap: "wrap" }}>
+                  <VerifyLink to="sources" focus="nasa-power">
+                    Parameters, window and derived ETo
+                  </VerifyLink>
+                  <VerifyLink to="water" focus="nasa-window">
+                    Fetched window (after a field is drawn)
+                  </VerifyLink>
+                </div>
               </div>
 
               <div>
                 <div className="row row--between">
-                  <strong>Crop water use</strong>
-                  <ProofChip proof={PROOFS.faoETc()} compact />
+                  <strong>seasonal crop water demand (fixed per-crop, mm)</strong>
+                  <ProofChip proof={PROOFS.cropWaterDemand()} compact />
                 </div>
                 <p className="mono" style={{ marginTop: 6 }}>
-                  ETc = Kc × ETo
+                  Demand = fixed per-crop seasonal total (mm)
                 </p>
                 <p className="small" style={{ marginTop: 4 }}>
-                  ETc = Kc × ETo with live FAO-56 ETo computed from NASA POWER inputs.
-                  Stage-based Kc is calibrated locally per crop and season.
+                  The plan compares your recorded quota with a seasonal crop water demand
+                  (fixed per-crop, mm) for each crop. The figure is a fixed baseline estimate
+                  per crop, not a stage-dependent calculation.
                 </p>
               </div>
 
@@ -242,6 +315,11 @@ export function MethodPage() {
                   has a source-scoped threshold and slope. Otherwise the dimension is
                   reported as unassessed, never assumed.
                 </p>
+                <div style={{ marginTop: 6 }}>
+                  <VerifyLink to="evidence" focus="salinity-pairs">
+                    Open the 13 pairs this equation runs on
+                  </VerifyLink>
+                </div>
               </div>
 
               <div>
@@ -256,6 +334,11 @@ export function MethodPage() {
                   FAO-29 screening form, shown only with a measured ECw and a
                   source-supported crop threshold. Not a scheduling prescription.
                 </p>
+                <div style={{ marginTop: 6 }}>
+                  <VerifyLink to="water" focus="water-quality">
+                    Open your measured ECw
+                  </VerifyLink>
+                </div>
               </div>
 
               <div>
@@ -295,10 +378,11 @@ export function MethodPage() {
               </div>
 
               <Note tone="sky" glyph="drop">
-                <strong>Water planning.</strong> The plan compares crop water demand with
-                your recorded quota through ETc = Kc × ETo, and the indicative leaching
-                fraction (LR = ECw / (5 × ECe_target − ECw)) screens the root-zone salt
-                balance against your measured ECw.
+                <strong>Water planning.</strong> The plan compares each crop's fixed
+                seasonal water-demand figure (mm) with your recorded quota, and the
+                indicative leaching fraction (LR = ECw / (5 × ECe_target − ECw)) screens
+                the root-zone salt balance against your measured ECw. ETo remains the
+                climate-demand indicator on the Water step.
               </Note>
             </div>
           </Card>
@@ -348,7 +432,7 @@ export function MethodPage() {
               in <span className="mono">localStorage</span>.
             </p>
             <p className="small" style={{ marginTop: 6, lineHeight: 1.6 }}>
-              Live NASA POWER, external map tiles and the optional local API still need a
+              NASA POWER, external map tiles and the optional local API still need a
               connection; the last cached response is shown if a request fails. Every other
               page, the plan board, the Best 3 scores and the offline yield model keep
               working offline.
@@ -385,9 +469,14 @@ export function MethodPage() {
             <Note tone="sky" glyph="info" style={{ marginTop: 12 }}>
               <strong>Visual is not numeric.</strong> The map layers are rendered
               imagery; the engine never reads a number out of a pixel. SoilGrids and
-              the SRTM terrain metrics are live public data. No token-gated granule
+              the SRTM terrain metrics are public data. No token-gated granule
               product is part of this build.
             </Note>
+            <div style={{ marginTop: 10 }}>
+              <VerifyLink to="sources" focus="eo-registry">
+                Open each product's numeric status in Sources
+              </VerifyLink>
+            </div>
           </Card>
 
           <Card glyph="lock" title="Engine guarantees">
@@ -406,6 +495,23 @@ export function MethodPage() {
                   <span className="small" style={{ minWidth: 0, flex: 1 }}>{test}</span>
                 </div>
               ))}
+            </div>
+            <div
+              className="row"
+              style={{ marginTop: 10, gap: 12, flexWrap: "wrap" }}
+            >
+              <VerifyLink to="crops" focus="crop-registry">
+                Crop registry
+              </VerifyLink>
+              <VerifyLink to="evidence" focus="salinity-pairs">
+                Salinity pairs
+              </VerifyLink>
+              <VerifyLink to="water" focus="nasa-window">
+                Water method
+              </VerifyLink>
+              <VerifyLink to="plan" focus="season-checks">
+                Season checks
+              </VerifyLink>
             </div>
           </Card>
 
@@ -465,7 +571,7 @@ export function MethodPage() {
       </div>
 
       <Note tone="forest" glyph="check" style={{ marginTop: 22 }}>
-        <strong>Live decision support.</strong> AgroRotate turns your field, soil, water
+        <strong>Decision support.</strong> AgroRotate turns your field, soil, water
         and NASA POWER climate into a source-scoped rotation plan. Every verdict shows the
         rule behind it and the evidence that rule stands on — working alongside your local
         agronomist, lab reports and extension diagnosis.

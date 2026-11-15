@@ -193,11 +193,13 @@ export function Stat({
   label,
   foot,
   tone,
+  action,
 }: {
   value: React.ReactNode;
   label: string;
   foot?: React.ReactNode;
   tone?: "forest" | "harvest" | "clay";
+  action?: React.ReactNode;
 }) {
   const color =
     tone === "forest"
@@ -214,6 +216,7 @@ export function Stat({
       </span>
       <span className="stat__label">{label}</span>
       {foot && <span className="stat__foot">{foot}</span>}
+      {action && <span className="stat__action">{action}</span>}
     </div>
   );
 }

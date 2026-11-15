@@ -213,7 +213,7 @@ export function AppShell({
         <div className="footer__inner">
           <div style={{ maxWidth: "56ch" }}>
             <div className="footer__brand">AgroRotate</div>A rotation advisor
-            built on live NASA POWER data, FAO source tables and your own field
+            built on on-demand NASA POWER data, FAO source tables and your own field
             record.
           </div>
           <div className="footer__links">

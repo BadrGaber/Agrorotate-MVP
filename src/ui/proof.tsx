@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from "react";
 import { Glyph } from "./icons";
+import { ROUTE_LABELS, routeHref, type RouteKey } from "../app/router";
 import {
   FAO_ANNEX_URL,
   SALINITY_CHECK_BY_CROP,
@@ -220,7 +221,7 @@ export const PROOFS = {
     label: "NASA POWER",
     statement:
       meta ??
-      "Fetched live from the NASA POWER daily point API (community=AG) for this field's coordinates. The response parameters, date range and retrieval time are stored with the request.",
+      "Fetched on demand (latest available: 2–3 days lag for meteorology, 5–7 days lag for solar radiation) from the NASA POWER daily point API (community=AG) for this field's coordinates. The response parameters, date range and retrieval time are stored with the request.",
     sourceId: "S02–S04",
     sourceUrl: "https://power.larc.nasa.gov/docs/services/api/temporal/daily/",
     limitation:
@@ -296,15 +297,15 @@ export const PROOFS = {
     limitation:
       "Crop-specific tillage timing stays with your agronomist's local recommendation; the engine flags the principle instead of asserting a number of days.",
   }),
-  faoETc: (): Proof => ({
-    kind: "modeled",
-    label: "FAO-56 method",
+  cropWaterDemand: (): Proof => ({
+    kind: "estimate",
+    label: "seasonal crop water demand (fixed per-crop, mm)",
     statement:
-      "Crop water demand follows the FAO-56 framework: ETc = Kc × ETo, with growth-stage coefficients and separate effective rainfall and irrigation efficiency.",
+      "Crop water demand in this build is a seasonal crop water demand (fixed per-crop, mm), compared with the quota you record.",
     sourceId: "S21–S22",
     sourceUrl: "https://www.fao.org/4/X0490E/X0490E00.htm",
     limitation:
-      "ETo is climate demand, not irrigation delivery. Crop water requirement in mm comes from ETc = Kc × ETo with stage-based Kc calibrated locally per crop and season.",
+      "The fixed figure is a baseline estimate per crop, not a stage-dependent calculation, and ETo is climate demand — not irrigation delivery.",
   }),
   faoLeaching: (): Proof => ({
     kind: "modeled",
@@ -317,3 +318,31 @@ export const PROOFS = {
       "This is an indicative screening value for a uniform root zone. It is not a scheduling prescription and assumes the salinity threshold is appropriate for the species and growth stage.",
   }),
 } as const;
+
+/**
+ * Inline proof pointer: sits next to a claim and opens the screen that shows
+ * the underlying data (and briefly outlines the exact card).
+ */
+export function VerifyLink({
+  to,
+  focus,
+  children,
+}: {
+  to: RouteKey;
+  focus?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      className="verify-link"
+      href={routeHref(to, focus)}
+      title={`Open ${ROUTE_LABELS[to]} at the proof for this claim`}
+    >
+      <Glyph name="check" size={11} />
+      <span>{children}</span>
+      <span aria-hidden="true" className="verify-link__arrow">
+        ↗
+      </span>
+    </a>
+  );
+}

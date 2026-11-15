@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect, useRef, useState } from "react";
 import { Analytics } from "@vercel/analytics/react";
 import { AppShell } from "./app/AppShell";
-import { useRoute } from "./app/router";
+import { useRoute, useRouteFocus, type RouteKey } from "./app/router";
 import { WorkspaceProvider } from "./state/workspace";
 import { ProofProvider } from "./ui/proof";
 import { playRouteSound } from "./ui/sound";
@@ -53,6 +53,20 @@ function PageLoading() {
 
 export function App() {
   const [route, navigate] = useRoute();
+  const focus = useRouteFocus();
+
+  /**
+   * A proof link (`#/water?focus=…`) is a read-only inspection of a page, so
+   * it must not be bounced to step one. Normal navigation keeps the gate.
+   */
+  const gated = (current: RouteKey, node: React.ReactNode) =>
+    focus ? (
+      node
+    ) : (
+      <SetupGate current={current} navigate={navigate}>
+        {node}
+      </SetupGate>
+    );
 
 
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -69,22 +83,13 @@ export function App() {
     route === "field" ? (
       <FieldPage navigate={navigate} />
     ) : route === "soil" ? (
-      <SetupGate current="soil" navigate={navigate}>
-        <SoilPage navigate={navigate} />
-      </SetupGate>
+      gated("soil", <SoilPage navigate={navigate} />)
     ) : route === "water" ? (
-      <SetupGate current="water" navigate={navigate}>
-        <WaterPage navigate={navigate} />
-      </SetupGate>
+      gated("water", <WaterPage navigate={navigate} />)
     ) : route === "priorities" ? (
-      <SetupGate current="priorities" navigate={navigate}>
-        <PrioritiesPage navigate={navigate} />
-      </SetupGate>
+      gated("priorities", <PrioritiesPage navigate={navigate} />)
     ) : route === "plan" ? (
-
-      <SetupGate current="plan" navigate={navigate}>
-        <PlanPage navigate={navigate} />
-      </SetupGate>
+      gated("plan", <PlanPage navigate={navigate} />)
     ) : route === "crops" ? (
       <CropsPage />
     ) : route === "evidence" ? (

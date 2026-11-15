@@ -106,7 +106,7 @@ export function CropsPage() {
       </div>
 
       <div className="split split--crops">
-        <div className="stack">
+        <div className="stack" id="crop-registry">
           <Card
             glyph="compass"
             title="Filter"

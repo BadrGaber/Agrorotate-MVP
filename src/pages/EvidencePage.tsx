@@ -8,6 +8,13 @@ import {
   EVIDENCE_META,
   EVIDENCE_SOURCES,
 } from "../data/evidence/generated";
+import {
+  FAO56_CH8_URL,
+  FAO_ANNEX_URL,
+  SALINITY_CHECKS,
+  VERIFICATION_LABEL,
+  VERIFICATION_SUMMARY,
+} from "../data/evidence/verification";
 
 type Tab = "claims" | "sources" | "inputs";
 
@@ -110,6 +117,72 @@ export function EvidencePage() {
             attached to the individual value, so the engine keeps them qualitative and
             never treats them as confirmed numbers.
           </Note>
+
+          <Card
+            id="salinity-pairs"
+            glyph="flask"
+            title="The 13 FAO salinity pairs, value-for-value"
+            hint={`Re-opened in FAO Annex 1 on ${VERIFICATION_LABEL}: ${VERIFICATION_SUMMARY.confirmedClaims} of ${VERIFICATION_SUMMARY.supportedClaims} values match exactly, and ${VERIFICATION_SUMMARY.fao56CrossCheckedCrops} of ${VERIFICATION_SUMMARY.cropsChecked} crops also appear in FAO-56 Table 23.`}
+            aside={
+              <span className="badge badge--soft badge--meas">
+                {VERIFICATION_SUMMARY.confirmedClaims} / {VERIFICATION_SUMMARY.supportedClaims} values
+              </span>
+            }
+          >
+            <div className="table-wrap">
+              <table className="data">
+                <thead>
+                  <tr>
+                    <th>Crop (registry name)</th>
+                    <th>ECe threshold</th>
+                    <th>Yield slope</th>
+                    <th>Endpoint in the FAO table</th>
+                    <th>FAO-56 Table 23</th>
+                    <th>What the table actually says</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {SALINITY_CHECKS.map((check) => (
+                    <tr key={check.crop}>
+                      <td style={{ whiteSpace: "nowrap" }}>
+                        <strong>{check.crop}</strong>
+                      </td>
+                      <td className="mono">{check.annexLimitDsm.toFixed(1)} dS/m</td>
+                      <td className="mono">
+                        {check.annexSlopePctPerDsm.toFixed(1)} % per dS/m
+                      </td>
+                      <td>{check.endpoint}</td>
+                      <td>
+                        {check.fao56Table23 ? (
+                          <span className="badge badge--soft badge--meas">listed</span>
+                        ) : (
+                          <span className="badge badge--soft badge--none">“– –”</span>
+                        )}
+                      </td>
+                      <td className="td-muted" style={{ minWidth: 280 }}>
+                        {check.endpointCaveat ??
+                          (check.fao56Table23
+                            ? "Same threshold and slope as Table 23."
+                            : "Annex 1 is the sole numeric source; Table 23 has no entry.")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <p className="small" style={{ marginTop: 10 }}>
+              <a href={FAO_ANNEX_URL} target="_blank" rel="noreferrer">
+                FAO Annex 1 — Table A1.1 ↗
+              </a>{" "}
+              ·{" "}
+              <a href={FAO56_CH8_URL} target="_blank" rel="noreferrer">
+                FAO-56 Chapter 8 — Table 23 ↗
+              </a>
+              . These 13 pairs are the registry's source-scoped salinity rows; the other{" "}
+              {30 - SALINITY_CHECKS.length} crops have no FAO-scoped pair, so their
+              salinity figures are estimates and are not cross-checked against Annex 1.
+            </p>
+          </Card>
 
           <Card
             glyph="compass"

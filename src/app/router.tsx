@@ -51,20 +51,60 @@ export const ROUTE_LABELS: Record<RouteKey, string> = {
   sources: "Sources",
 };
 
-function readRoute(): RouteKey {
-  const hash = window.location.hash || "#/";
-  return HASH_TO_ROUTE[hash] ?? "field";
+/** The highlight class applied to the card a "Verify" link points at. */
+const FOCUS_FLASH = "is-focus-target";
+
+/**
+ * Hash format: `#/route?focus=element-id`.
+ * The query is routing metadata, not part of the route key.
+ */
+function splitHash(hash: string): { path: string; focus: string | null } {
+  const [path, query = ""] = (hash || "#/").split("?");
+  const raw = new URLSearchParams(query).get("focus");
+  return {
+    path: path || "#/",
+    focus: raw && /^[A-Za-z0-9_-]+$/.test(raw) ? raw : null,
+  };
 }
 
-export function useRoute(): [RouteKey, (route: RouteKey) => void] {
-  const [route, setRoute] = useState<RouteKey>(readRoute);
+function readRoute(): RouteKey {
+  const { path } = splitHash(window.location.hash || "#/");
+  return HASH_TO_ROUTE[path] ?? "field";
+}
+
+/**
+ * Scrolls to `focus`, then briefly outlines it. Pages are lazy-loaded, so the
+ * target can arrive a few frames after the route changes; retry until it does.
+ */
+function scrollToFocus(focus: string, attempt = 0): void {
+  const target = document.getElementById(focus);
+  if (!target) {
+    if (attempt < 40) {
+      window.setTimeout(() => scrollToFocus(focus, attempt + 1), 100);
+    }
+    return;
+  }
+  target.scrollIntoView({ block: "center", behavior: "smooth" });
+  target.classList.add(FOCUS_FLASH);
+  window.setTimeout(() => target.classList.remove(FOCUS_FLASH), 2600);
+}
+
+export function useRoute(): [RouteKey, (route: RouteKey) => void] {  const [route, setRoute] = useState<RouteKey>(readRoute);
 
   useEffect(() => {
     const onChange = () => {
+      const { focus } = splitHash(window.location.hash || "#/");
       setRoute(readRoute());
-      window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      if (focus) {
+        scrollToFocus(focus);
+      } else {
+        window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+      }
     };
     window.addEventListener("hashchange", onChange);
+    // A shared or reloaded `#/route?focus=…` link must land on its proof too.
+    const initial = splitHash(window.location.hash || "#/");
+    if (initial.focus) window.setTimeout(() => scrollToFocus(initial.focus as string), 0);
     return () => window.removeEventListener("hashchange", onChange);
   }, []);
 
@@ -82,6 +122,25 @@ export function useRoute(): [RouteKey, (route: RouteKey) => void] {
   return [route, navigate];
 }
 
-export function routeHref(route: RouteKey): string {
-  return ROUTE_TO_HASH[route];
+/**
+ * True while the current hash is a `?focus=` proof link. Setup pages use this
+ * to render their content instead of bouncing a reader back to step one.
+ */
+export function useRouteFocus(): string | null {
+  const [focus, setFocus] = useState<string | null>(
+    () => splitHash(window.location.hash || "#/").focus,
+  );
+
+  useEffect(() => {
+    const onChange = () => setFocus(splitHash(window.location.hash || "#/").focus);
+    window.addEventListener("hashchange", onChange);
+    return () => window.removeEventListener("hashchange", onChange);
+  }, []);
+
+  return focus;
+}
+
+export function routeHref(route: RouteKey, focus?: string): string {
+  const base = ROUTE_TO_HASH[route];
+  return focus ? `${base}?focus=${encodeURIComponent(focus)}` : base;
 }
