@@ -17,7 +17,11 @@ import {
 import type { WorkspaceState } from "../state/model";
 import { cropById } from "../data/catalog";
 
-const WEIGHTS_URL = "/models/agrorotate_surrogate_weights.json";
+const BASE_URL = (typeof import.meta !== "undefined" && import.meta.env?.BASE_URL
+  ? import.meta.env.BASE_URL
+  : "./"
+).replace(/\/$/, "");
+const WEIGHTS_URL = `${BASE_URL}/models/agrorotate_surrogate_weights.json`;
 const MODEL_CACHE = "agrorotate-ai-models-v2";
 
 let weightsCache: SurrogateWeights | null = null;
