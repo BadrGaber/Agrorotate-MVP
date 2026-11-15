@@ -1,0 +1,10 @@
+{
+  "radius_km": 50.0,
+  "sites": 550,
+  "sites_with_measured_ece": 88,
+  "coverage_pct": 16.0,
+  "ece_p50_measured": 0.449,
+  "ece_p90_measured": 2.52,
+  "ece_max_measured": 48.0,
+  "rule": "nearest WoSIS 0-30cm ECe profile inside the radius; otherwise 0.5 dS/m documented baseline"
+}

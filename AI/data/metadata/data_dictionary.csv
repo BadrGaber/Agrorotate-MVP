@@ -1,0 +1,23 @@
+﻿variable,unit,source,definition_and_caution
+latitude,degrees_north,MAPSPAM grid centre,Location of sampled cultivated grid cell
+longitude,degrees_east,MAPSPAM grid centre,Location of sampled cultivated grid cell
+country,text,Natural Earth admin-0 polygon overlay,Approximate country of the grid-cell centre; not farm survey metadata
+country_iso3,ISO3,Natural Earth admin-0 polygon overlay,Approximate country code of the grid-cell centre
+soilgrids_phh2o_0_5cm,pH,ISRIC SoilGrids 250m prediction,"Predicted soil pH, top 0-5 cm; not a field lab test"
+soilgrids_clay_0_5cm,%,ISRIC SoilGrids 250m prediction,"Predicted clay content, top 0-5 cm"
+soilgrids_sand_0_5cm,%,ISRIC SoilGrids 250m prediction,"Predicted sand content, top 0-5 cm"
+soilgrids_silt_0_5cm,%,ISRIC SoilGrids 250m prediction,"Predicted silt content, top 0-5 cm"
+soilgrids_soc_0_5cm,g/kg,ISRIC SoilGrids 250m prediction,"Predicted soil organic carbon, top 0-5 cm"
+soilgrids_bdod_0_5cm,kg/dm3,ISRIC SoilGrids 250m prediction,"Predicted bulk density, top 0-5 cm"
+soilgrids_cec_0_5cm,cmol(c)/kg,ISRIC SoilGrids 250m prediction,"Predicted cation exchange capacity, top 0-5 cm"
+soilgrids_nitrogen_0_5cm,g/kg,ISRIC SoilGrids 250m prediction,"Predicted total nitrogen, top 0-5 cm"
+air_temp_mean_c,deg C,NASA POWER monthly,Mean temperature in feature year
+precipitation_annual_mm,mm/year,NASA POWER monthly,Sum of monthly precipitation totals; PRECTOTCORR monthly mean daily rate × days
+elevation_m,m,OpenTopoData SRTM30m/ASTER30m,Elevation at grid point
+slope_percent_approx,%,OpenTopoData local 3-point gradient,Approximate slope from center/north/east elevations
+target_yield_kg_ha,kg/ha,MAPSPAM 2020,Modelled/spatially disaggregated crop yield; only populated where crop has data
+target_harvested_area_ha,ha,MAPSPAM 2020,Harvested area allocated to grid cell for crop
+target_production_t,tonnes,MAPSPAM 2020,Production allocated to grid cell for crop
+is_cultivated_in_grid_2020,0/1,MAPSPAM 2020,Crop presence in the grid cell; not a crop-suitability or optimality label
+wosis_distance_km,km,ISRIC WoSIS,Distance from sample grid centre to nearest known soil profile
+fertilizer_nutrient_records,country/year/nutrient,FAOSTAT Inputs_FertilizersNutrient,"National fertilizer nutrient statistics; separate table, not plot application quantities"

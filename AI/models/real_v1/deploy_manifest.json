@@ -1,0 +1,20 @@
+{
+  "deployed_utc": "2026-11-14T10:02:52.343765+00:00",
+  "model": "agrorotate real-v1 (MAPSPAM/NASA/SoilGrids)",
+  "source": "C:\\Users\\badrg\\Desktop\\Nasa App\\AI\\models\\real_v1\\real_surrogate_weights.json",
+  "targets": [
+    "C:\\Users\\badrg\\Desktop\\Nasa App\\Agrorotate_Front-end_MVP\\public\\models",
+    "C:\\Users\\badrg\\Desktop\\Nasa App\\Agrorotate_Front-end_MVP\\server\\models"
+  ],
+  "backup": "C:\\Users\\badrg\\Desktop\\Nasa App\\AI\\models\\legacy_v3\\runtime_backup_20261114T100252Z",
+  "retired": [],
+  "model_version": "agrorotate.surrogate_weights/real-v1",
+  "trained_targets": [
+    "yield_gap_pct"
+  ],
+  "rows": 3404,
+  "sites": 501,
+  "crops": 22,
+  "oof_mae": 20.57,
+  "oof_spearman": 0.278
+}

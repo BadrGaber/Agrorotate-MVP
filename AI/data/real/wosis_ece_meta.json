@@ -1,0 +1,14 @@
+{
+  "source": "ISRIC WoSIS_latest - Electrical conductivity, saturated paste (ELCOSP)",
+  "service": "https://maps.isric.org/mapserv?map=/map/wosis_latest.map&SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature&TYPENAMES=wosis_latest_elcosp&OUTPUTFORMAT=csv",
+  "doi": "10.5194/essd-16-4735-2024",
+  "units": "dS/m (ECe)",
+  "depth": "0-30 cm thickness-weighted profile mean",
+  "retrieved_utc": "2026-11-14T10:01:53.758319+00:00",
+  "raw_measurements": 84815,
+  "dropped_invalid": 0,
+  "profiles": 20312,
+  "ece_p50": 0.833,
+  "ece_p90": 3.812,
+  "ece_max": 60.0
+}

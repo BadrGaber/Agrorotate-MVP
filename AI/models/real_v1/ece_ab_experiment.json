@@ -1,0 +1,38 @@
+{
+  "experiment": "Train with and without measured ECe (WoSIS ELCOSP 0-30cm, nearest profile <=50 km)",
+  "design": "identical seed/epochs/spatial folds; only f14 differs",
+  "coverage": {
+    "sites_with_measured_ece": 88,
+    "sites_total": 550,
+    "training_rows_covered": 632,
+    "rows_total": 3404,
+    "row_coverage_pct": 18.6
+  },
+  "results": {
+    "ece_excluded_baseline": {
+      "ece_input": "imputed",
+      "oof_mae": 20.57,
+      "oof_within_crop_spearman": 0.221,
+      "oof_subset_632_rows_mae": 22.31,
+      "oof_subset_within_crop_spearman": 0.151,
+      "arc_mae": 26.02,
+      "arc_r2": 0.173,
+      "arc_spearman": 0.753,
+      "arc_within_crop_spearman": 0.819,
+      "ece_sweep_mean_gap_delta_16_vs_1_pp": 5.16
+    },
+    "ece_measured_16pct": {
+      "ece_input": "real",
+      "oof_mae": 20.56,
+      "oof_within_crop_spearman": 0.222,
+      "oof_subset_632_rows_mae": 22.28,
+      "oof_subset_within_crop_spearman": 0.166,
+      "arc_mae": 31.64,
+      "arc_r2": -0.163,
+      "arc_spearman": -0.244,
+      "arc_within_crop_spearman": -0.247,
+      "ece_sweep_mean_gap_delta_16_vs_1_pp": -7.93
+    }
+  },
+  "conclusion": "Feeding the measured ECe neither improves held-out gap accuracy (MAE 20.57 -> 20.56) nor teaches the correct salinity response: the ECe sweep flips sign (+5.2 pp at 16 vs 1 dS/m without ECe, -7.9 pp with it), and the independent ARC/ICARDA exam collapses (Spearman 0.753 -> -0.244, R2 0.173 -> -0.163). Cause: only 16% of sites have a WoSIS profile within 50 km, and those sites are not a random sample (well-managed temperate regions have low MAPSPAM gaps for reasons unrelated to salinity). ECe therefore stays a physics-only driver; the deployed model keeps the documented 0.5 dS/m constant."
+}

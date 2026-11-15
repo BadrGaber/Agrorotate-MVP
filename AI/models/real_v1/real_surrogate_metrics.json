@@ -1,0 +1,306 @@
+{
+  "model": "AgroRotate real-data yield-gap surrogate v1",
+  "trainer": "pipeline/train_real_surrogate.py",
+  "dataset": "C:\\Users\\badrg\\Desktop\\Nasa App\\AI\\data\\real\\real_crop_yield_training.parquet",
+  "rows": 3404,
+  "sites": 501,
+  "crops": 22,
+  "label": "relative yield gap (%) vs per-crop p95 attainable yield",
+  "validation": "5-fold spatial block CV (folds from lat/lon blocks)",
+  "oof_metrics": {
+    "mae": 20.57,
+    "rmse": 25.55,
+    "r2": 0.063,
+    "spearman": 0.278,
+    "n": 3404
+  },
+  "fold_reports": [
+    {
+      "fold": 0,
+      "mae": 20.49,
+      "rmse": 25.65,
+      "r2": -0.024,
+      "spearman": 0.024,
+      "n": 748,
+      "best_epoch": 25
+    },
+    {
+      "fold": 1,
+      "mae": 20.87,
+      "rmse": 25.9,
+      "r2": 0.141,
+      "spearman": 0.452,
+      "n": 653,
+      "best_epoch": 120
+    },
+    {
+      "fold": 2,
+      "mae": 19.33,
+      "rmse": 24.12,
+      "r2": 0.018,
+      "spearman": 0.205,
+      "n": 750,
+      "best_epoch": 72
+    },
+    {
+      "fold": 3,
+      "mae": 20.67,
+      "rmse": 24.9,
+      "r2": 0.091,
+      "spearman": 0.401,
+      "n": 536,
+      "best_epoch": 93
+    },
+    {
+      "fold": 4,
+      "mae": 21.59,
+      "rmse": 27.0,
+      "r2": 0.059,
+      "spearman": 0.301,
+      "n": 717,
+      "best_epoch": 60
+    }
+  ],
+  "within_crop_spearman": {
+    "real_v1_oof": 0.221,
+    "crop_mean": null,
+    "shipped_synthetic_surrogate": 0.25
+  },
+  "baselines": {
+    "global_mean": {
+      "mae": 21.49,
+      "rmse": 26.39,
+      "r2": 0.0,
+      "spearman": null,
+      "n": 3404
+    },
+    "crop_mean": {
+      "mae": 20.9,
+      "rmse": 25.86,
+      "r2": 0.04,
+      "spearman": 0.219,
+      "n": 3404
+    },
+    "shipped_synthetic_surrogate": {
+      "mae": 20.43,
+      "rmse": 25.38,
+      "r2": 0.075,
+      "spearman": 0.306,
+      "n": 3404
+    }
+  },
+  "per_crop_spearman_vs_attainable": {
+    "bread-wheat": 0.393,
+    "bulb-onion": 0.363,
+    "chickpea": 0.111,
+    "cowpea": 0.098,
+    "egyptian-cotton": 0.253,
+    "faba-bean": 0.182,
+    "grain-maize": 0.377,
+    "grain-sorghum": 0.243,
+    "lentil": 0.046,
+    "paddy-rice": 0.261,
+    "peanut-groundnut": 0.345,
+    "pearl-millet": 0.159,
+    "potato": 0.294,
+    "processing-tomato": 0.196,
+    "sesame": 0.286,
+    "six-row-barley": 0.183,
+    "soybean": 0.148,
+    "sugar-beet": 0.168,
+    "sugarcane": 0.077,
+    "sunflower": 0.195,
+    "sweet-potato": 0.089,
+    "winter-canola-rapeseed": 0.392
+  },
+  "conformal": {
+    "nominal_coverage": 0.9,
+    "empirical_half_width_gap_pct": 41.72,
+    "note": "Split-conformal half-width on spatially held-out real sites."
+  },
+  "oof_metrics_measured_ece_subset": {
+    "mae": 22.31,
+    "rmse": 27.35,
+    "r2": 0.029,
+    "spearman": 0.219,
+    "n": 632,
+    "within_crop_spearman": 0.151
+  },
+  "ece_sweep": {
+    "levels_dsm": [
+      1.0,
+      4.0,
+      8.0,
+      16.0
+    ],
+    "mean_gap_delta_16_vs_1_pp": 5.16,
+    "per_crop": {
+      "bread-wheat": {
+        "1.0": 61.1,
+        "4.0": 62.2,
+        "8.0": 63.5,
+        "16.0": 66.3
+      },
+      "bulb-onion": {
+        "1.0": 60.5,
+        "4.0": 61.5,
+        "8.0": 62.9,
+        "16.0": 65.7
+      },
+      "chickpea": {
+        "1.0": 62.2,
+        "4.0": 63.3,
+        "8.0": 64.6,
+        "16.0": 67.4
+      },
+      "cowpea": {
+        "1.0": 63.0,
+        "4.0": 64.0,
+        "8.0": 65.4,
+        "16.0": 68.1
+      },
+      "egyptian-cotton": {
+        "1.0": 57.7,
+        "4.0": 58.7,
+        "8.0": 60.1,
+        "16.0": 62.8
+      },
+      "faba-bean": {
+        "1.0": 63.9,
+        "4.0": 65.0,
+        "8.0": 66.3,
+        "16.0": 69.1
+      },
+      "grain-maize": {
+        "1.0": 64.9,
+        "4.0": 65.9,
+        "8.0": 67.3,
+        "16.0": 70.0
+      },
+      "grain-sorghum": {
+        "1.0": 62.2,
+        "4.0": 63.3,
+        "8.0": 64.7,
+        "16.0": 67.4
+      },
+      "lentil": {
+        "1.0": 61.0,
+        "4.0": 62.1,
+        "8.0": 63.4,
+        "16.0": 66.2
+      },
+      "paddy-rice": {
+        "1.0": 60.2,
+        "4.0": 61.2,
+        "8.0": 62.6,
+        "16.0": 65.4
+      },
+      "peanut-groundnut": {
+        "1.0": 61.5,
+        "4.0": 62.5,
+        "8.0": 63.9,
+        "16.0": 66.6
+      },
+      "pearl-millet": {
+        "1.0": 61.6,
+        "4.0": 62.6,
+        "8.0": 64.0,
+        "16.0": 66.7
+      },
+      "potato": {
+        "1.0": 60.5,
+        "4.0": 61.5,
+        "8.0": 62.9,
+        "16.0": 65.6
+      },
+      "processing-tomato": {
+        "1.0": 60.1,
+        "4.0": 61.2,
+        "8.0": 62.6,
+        "16.0": 65.3
+      },
+      "sesame": {
+        "1.0": 58.5,
+        "4.0": 59.5,
+        "8.0": 60.9,
+        "16.0": 63.7
+      },
+      "six-row-barley": {
+        "1.0": 58.3,
+        "4.0": 59.3,
+        "8.0": 60.7,
+        "16.0": 63.4
+      },
+      "soybean": {
+        "1.0": 61.7,
+        "4.0": 62.8,
+        "8.0": 64.2,
+        "16.0": 66.9
+      },
+      "sugar-beet": {
+        "1.0": 58.5,
+        "4.0": 59.5,
+        "8.0": 60.9,
+        "16.0": 63.7
+      },
+      "sugarcane": {
+        "1.0": 64.3,
+        "4.0": 65.3,
+        "8.0": 66.7,
+        "16.0": 69.4
+      },
+      "sunflower": {
+        "1.0": 57.4,
+        "4.0": 58.5,
+        "8.0": 59.8,
+        "16.0": 62.6
+      },
+      "sweet-potato": {
+        "1.0": 60.1,
+        "4.0": 61.1,
+        "8.0": 62.5,
+        "16.0": 65.3
+      },
+      "winter-canola-rapeseed": {
+        "1.0": 58.2,
+        "4.0": 59.2,
+        "8.0": 60.6,
+        "16.0": 63.3
+      }
+    }
+  },
+  "ece_input": "imputed",
+  "external_exam_arc_icarda": {
+    "n": 504,
+    "crops": 23,
+    "crop_mean_baseline": {
+      "mae": 26.02,
+      "rmse": 32.1,
+      "r2": 0.079,
+      "spearman": 0.326,
+      "n": 504,
+      "within_crop_spearman": null
+    },
+    "shipped_synthetic_model": {
+      "mae": 26.02,
+      "rmse": 30.41,
+      "r2": 0.173,
+      "spearman": 0.753,
+      "n": 504,
+      "within_crop_spearman": 0.819
+    },
+    "real_v1_model": {
+      "mae": 26.02,
+      "rmse": 30.41,
+      "r2": 0.173,
+      "spearman": 0.753,
+      "n": 504,
+      "within_crop_spearman": 0.819
+    }
+  },
+  "decision": {
+    "deploy_status": "candidate",
+    "reason": "Real labels exist for yield only; salinity/pathogen/nutrient dimensions are imputed.",
+    "recommended_runtime_use": "Use head 0 (yield gap) as a prior; keep physics for ECe, pathogens and rotation dynamics."
+  }
+}

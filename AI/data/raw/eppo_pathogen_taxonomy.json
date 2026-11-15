@@ -1,0 +1,26 @@
+{
+  "root_knot_nematode": {
+    "status_code": 403,
+    "note": "{\"message\":\"You do not have sufficent rights to perform this operation\"}"
+  },
+  "fusarium_oxysporum": {
+    "status_code": 403,
+    "note": "{\"message\":\"You do not have sufficent rights to perform this operation\"}"
+  },
+  "white_rot": {
+    "status_code": 403,
+    "note": "{\"message\":\"You do not have sufficent rights to perform this operation\"}"
+  },
+  "broomrape": {
+    "status_code": 403,
+    "note": "{\"message\":\"You do not have sufficent rights to perform this operation\"}"
+  },
+  "cyst_nematode": {
+    "status_code": 403,
+    "note": "{\"message\":\"You do not have sufficent rights to perform this operation\"}"
+  },
+  "rhizoctonia_solani": {
+    "status_code": 403,
+    "note": "{\"message\":\"You do not have sufficent rights to perform this operation\"}"
+  }
+}

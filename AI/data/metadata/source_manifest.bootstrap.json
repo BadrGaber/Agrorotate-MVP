@@ -1,0 +1,45 @@
+{
+  "project": "AgroRotate Global Research Dataset",
+  "generated_utc": "2026-11-14T04:53:55.662344+00:00",
+  "requested_sites": 550,
+  "sampling_seed": 42,
+  "climate_years": [
+    2001,
+    2025
+  ],
+  "mapspam": {
+    "url": "https://digital-atlas.s3.amazonaws.com/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr",
+    "version": "2020 v2r2",
+    "reference_year": 2020,
+    "license": "CC-BY-SA-4.0",
+    "doi": "10.7910/DVN/SWPENT",
+    "zarr_open_strategy": "download complete public S3 prefix to local cache, verify Zarr metadata, then open local Zarr with consolidated=False and explicit store-aligned chunks (Zarr auto-rechunking fails on object-dtype coordinate arrays)",
+    "supported_spatial_layouts": [
+      "regular x/y dimensions",
+      "flattened cell dimension with x/y coordinates"
+    ],
+    "local_store": "C:\\Users\\badrg\\Downloads\\AgroRotate_Global_Final_Package_v5\\AgroRotate_Global_Data\\raw\\mapspam2020-v2r2.zarr",
+    "objects_total": 568,
+    "objects_downloaded_this_run": 0,
+    "objects_reused": 568,
+    "bytes_expected_from_s3": 287215023,
+    "bytes_local": 287215023,
+    "download_status": "verified_local_store",
+    "remote_prefix": "digital-atlas/cdh/data/mapspam2020-v2r2/spam2020-v2r2.zarr"
+  },
+  "country_boundaries": {
+    "url": "https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson",
+    "source": "Natural Earth 110m admin-0",
+    "use": "approximate country attribution, not a farm boundary"
+  },
+  "scientific_limitations": [
+    "Sites are cultivated 5-arc-minute MAPSPAM grid cells, not surveyed individual farms.",
+    "MAPSPAM outcomes are spatially disaggregated estimates from administrative statistics.",
+    "SoilGrids is a modelled 250m prediction product, not laboratory measurement.",
+    "WoSIS nearest profile may not be from the sampled crop cell; distance is included.",
+    "The crop-presence label is observed allocated land use, not optimal crop suitability.",
+    "FAOSTAT fertilizer nutrient records are national statistics, not plot-level application records.",
+    "No global public source provides field-level irrigation, fertilizer application, farm costs, or rotation history for every site.",
+    "Missing values remain missing; they are not converted to zero."
+  ]
+}
