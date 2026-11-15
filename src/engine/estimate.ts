@@ -985,8 +985,12 @@ export function normalizeFieldInputsToScientificVector(
   if (options.provenanceSources) {
     const ps = options.provenanceSources;
     const nowIso = new Date().toISOString();
-    const areaTier: DataProvenance = ps.areaSource === "drawn" ? "MEAS" : "EST";
-    const areaConf = ps.areaSource === "drawn" ? 1.0 : ps.areaSource === "declared" ? 0.82 : 0.60;
+
+    // Spatial location & terrain priors get 0.50 (EO_PRIOR),
+    // field observations get 0.75 (EST),
+    // direct lab measurements get 1.00 (MEAS).
+    const areaTier: DataProvenance = "EO_PRIOR";
+    const areaConf = 0.50;
     provenance["fieldArea"] = {
       featureName: "fieldArea",
       source: areaTier,
@@ -996,8 +1000,8 @@ export function normalizeFieldInputsToScientificVector(
       timestamp: nowIso,
     };
 
-    const slopeTier: DataProvenance = ps.slopeSource === "dem" ? "EO_PRIOR" : "EST";
-    const slopeConf = ps.slopeSource === "dem" ? 0.95 : ps.slopeSource === "observation" ? 0.75 : 0.60;
+    const slopeTier: DataProvenance = ps.slopeSource === "observation" ? "EST" : "EO_PRIOR";
+    const slopeConf = ps.slopeSource === "observation" ? 0.75 : 0.50;
     provenance["slope"] = {
       featureName: "slope",
       source: slopeTier,
@@ -1007,8 +1011,8 @@ export function normalizeFieldInputsToScientificVector(
       timestamp: nowIso,
     };
 
-    const elevTier: DataProvenance = ps.elevationSource === "dem" ? "EO_PRIOR" : ps.elevationSource === "user" ? "MEAS" : "EST";
-    const elevConf = ps.elevationSource === "dem" ? 0.95 : ps.elevationSource === "user" ? 0.85 : 0.60;
+    const elevTier: DataProvenance = ps.elevationSource === "user" ? "EST" : "EO_PRIOR";
+    const elevConf = ps.elevationSource === "user" ? 0.75 : 0.50;
     provenance["elevation"] = {
       featureName: "elevation",
       source: elevTier,
