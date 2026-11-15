@@ -31,6 +31,10 @@ export interface FeatureProvenanceMeta {
   lowerBound95?: number;
   upperBound95?: number;
   uncertaintyPct?: number;
+  featureName?: string;
+  rawValue?: number;
+  normalizedValue?: number;
+  timestamp?: string;
 }
 
 export type UsdaTextureClass =
@@ -550,7 +554,6 @@ export interface PrioritiesState {
 
 export interface SlotState {
   cropId: string | null;
-  note: string;
 }
 
 export interface PlanState {
@@ -645,7 +648,7 @@ export const DEFAULT_WORKSPACE: WorkspaceState = {
   plan: {
     title: "Three-year rotation",
     cycle: 1,
-    slots: Array.from({ length: 6 }, () => ({ cropId: null, note: "" })),
+    slots: Array.from({ length: 6 }, () => ({ cropId: null })),
     updatedAtIso: null,
     serverRevisionId: null,
   },

@@ -237,7 +237,7 @@ export function FieldMap({
   const [editing, setEditing] = useState(false);
   const [zoom, setZoom] = useState(14);
   const [baseKind, setBaseKind] = useState<"satellite" | "street">("satellite");
-  const [overlayId, setOverlayId] = useState<string>("modis16");
+  const [overlayId, setOverlayId] = useState<string>("none");
   const [overlayOpacity, setOverlayOpacity] = useState(45);
   const [mapGeneration, setMapGeneration] = useState(0);
   const [detectingParcels, setDetectingParcels] = useState(false);
@@ -384,7 +384,21 @@ export function FieldMap({
     // makes the overlay effect run against the new Leaflet instance.
     setMapGeneration((value) => value + 1);
 
+    const invalidateTimer = window.setTimeout(() => {
+      map.invalidateSize();
+    }, 150);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined" && containerRef.current) {
+      resizeObserver = new ResizeObserver(() => {
+        map.invalidateSize();
+      });
+      resizeObserver.observe(containerRef.current);
+    }
+
     return () => {
+      window.clearTimeout(invalidateTimer);
+      resizeObserver?.disconnect();
       map.remove();
       mapRef.current = null;
       polygonRef.current = null;

@@ -110,6 +110,18 @@ export function FieldPage({
     lastAnalysedRef.current = signature;
     setAnalyzing(true);
     setClimate({ status: "loading", error: null });
+
+    // Immediately record geometry and computed area so the validation gate
+    // unlocks without waiting for network or failing on backend availability.
+    const localMetrics = polygonMetrics(boundary);
+    setField({
+      boundary,
+      areaHa: Number(localMetrics.areaHa.toFixed(2)),
+      areaSource: "drawn",
+      centroidLat: Number(localMetrics.centroidLat.toFixed(5)),
+      centroidLon: Number(localMetrics.centroidLon.toFixed(5)),
+    });
+
     try {
       const result = await analyzeField(boundary, {
         years: 5,
@@ -156,6 +168,13 @@ export function FieldPage({
       // If the local analysis endpoint is unavailable, keep the field usable
       // through the direct POWER fallback. Terrain stays explicitly missing.
       const metrics = polygonMetrics(boundary);
+      setField({
+        boundary,
+        areaHa: Number(metrics.areaHa.toFixed(2)),
+        areaSource: "drawn",
+        centroidLat: Number(metrics.centroidLat.toFixed(5)),
+        centroidLon: Number(metrics.centroidLon.toFixed(5)),
+      });
       try {
         const fallback = await fetchClimateContext(
           metrics.centroidLat,
@@ -253,7 +272,16 @@ export function FieldPage({
           >
             <FieldMap
               points={state.field.boundary}
-              onChange={(boundary) => setField({ boundary })}
+              onChange={(boundary) => {
+                const m = polygonMetrics(boundary);
+                setField({
+                  boundary,
+                  areaHa: boundary.length >= 3 ? Number(m.areaHa.toFixed(2)) : null,
+                  areaSource: boundary.length >= 3 ? "drawn" : null,
+                  centroidLat: boundary.length >= 3 ? Number(m.centroidLat.toFixed(5)) : null,
+                  centroidLon: boundary.length >= 3 ? Number(m.centroidLon.toFixed(5)) : null,
+                });
+              }}
               onBoundaryCommitted={(boundary) =>
                 void analyseCurrentField(boundary)
               }

@@ -65,7 +65,6 @@ function mergeState(raw: Partial<WorkspaceState> | null): WorkspaceState {
         raw.plan?.slots?.length === 6
           ? raw.plan.slots.map((slot) => ({
               cropId: slot?.cropId ?? null,
-              note: slot?.note ?? "",
             }))
           : structuredClone(DEFAULT_WORKSPACE.plan.slots),
     },

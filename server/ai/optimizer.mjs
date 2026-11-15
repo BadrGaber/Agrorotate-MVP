@@ -1028,12 +1028,16 @@ export function buildRuntimeVector40(workspace, crop, state) {
   const bd = parseNumeric(lab.bulkDensity) ?? ptf.bd;
   const ph = parseNumeric(lab.ph) ?? 7.5;
   const cec = parseNumeric(lab.cec) ?? Math.max(5, clay * 0.5 + som * 2);
-  // ESP and CaCO3 are no longer collected in the UI and the model learned no
-  // response to them. Keep the training-like defaults so an old saved workspace
-  // cannot keep feeding removed lab values into the contract.
-  const esp = 1.0;
-  const caco3 = 5.0;
+  const esp = parseNumeric(lab.espPct) ?? 1.0;
+  const caco3 = parseNumeric(lab.caco3Pct) ?? 5.0;
+  const no3n = parseNumeric(lab.no3nPpm) ?? 18.0;
+  const olsenP = parseNumeric(lab.olsenPPpm) ?? 12.0;
+  const exchK = parseNumeric(lab.exchangeableKPpm) ?? 150.0;
   const eto = parseNumeric(workspace.climate?.summary?.etoAnnualMm) ?? 1600;
+  const heatDays = parseNumeric(workspace.climate?.summary?.heatDays35) ?? 30;
+  const slopeClass = workspace.field?.slopeClass ?? "flat";
+  const slopeMap = { flat: 1.0, slight: 3.5, moderate: 7.0, steep: 15.0 };
+  const slopePct = slopeMap[slopeClass] ?? 1.5;
   const isWarm = state.isWarm;
 
   const clamp01 = (x) => Math.max(0, Math.min(1, Number.isFinite(x) ? x : 0));
@@ -1058,13 +1062,13 @@ export function buildRuntimeVector40(workspace, crop, state) {
   v[17] = clamp01(som / 8);
   v[18] = clamp01(cec / 60);
   v[19] = clamp01(state.nStock / 200);
-  v[20] = 0.35;
-  v[21] = 0.5;
+  v[20] = clamp01(olsenP / 60);
+  v[21] = clamp01(exchK / 500);
   for (let k = 22; k <= 27; k += 1) v[k] = 0.02;
   v[28] = clamp01(state.quota / 10000);
   v[29] = clamp01(state.ecw / 5);
   v[30] = clamp01(eto / 2500);
-  v[31] = clamp01(1.5 / 20);
+  v[31] = clamp01(slopePct / 20);
   v[32] = CROP_KC[crop.id] ?? 1.1;
   v[33] = crop.salinityThresholdDsm / 10;
   v[34] = crop.salinitySlopePctPerDsm / 20;

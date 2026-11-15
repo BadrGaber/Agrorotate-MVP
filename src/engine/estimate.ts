@@ -538,6 +538,12 @@ export interface NormalizeInputOptions {
     soil?: number;
     risk?: number;
   };
+  provenanceSources?: {
+    areaSource?: "drawn" | "declared" | null;
+    slopeSource?: "dem" | "observation" | null;
+    elevationSource?: "dem" | "user" | null;
+    areaHa?: number | null;
+  };
 }
 
 /**
@@ -974,6 +980,44 @@ export function normalizeFieldInputsToScientificVector(
     Number(clamp(slopePercent / 45.0, 0, 1).toFixed(4)),                             // [31] slope_norm
   ];
 
+  // 10. FIELD PROVENANCE & UNCERTAINTY CALIBRATION
+  if (options.provenanceSources) {
+    const ps = options.provenanceSources;
+    const nowIso = new Date().toISOString();
+    const areaTier: DataProvenance = ps.areaSource === "drawn" ? "MEAS" : "EST";
+    const areaConf = ps.areaSource === "drawn" ? 1.0 : ps.areaSource === "declared" ? 0.82 : 0.60;
+    provenance["fieldArea"] = {
+      featureName: "fieldArea",
+      source: areaTier,
+      confidenceWeight: areaConf,
+      rawValue: ps.areaHa ?? 0,
+      normalizedValue: 1.0,
+      timestamp: nowIso,
+    };
+
+    const slopeTier: DataProvenance = ps.slopeSource === "dem" ? "EO_PRIOR" : "EST";
+    const slopeConf = ps.slopeSource === "dem" ? 0.95 : ps.slopeSource === "observation" ? 0.75 : 0.60;
+    provenance["slope"] = {
+      featureName: "slope",
+      source: slopeTier,
+      confidenceWeight: slopeConf,
+      rawValue: slopePercent,
+      normalizedValue: Number((slopePercent / 45.0).toFixed(4)),
+      timestamp: nowIso,
+    };
+
+    const elevTier: DataProvenance = ps.elevationSource === "dem" ? "EO_PRIOR" : ps.elevationSource === "user" ? "MEAS" : "EST";
+    const elevConf = ps.elevationSource === "dem" ? 0.95 : ps.elevationSource === "user" ? 0.85 : 0.60;
+    provenance["elevation"] = {
+      featureName: "elevation",
+      source: elevTier,
+      confidenceWeight: elevConf,
+      rawValue: elevationM,
+      normalizedValue: Number((elevationM / 2000.0).toFixed(4)),
+      timestamp: nowIso,
+    };
+  }
+
   // Calculate overall confidence score
   let totalConfidence = 0;
   let provCount = 0;
@@ -1161,8 +1205,14 @@ export function workspaceToAgronomicVector(
       eceDsm: parseNumHelper(lab.eceDsm),
       socPercent: parseNumHelper(lab.socPct),
       cecCmolKg: parseNumHelper(lab.cec),
+      espPercent: parseNumHelper(lab.espPct),
+      caco3Percent: parseNumHelper(lab.caco3Pct),
+      availableNPpm: parseNumHelper(lab.no3nPpm),
+      availablePPpm: parseNumHelper(lab.olsenPPpm),
+      availableKPpm: parseNumHelper(lab.exchangeableKPpm),
       seasonalWaterQuotaM3Ha: parseNumHelper(water.quotaMm) ? parseNumHelper(water.quotaMm)! * 10 : undefined,
       irrigationEcwDsm: parseNumHelper(water.ecwDsm),
+      irrigationSarw: parseNumHelper(water.sarw),
       waterSupplyRegime,
       irrigationSystemType,
     },
@@ -1191,6 +1241,12 @@ export function workspaceToAgronomicVector(
       water: Number(((w.water ?? 3) / wTotal).toFixed(3)),
       soil: Number(((w.soil ?? 3) / wTotal).toFixed(3)),
       risk: Number(((w.risk ?? 3) / wTotal).toFixed(3)),
+    },
+    provenanceSources: {
+      areaSource: field.areaSource,
+      slopeSource: field.slopeSource,
+      elevationSource: field.elevationSource,
+      areaHa: field.areaHa ?? undefined,
     },
   };
 
