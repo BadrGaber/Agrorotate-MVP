@@ -1716,9 +1716,10 @@ function createSeededPrng(seedStr: string): () => number {
  *
  * Runs a fixed budget of 900 UCB1 rollouts over the 6-season space. That is a
  * budgeted approximation of the search space, not an enumeration: the ordered
- * upper bound for the full 30-crop pool is 11,390,625 sequences, but only the
- * unique rotations the budget actually evaluates are scored. Every run reports
- * both numbers separately in `search`.
+ * upper bound for the full 30-crop pool is far larger than the budget, but only
+ * the unique rotations the budget actually evaluates are scored. Every run
+ * reports the budget, the executed rollouts and the evaluated count separately
+ * in `search`.
  *
  * The three non-baseline solutions are the best trajectories found for net
  * return, water saving and soil health among those evaluated. They are not a

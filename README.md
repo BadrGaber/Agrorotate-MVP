@@ -38,7 +38,7 @@ AgroRotate is built AI-first. A pre-trained neural surrogate network evaluates m
 
 ### 3. Four Rotation Strategies for Every Field
 
-Farm management is never one-size-fits-all. AgroRotate runs a high-performance Batched Monte Carlo Tree Search (MCTS) engine in a background browser worker with a fixed budget of **900 rollouts per run**. That is a budgeted sample, not an enumeration: with the full 30-crop pool the ordered 6-season space is 11,390,625 sequences, but the engine only evaluates the unique rotations its budget actually reaches. Every result reports both numbers separately, plus the measured elapsed time — see `docs/BENCHMARK.md`.
+Farm management is never one-size-fits-all. AgroRotate runs a high-performance Batched Monte Carlo Tree Search (MCTS) engine in a background browser worker with a fixed budget of **900 rollouts per run**. That is a budgeted sample, not an enumeration: the ordered 6-season space with the full 30-crop pool is far larger than the budget, but the engine only evaluates the unique rotations its budget actually reaches. Every result reports both numbers separately, plus the measured elapsed time — see `docs/BENCHMARK.md`.
 
 The four pathways are the best alternatives the search found among the rotations it evaluated:
 

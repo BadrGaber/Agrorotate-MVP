@@ -46,9 +46,9 @@ directly).
 | 5 | 900 | 900 | 161 | 739 | 7.04 |
 
 - Median wall time: **11.82 ms** (min 7.05 ms, max 20.07 ms).
-- Theoretical ordered 6-season space with the full 30-crop pool:
-  **11,390,625 sequences**. This is an upper bound, explicitly labelled
-  theoretical; it is **not** 11.4 million explored paths.
+- The theoretical ordered 6-season space is computed from the candidate pools
+  and labelled as theoretical. It is an upper bound on the space, **not** the
+  number of paths explored.
 - The engine evaluated **161 unique rotations** in this run and skipped 739
   duplicate rollouts. Both numbers are reported by every result's `search`
   block and shown in the UI.

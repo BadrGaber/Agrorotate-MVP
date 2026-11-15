@@ -48,9 +48,9 @@ test("search telemetry reports executed simulations and unique rotations separat
   assert.ok(contract.search.theoreticalSearchSpace > contract.search.uniqueRotationsEvaluated);
   assert.match(contract.search.theoreticalSearchSpaceLabel, /theoretical/i);
 
-  // No "11.4 million explored" claim anywhere in the payload.
+  // No inflated explored-branch claim anywhere in the payload.
   const payload = JSON.stringify(contract);
-  assert.doesNotMatch(payload, /11\.4\s*million/i);
+  assert.doesNotMatch(payload, /million/i);
   assert.doesNotMatch(payload, /Pareto-optimal/i);
 });
 
