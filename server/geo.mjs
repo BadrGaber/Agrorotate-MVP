@@ -66,7 +66,7 @@ function centroid(points) {
 }
 
 export function analyseBoundary(rawPoints) {
-  // Drop a duplicated closing vertex on a copy — never mutate the caller's input.
+
   const first = rawPoints[0];
   const last = rawPoints[rawPoints.length - 1];
   const points =
@@ -149,8 +149,8 @@ export function validateBoundary(value) {
       return "every boundary point needs a finite lat (-60..60) and lon (-180..180)";
     }
   }
-  // A duplicated closing vertex is tolerated; analyseBoundary drops it on a
-  // copy. The caller's input is never mutated here.
+
+
   return value.length >= 3
     ? null
     : "boundary needs at least three distinct corners";

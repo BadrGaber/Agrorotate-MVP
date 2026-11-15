@@ -13,11 +13,11 @@ import { validateSingleField } from "../engine/validation";
 import { workspaceToAgronomicVector } from "../engine/estimate";
 import { observationFallback, observationProxy } from "../data/observationProxy";
 
-/**
- * Correct data label per input section, copied from the v5 evidence matrix.
- * Kept local so the evidence dataset stays in its lazy-loaded chunk instead of
- * being pulled into the initial Soil page bundle.
- */
+
+
+
+
+
 const DATA_LABELS: Record<number, string> = {
   2: "Farmer observation / mapped estimate / lab measurement kept separate",
   3: "Measured bulk density / qualitative compaction flag",
@@ -28,7 +28,7 @@ const DATA_LABELS: Record<number, string> = {
 
 type Tab = "observe" | "lab";
 
-/** The only lab fields the plan actually reads. */
+
 const LAB_GROUPS: {
   title: string;
   glyph: "layers" | "flask";
@@ -39,7 +39,7 @@ const LAB_GROUPS: {
     unit: string;
     placeholder: string;
     section: number;
-    /** Texture fractions stay number-only: no tactile class may become a %. */
+
     numberOnly?: boolean;
   }[];
 }[] = [
@@ -161,7 +161,7 @@ export function SoilPage({ navigate }: { navigate: (route: RouteKey) => void }) 
     return "engine default";
   };
 
-  /** What the engine actually uses when a lab box is empty. */
+
   const engineFallback = (key: keyof LabSoil): string => {
     switch (key) {
       case "sandPct":

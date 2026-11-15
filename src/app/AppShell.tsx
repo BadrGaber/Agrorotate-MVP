@@ -12,8 +12,8 @@ import {
   type RouteKey,
 } from "./router";
 
-// The five-step preview dialog lives at the app level (see App.tsx) so it can
-// overlay the landing page too — the topbar button just asks App to open it.
+
+
 
 function timeAgo(iso: string): string {
   const seconds = Math.round((Date.now() - new Date(iso).getTime()) / 1000);
@@ -180,8 +180,8 @@ export function AppShell({
                   onClick={(event) => {
                     event.preventDefault();
                     if (locked) {
-                      // Same behaviour as a failed Continue: stay here and
-                      // surface the entries the open setup step still needs.
+
+
                       if (firstMissingSetup) {
                         window.dispatchEvent(
                           new CustomEvent("agrorotate:gate-attempt", {

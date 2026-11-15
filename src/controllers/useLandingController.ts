@@ -56,8 +56,8 @@ export function useLandingController(onEnterDashboard: () => void) {
     setViewedSlides((prev) => (prev.includes(idx) ? prev : [...prev, idx]));
   };
 
-  // The highlights stay available for browsing, but entering the app is
-  // always one click away.
+
+
   const handleActionClick = () => {
     onEnterDashboard();
   };

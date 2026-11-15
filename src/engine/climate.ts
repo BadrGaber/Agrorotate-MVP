@@ -3,7 +3,7 @@ import type { ClimateDay, ClimateSummary } from "../state/model";
 const clamp = (value: number, min: number, max: number) =>
   Math.max(min, Math.min(max, value));
 
-/** Extraterrestrial radiation Ra in MJ m⁻² day⁻¹ (FAO-56 Eq. 21). */
+
 export function extraterrestrialRadiation(
   dayOfYear: number,
   latitudeDeg: number,
@@ -45,22 +45,22 @@ export interface PmInputs {
   elevationM?: number;
 }
 
-/**
- * FAO-56 Penman–Monteith daily reference evapotranspiration (Eq. 6).
- *
- * Inputs and units actually used here:
- *  - tmax, tmin (°C)                    NASA POWER T2M_MAX / T2M_MIN
- *  - rhMean (%)                         NASA POWER RH2M (mean, not RHmax/RHmin)
- *  - wind2m (m/s at 2 m)                NASA POWER WS2M (already at 2 m)
- *  - solarRadiation (MJ m⁻² day⁻¹)      NASA POWER ALLSKY_SFC_SW_DWN
- *  - elevationM (m)                     field elevation (DEM or user)
- *  - latitude (decimal degrees)         parcel centroid
- *  - isoDate                            record date, for Ra (Eq. 21)
- *
- * ea is derived from RHmean and es, not from the RHmax/RHmin form of Eq. 17.
- * Returns null when a required input is missing rather than substituting a
- * different method silently.
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export function fao56PenmanMonteith(input: PmInputs): number | null {
   const { tmax, tmin, rhMean, wind2m, solarRadiation, isoDate, latitude } = input;
   if (
@@ -121,10 +121,10 @@ export interface DailyRecord {
   srad: number | null;
 }
 
-/**
- * Normalises NASA POWER daily JSON (`properties.parameter`) into records and a
- * summary. POWER uses -999 for missing values; those become null.
- */
+
+
+
+
 export function summarisePower(
   payload: unknown,
   latitude: number,
@@ -144,7 +144,7 @@ export function summarisePower(
   const records: DailyRecord[] = dates
     .sort()
     .map((rawDate) => {
-      // POWER daily keys are YYYYMMDD; everything downstream expects ISO dates.
+
       const date = /^\d{8}$/.test(rawDate)
         ? `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`
         : rawDate;

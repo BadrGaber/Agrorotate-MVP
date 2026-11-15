@@ -5,11 +5,11 @@ import {
   type OfflineCacheStatus,
 } from "./register";
 
-/**
- * Polls the service worker once after it activates and whenever it reports a
- * finished precache. Offline readiness is shown on the Method page, not hidden
- * in a browser console.
- */
+
+
+
+
+
 export function useOfflineStatus(): OfflineCacheStatus {
   const [status, setStatus] = useState<OfflineCacheStatus>(EMPTY_OFFLINE_STATUS);
 

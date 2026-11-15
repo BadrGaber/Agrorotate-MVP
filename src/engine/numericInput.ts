@@ -1,16 +1,3 @@
-/**
- * One numeric-input contract for the whole engine.
- *
- * Two rules this module exists to enforce:
- *  1. `0` is a value, not "missing". Nothing here uses truthiness.
- *  2. Text that is not a finite number never becomes a value silently. It is
- *     reported as an issue so the caller can stop the affected evaluation.
- *
- * Absence (null / undefined / empty string) is different from invalidity. An
- * optional field may be absent; a required one may not. A field may declare an
- * explicit planning default for absence only — never for invalid text.
- */
-
 export type NumericIssueCode =
   | "required_missing"
   | "not_a_number"
@@ -19,20 +6,20 @@ export type NumericIssueCode =
   | "above_max";
 
 export interface NumericInputSpec {
-  /** Stable field id used in reports and UI messages. */
+
   key: string;
   label: string;
   unit: string;
   min: number;
   max: number;
-  /** Absence is an error when this is true. */
+
   required?: boolean;
-  /**
-   * Declared value used only when the field is EMPTY, with the scientific or
-   * planning reason. Invalid text never uses this default.
-   */
+
+
+
+
   absentFallback?: { value: number; reason: string };
-  /** Reason for a caller-supplied default when absence depends on context. */
+
   absentFallbackReason?: string;
 }
 
@@ -84,10 +71,10 @@ function issue(
   };
 }
 
-/**
- * Parses one UI / API value against a field-specific spec.
- * Bounds are per variable and unit; there is no shared global range.
- */
+
+
+
+
 export function parseNumericInput(
   raw: unknown,
   spec: NumericInputSpec,
@@ -156,15 +143,15 @@ export function parseNumericInput(
   return { ok: true, present: true, value, issue: null };
 }
 
-/**
- * Reads a value that must be a number for the calculation to run.
- *
- * - valid value (including 0) -> that value, no issue
- * - empty + declared absentFallback -> the declared default, no issue
- * - empty + no declared default -> `fallback`, no issue (caller documents it)
- * - invalid -> `fallback` AND an issue; callers must not use the result as a
- *   valid decision. The optimizer blocks the run when any issue is returned.
- */
+
+
+
+
+
+
+
+
+
 export function resolveNumericInput(
   raw: unknown,
   spec: NumericInputSpec,
@@ -184,23 +171,23 @@ export function resolveNumericInput(
   return { value: fallback, issue: parsed.issue, usedFallback: true };
 }
 
-/** Keeps a computed number only when it is finite; otherwise uses the fallback. */
+
 export function finiteOr(value: unknown, fallback: number): number {
   return typeof value === "number" && Number.isFinite(value) ? value : fallback;
 }
 
-/**
- * Field specs for the numbers that enter the optimizer. Ranges are per
- * variable and unit; a zero is accepted wherever zero is physically meaningful.
- */
+
+
+
+
 export const INPUT_SPECS = {
   waterQuotaMm: {
     key: "water.quotaMm",
     label: "Seasonal water quota",
     unit: "mm / season (the unit the app stores)",
     min: 0,
-    // The engine, the API fixtures and the planning default (5500) all use this
-    // stored range; 18,000 is the same ceiling as the scientific vector field.
+
+
     max: 18000,
     absentFallbackReason:
       "Blank quota falls back to the declared planning default (1500 mm rain-fed / 5500 mm irrigated) shown on the water step.",

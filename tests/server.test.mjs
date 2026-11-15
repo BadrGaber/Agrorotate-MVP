@@ -1,8 +1,3 @@
-/**
- * Endpoint tests for the local API. The server is spawned on a scratch port so
- * the developer's running instance on 8000 is never touched.
- * Run: npm test
- */
 import test from "node:test";
 import assert from "node:assert/strict";
 import http from "node:http";
@@ -84,7 +79,7 @@ async function startServer() {
       const response = await testFetch(`${BASE}/health`);
       if (response.ok) return;
     } catch {
-      // not up yet
+
     }
     await new Promise((resolve) => setTimeout(resolve, 200));
   }
@@ -304,22 +299,22 @@ test("POST /ai/choose annotates the browser alternatives instead of dropping the
   assert.equal(response.status, 200);
   const body = await response.json();
 
-  // The choice comes from the selected crop with the engine evaluation attached.
+
   assert.equal(body.choice.cropName, "Bread Wheat");
   assert.equal(body.choice.verdict, "caution");
   assert.equal(body.choice.salinityClears, false);
   assert.equal(body.choice.salinity.relativeYieldPct, 80.7);
 
-  // Alternatives are echoed back with their per-check reasons — never emptied.
+
   assert.equal(body.alternatives.length, 4);
   assert.equal(body.alternatives[0].cropName, "Six-Row Barley");
   assert.equal(body.alternatives[0].salinityClears, true);
 
-  // No trained ranker file exists in this repo: the probability must stay null,
-  // never a fake 0.
+
+
   assert.ok(body.alternatives.every((alt) => alt.rankerProbability === null));
 
-  // Coverage totals come from the payload the engine computed.
+
   assert.equal(body.counts.seasonsFilled, 1);
   assert.equal(body.counts.seasonsInPlan, 6);
   assert.equal(body.counts.conflicts, 0);
@@ -380,7 +375,7 @@ test("the exported AI registry matches the evidence ledger", () => {
     `salinity-backed crops: ${withThreshold.length}`,
   );
 
-  // Only the four parameters a decision reads survive the ledger trim.
+
   assert.equal(evidence.claims.length, 120);
   const keptParameters = new Set(evidence.claims.map((claim) => claim.parameter));
   assert.deepEqual(
@@ -389,7 +384,7 @@ test("the exported AI registry matches the evidence ledger", () => {
   );
   assert.ok(Array.isArray(evidence.sources) && evidence.sources.length >= 30);
 
-  // Every crop in the registry must exist in the claim ledger.
+
   const cropNames = new Set(evidence.claims.map((claim) => claim.crop));
   for (const crop of crops.crops) {
     assert.ok(cropNames.has(crop.name), `missing claims for ${crop.name}`);

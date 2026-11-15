@@ -1,15 +1,3 @@
-/**
- * Pedotransfer functions and the agronomic vector engine.
- *
- * Field observations are EST proxies defined in src/data/observationProxy.ts;
- * a typed lab number is MEAS. The old estimate-option catalogue that could
- * write a midpoint into a lab field was removed on purpose.
- */
-
-// ============================================================================
-// PEDOTRANSFER FUNCTIONS (PTF) & 32-DIM NORMALIZED AGRONOMIC VECTOR ENGINE
-// ============================================================================
-
 import type {
   AiInputContract,
   DataProvenance,
@@ -217,11 +205,11 @@ export const GROUP_TO_USDA_CLASS: Record<SimplifiedTextureGroup, UsdaTextureClas
   EXTREME_VERTIC_CLAY: "VERTIC_HEAVY_CLAY",
 };
 
-/**
- * Observation key -> engine class. The Soil page imports these maps so the
- * number shown beside an answer is the exact value the engine substitutes,
- * not a second, hand-written explanation that can drift from the code.
- */
+
+
+
+
+
 export const TEXTURE_GROUP_BY_OBSERVATION: Record<string, SimplifiedTextureGroup> = {
   sandy: "COARSE_SANDY",
   loamy: "LIGHT_LOAMY",
@@ -321,9 +309,9 @@ export const WATER_SOURCE_BY_UI: Record<string, SimplifiedWaterSourceType> = {
   mixed: "MIXED_DRAINAGE_CANAL",
 };
 
-/**
- * Classifies exact (%Sand, %Silt, %Clay) into the USDA 12-class textural triangle.
- */
+
+
+
 export function classifyUsdaSoilTexture(sand: number, silt: number, clay: number): UsdaTextureClass {
   if (clay >= 60) return "VERTIC_HEAVY_CLAY";
   if (silt + 1.5 * clay < 15) return "SAND";
@@ -362,10 +350,10 @@ function buildMeta(value: number, source: DataProvenance, relUncertainty: number
   };
 }
 
-/**
- * Saxton & Rawls (2006) Continuous Hydraulic Pedotransfer Equations.
- * Computes PWP, Field Capacity, Saturation, Bulk Density, AWC, and Ksat.
- */
+
+
+
+
 export function computeSaxtonRawlsHydraulics(
   sandPercent: number,
   clayPercent: number,
@@ -379,7 +367,7 @@ export function computeSaxtonRawlsHydraulics(
   const C = clayPercent / 100.0;
   const OM = clamp(somPercent, 0.2, 8.0);
 
-  // 1. Permanent Wilting Point (theta_1500, fraction v/v)
+
   const theta1500t =
     -0.024 * S +
     0.487 * C +
@@ -390,7 +378,7 @@ export function computeSaxtonRawlsHydraulics(
     0.031;
   const ptfPwpFrac = clamp(theta1500t + (0.14 * theta1500t - 0.02), 0.02, 0.38);
 
-  // 2. Field Capacity (theta_33, fraction v/v)
+
   const theta33t =
     -0.251 * S +
     0.195 * C +
@@ -405,7 +393,7 @@ export function computeSaxtonRawlsHydraulics(
     0.55
   );
 
-  // 3. Normal Saturation and Bulk Density
+
   const thetaS33t =
     0.278 * S +
     0.034 * C +
@@ -418,14 +406,14 @@ export function computeSaxtonRawlsHydraulics(
   const thetaSatNormalFrac = clamp(thetaFcNormalFrac + thetaS33 - 0.097 * S + 0.043, 0.35, 0.62);
   const rhoNormal = (1.0 - thetaSatNormalFrac) * 2.65;
 
-  // 4. Compaction Adjustment
+
   const compDelta = compactionState ? COMPACTION_BULK_DENSITY_DELTA[compactionState] : 0.0;
   const bulkDensityGCm3 = bulkDensityOverride !== undefined
     ? clamp(bulkDensityOverride, 0.85, 1.95)
     : clamp(rhoNormal + compDelta, 0.95, 1.88);
 
   const thetaSatAdjFrac = clamp(1.0 - bulkDensityGCm3 / 2.65, 0.32, 0.62);
-  // Strict thermodynamic ordering: 0.02 <= theta_wp < theta_fc < theta_sat
+
   const maxFc = Math.max(0.05, thetaSatAdjFrac - 0.02);
   const ptfFcAdjRaw = thetaFcNormalFrac - 0.2 * (thetaSatNormalFrac - thetaSatAdjFrac);
   const ptfFcAdjFrac = clamp(ptfFcAdjRaw, 0.04, maxFc);
@@ -435,11 +423,11 @@ export function computeSaxtonRawlsHydraulics(
   const wiltingPointVolPct = Number((effectivePwpFrac * 100).toFixed(1));
   const saturationVolPct = Number((thetaSatAdjFrac * 100).toFixed(1));
 
-  // 5. Available Water Capacity (AWC in mm/m)
+
   const rawAwc = 10.0 * (fieldCapacityVolPct - wiltingPointVolPct) * (1.0 - coarseFragmentFrac);
   const awcMmM = Number(clamp(rawAwc, 0.0, 240.0).toFixed(1));
 
-  // 6. Saturated Hydraulic Conductivity (Ksat) with Sodicity Penalty
+
   const bSlope =
     (Math.log(1500) - Math.log(33)) /
     (Math.log(fieldCapacityVolPct) - Math.log(wiltingPointVolPct));
@@ -547,9 +535,9 @@ export interface NormalizeInputOptions {
   };
 }
 
-/**
- * Standard 32-Dimension Feature Names in exact canonical order:
- */
+
+
+
 export const AGRONOMIC_32_FEATURE_LABELS: string[] = [
   "sand_fraction",
   "silt_fraction",
@@ -585,10 +573,10 @@ export const AGRONOMIC_32_FEATURE_LABELS: string[] = [
   "slope_norm",
 ];
 
-/**
- * Primary Dual-Mode & Three-Tier Normalization Engine.
- * Converts MEAS, EST, and EO_PRIOR inputs into a rigorous NormalizedAgronomicVector (32 continuous dims).
- */
+
+
+
+
 export function normalizeFieldInputsToScientificVector(
   options: NormalizeInputOptions
 ): NormalizedAgronomicVector {
@@ -597,7 +585,7 @@ export function normalizeFieldInputsToScientificVector(
   const eo = options.eoPrior ?? {};
   const provenance: Record<string, FeatureProvenanceMeta> = {};
 
-  // 1. TEXTURE & PARTICLE SIZE FRACTIONS
+
   let sandPercent: number;
   let siltPercent: number;
   let clayPercent: number;
@@ -652,7 +640,7 @@ export function normalizeFieldInputsToScientificVector(
     0.60
   );
 
-  // 2. SOIL ORGANIC MATTER (SOM% & SOC%)
+
   let somPercent: number;
   let somSource: DataProvenance;
   if (meas.somPercent !== undefined) {
@@ -677,7 +665,7 @@ export function normalizeFieldInputsToScientificVector(
     somSource === "MEAS" ? 0.05 : somSource === "EST" ? 0.20 : 0.35
   );
 
-  // 3. CHEMICAL FACTORS (pH, ECe, ESP, CaCO3, CEC)
+
   let phH2o: number;
   let phSource: DataProvenance;
   if (meas.phH2o !== undefined) {
@@ -692,7 +680,7 @@ export function normalizeFieldInputsToScientificVector(
   }
   provenance.phH2o = buildMeta(phH2o, phSource, phSource === "MEAS" ? 0.02 : 0.08);
 
-  // Water source defaults
+
   const wDef = WATER_SOURCE_DEFAULTS[est.waterSourceType ?? "FRESH_RIVER_CANAL"];
   const irrigationEcwDsm = clamp(meas.irrigationEcwDsm ?? wDef.ecw, 0.1, 15.0);
   const irrigationSarw = clamp(meas.irrigationSarw ?? wDef.sarw, 0.1, 35.0);
@@ -769,14 +757,14 @@ export function normalizeFieldInputsToScientificVector(
     const mineralFactor = usdaTextureClass === "VERTIC_HEAVY_CLAY" ? 0.75 : 0.55;
     const ptfCec = mineralFactor * clayPercent + 2.0 * somPercent;
     cecCmolKg = Number(clamp(ptfCec, 2.0, 60.0).toFixed(1));
-    // CEC is derived by a pedotransfer function here, never measured. A MEAS
-    // label is reserved for a CEC typed from the lab report, even when the
-    // texture fractions that feed the PTF are themselves measured.
+
+
+
     cecSource = "EST";
   }
   provenance.cecCmolKg = buildMeta(cecCmolKg, cecSource, cecSource === "MEAS" ? 0.05 : 0.20);
 
-  // 4. HYDRAULIC PTFs VIA SAXTON & RAWLS (2006)
+
   const hydraulics = computeSaxtonRawlsHydraulics(
     sandPercent,
     clayPercent,
@@ -797,7 +785,7 @@ export function normalizeFieldInputsToScientificVector(
   provenance.bulkDensityGCm3 = buildMeta(bulkDensityGCm3, meas.bulkDensityGCm3 ? "MEAS" : "EST", 0.08);
   provenance.awcMmM = buildMeta(awcMmM, meas.awcMmM ? "MEAS" : "EST", 0.15);
 
-  // Drainage & Root Depth
+
   let drainageIndex: number;
   let waterTableDepthCm: number;
   let aerationStressFactor: number;
@@ -833,7 +821,7 @@ export function normalizeFieldInputsToScientificVector(
     250
   );
 
-  // 5. NUTRIENTS (N, P, K)
+
   const nHistoryMap: Record<SimplifiedNitrogenHistoryClass, number> = {
     DEPLETED_CEREAL_EXHAUSTIVE: 8.0,
     MODERATE_BASELINE: 18.0,
@@ -876,7 +864,7 @@ export function normalizeFieldInputsToScientificVector(
         ).toFixed(0)
       );
 
-  // 6. PATHOGENS
+
   const allPathogens: SoilBornePathogenGroup[] = [
     "ROOT_KNOT_NEMATODE",
     "VASCULAR_WILT_COMPLEX",
@@ -904,7 +892,7 @@ export function normalizeFieldInputsToScientificVector(
     }
   }
 
-  // 7. WATER & IRRIGATION
+
   const waterSupplyRegime: WaterSupplyRegime =
     meas.waterSupplyRegime ?? est.waterSupplyRegime ?? "FULL_IRRIGATION";
 
@@ -937,7 +925,7 @@ export function normalizeFieldInputsToScientificVector(
   const dripOsmoticBufferBonusDsm = isDrip ? Number((0.20 * eceDsm).toFixed(2)) : 0.0;
   const permeabilityHazardPenaltyFrac = irrigationEcwDsm < 0.15 * irrigationSarw + 0.1 ? 0.35 : 0.0;
 
-  // 8. EO & CLIMATE
+
   const elevationM = eo.elevationM ?? 18;
   const slopePercent = eo.slopePercent ?? 1.2;
   const annualPrecipitationMm = eo.annualPrecipitationMm ?? 48;
@@ -945,50 +933,50 @@ export function normalizeFieldInputsToScientificVector(
   const aridityIndex = Number((annualPrecipitationMm / Math.max(1, annualEt0Mm)).toFixed(3));
   const heatDays35 = eo.heatDays35 ?? 34;
 
-  // 9. CONSTRUCT EXACT 32 CONTINUOUS NORMALIZED DIMENSIONS [0.0, 1.0]
+
   const continuousVector32: number[] = [
-    Number((sandPercent / 100.0).toFixed(4)),                                        // [0] sand_fraction
-    Number((siltPercent / 100.0).toFixed(4)),                                        // [1] silt_fraction
-    Number((clayPercent / 100.0).toFixed(4)),                                        // [2] clay_fraction
-    Number((coarseFragmentVolFrac / 0.60).toFixed(4)),                               // [3] coarse_fragments_fraction
-    Number(clamp((bulkDensityGCm3 - 0.85) / (1.95 - 0.85), 0, 1).toFixed(4)),       // [4] bulk_density_norm
-    Number(clamp(fieldCapacityVolPct / 60.0, 0, 1).toFixed(4)),                      // [5] field_capacity_norm
-    Number(clamp(wiltingPointVolPct / 40.0, 0, 1).toFixed(4)),                       // [6] wilting_point_norm
-    Number(clamp(awcMmM / 250.0, 0, 1).toFixed(4)),                                  // [7] awc_norm
-    Number(clamp(infiltrationRateMmHr / 250.0, 0, 1).toFixed(4)),                    // [8] ksat_norm
-    Number(clamp((drainageIndex - 1.0) / 4.0, 0, 1).toFixed(4)),                     // [9] drainage_index_norm
-    Number(clamp(waterTableDepthCm / 500.0, 0, 1).toFixed(4)),                       // [10] water_table_depth_norm
-    Number(clamp(effectiveRootDepthCm / 250.0, 0, 1).toFixed(4)),                    // [11] root_depth_norm
-    Number(clamp(aerationStressFactor, 0, 1).toFixed(4)),                            // [12] aeration_stress_norm
-    Number(clamp((phH2o - 3.5) / (10.5 - 3.5), 0, 1).toFixed(4)),                   // [13] ph_norm
-    Number(clamp(eceDsm / 50.0, 0, 1).toFixed(4)),                                   // [14] ece_norm
-    Number(clamp(espPercent / 65.0, 0, 1).toFixed(4)),                               // [15] esp_norm
-    Number(clamp(caco3Percent / 65.0, 0, 1).toFixed(4)),                             // [16] caco3_norm
-    Number(clamp(somPercent / 12.0, 0, 1).toFixed(4)),                               // [17] som_norm
-    Number(clamp(cecCmolKg / 65.0, 0, 1).toFixed(4)),                                // [18] cec_norm
-    Number(clamp(availableNPpm / 150.0, 0, 1).toFixed(4)),                           // [19] avail_n_norm
-    Number(clamp(availablePPpm / 100.0, 0, 1).toFixed(4)),                           // [20] avail_p_norm
-    Number(clamp(availableKPpm / 900.0, 0, 1).toFixed(4)),                           // [21] avail_k_norm
-    Number(clamp(pathogenInoculumRisk.ROOT_KNOT_NEMATODE, 0, 1).toFixed(4)),         // [22] nematode_risk
-    Number(clamp(pathogenInoculumRisk.VASCULAR_WILT_COMPLEX, 0, 1).toFixed(4)),      // [23] fusarium_wilt_risk
-    Number(clamp(pathogenInoculumRisk.ALLIUM_WHITE_ROT, 0, 1).toFixed(4)),           // [24] allium_white_rot_risk
-    Number(clamp(pathogenInoculumRisk.OROBANCHE_BROOMRAPE, 0, 1).toFixed(4)),        // [25] orobanche_risk
-    Number(clamp(seasonalWaterQuotaM3Ha / 18000.0, 0, 1).toFixed(4)),                // [26] water_quota_norm
-    Number(clamp(irrigationEcwDsm / 15.0, 0, 1).toFixed(4)),                         // [27] water_ecw_norm
-    Number(clamp(applicationEfficiencyFrac, 0, 1).toFixed(4)),                       // [28] irrigation_efficiency
-    Number(clamp(annualEt0Mm / 2500.0, 0, 1).toFixed(4)),                            // [29] annual_eto_norm
-    Number(clamp(heatDays35 / 120.0, 0, 1).toFixed(4)),                              // [30] heat_days_norm
-    Number(clamp(slopePercent / 45.0, 0, 1).toFixed(4)),                             // [31] slope_norm
+    Number((sandPercent / 100.0).toFixed(4)),
+    Number((siltPercent / 100.0).toFixed(4)),
+    Number((clayPercent / 100.0).toFixed(4)),
+    Number((coarseFragmentVolFrac / 0.60).toFixed(4)),
+    Number(clamp((bulkDensityGCm3 - 0.85) / (1.95 - 0.85), 0, 1).toFixed(4)),
+    Number(clamp(fieldCapacityVolPct / 60.0, 0, 1).toFixed(4)),
+    Number(clamp(wiltingPointVolPct / 40.0, 0, 1).toFixed(4)),
+    Number(clamp(awcMmM / 250.0, 0, 1).toFixed(4)),
+    Number(clamp(infiltrationRateMmHr / 250.0, 0, 1).toFixed(4)),
+    Number(clamp((drainageIndex - 1.0) / 4.0, 0, 1).toFixed(4)),
+    Number(clamp(waterTableDepthCm / 500.0, 0, 1).toFixed(4)),
+    Number(clamp(effectiveRootDepthCm / 250.0, 0, 1).toFixed(4)),
+    Number(clamp(aerationStressFactor, 0, 1).toFixed(4)),
+    Number(clamp((phH2o - 3.5) / (10.5 - 3.5), 0, 1).toFixed(4)),
+    Number(clamp(eceDsm / 50.0, 0, 1).toFixed(4)),
+    Number(clamp(espPercent / 65.0, 0, 1).toFixed(4)),
+    Number(clamp(caco3Percent / 65.0, 0, 1).toFixed(4)),
+    Number(clamp(somPercent / 12.0, 0, 1).toFixed(4)),
+    Number(clamp(cecCmolKg / 65.0, 0, 1).toFixed(4)),
+    Number(clamp(availableNPpm / 150.0, 0, 1).toFixed(4)),
+    Number(clamp(availablePPpm / 100.0, 0, 1).toFixed(4)),
+    Number(clamp(availableKPpm / 900.0, 0, 1).toFixed(4)),
+    Number(clamp(pathogenInoculumRisk.ROOT_KNOT_NEMATODE, 0, 1).toFixed(4)),
+    Number(clamp(pathogenInoculumRisk.VASCULAR_WILT_COMPLEX, 0, 1).toFixed(4)),
+    Number(clamp(pathogenInoculumRisk.ALLIUM_WHITE_ROT, 0, 1).toFixed(4)),
+    Number(clamp(pathogenInoculumRisk.OROBANCHE_BROOMRAPE, 0, 1).toFixed(4)),
+    Number(clamp(seasonalWaterQuotaM3Ha / 18000.0, 0, 1).toFixed(4)),
+    Number(clamp(irrigationEcwDsm / 15.0, 0, 1).toFixed(4)),
+    Number(clamp(applicationEfficiencyFrac, 0, 1).toFixed(4)),
+    Number(clamp(annualEt0Mm / 2500.0, 0, 1).toFixed(4)),
+    Number(clamp(heatDays35 / 120.0, 0, 1).toFixed(4)),
+    Number(clamp(slopePercent / 45.0, 0, 1).toFixed(4)),
   ];
 
-  // 10. FIELD PROVENANCE & UNCERTAINTY CALIBRATION
+
   if (options.provenanceSources) {
     const ps = options.provenanceSources;
     const nowIso = new Date().toISOString();
 
-    // Spatial location & terrain priors get 0.50 (EO_PRIOR),
-    // field observations get 0.75 (EST),
-    // direct lab measurements get 1.00 (MEAS).
+
+
+
     const areaTier: DataProvenance = "EO_PRIOR";
     const areaConf = 0.50;
     provenance["fieldArea"] = {
@@ -1023,7 +1011,7 @@ export function normalizeFieldInputsToScientificVector(
     };
   }
 
-  // Calculate overall confidence score
+
   let totalConfidence = 0;
   let provCount = 0;
   for (const meta of Object.values(provenance)) {
@@ -1110,17 +1098,17 @@ export function normalizeFieldInputsToScientificVector(
   };
 }
 
-/**
- * Bridges WorkspaceState from the interactive React application to the
- * canonical 32-dimensional NormalizedAgronomicVector.
- */
+
+
+
+
 export function workspaceToAgronomicVector(
   state: WorkspaceState,
   eoPriorOverride?: Partial<NormalizeInputOptions["eoPrior"]>
 ): NormalizedAgronomicVector {
   const parseNumHelper = (val: string | number | null | undefined): number | undefined => {
     if (val === null || val === undefined) return undefined;
-    // A whitespace-only field is empty, not 0 (Number(" ") is 0).
+
     if (typeof val === "string" && val.trim() === "") return undefined;
     const n = typeof val === "number" ? val : Number(String(val).trim().replace(",", "."));
     return Number.isFinite(n) ? n : undefined;
@@ -1132,8 +1120,8 @@ export function workspaceToAgronomicVector(
   const field = state.field;
   const climate = state.climate.summary;
 
-  // Observations -> the exact engine classes. The Soil page imports the same
-  // maps, so the proxy it displays is the value the engine actually substitutes.
+
+
   const textureGroup = obs.textureRibbon
     ? TEXTURE_GROUP_BY_OBSERVATION[obs.textureRibbon]
     : undefined;
@@ -1153,11 +1141,11 @@ export function workspaceToAgronomicVector(
     ? COLOR_BY_OBSERVATION[obs.colour]
     : undefined;
 
-  // No diagnosis input exists in this build (the model never learned pathogen
-  // pressure either), so every group keeps its baseline inoculum risk.
+
+
   const observedPathogens: SoilBornePathogenGroup[] = [];
 
-  // Water mappings
+
   const regimeMap: Record<string, WaterSupplyRegime> = {
     full_irrigation: "FULL_IRRIGATION",
     deficit_allocation: "DEFICIT_ALLOCATION",
@@ -1176,7 +1164,7 @@ export function workspaceToAgronomicVector(
 
   const waterSourceType = water.source ? WATER_SOURCE_BY_UI[water.source] : undefined;
 
-  // Slope mapping
+
   const slopeMap: Record<string, number> = {
     unknown: 1.5,
     flat: 1.0,
@@ -1186,8 +1174,8 @@ export function workspaceToAgronomicVector(
   };
   const slopePercent = field.slopeClass ? slopeMap[field.slopeClass] ?? 1.5 : 1.5;
 
-  // Normalized weights. NaN never enters the total, and an all-zero choice is a
-  // deliberate "no preference" (equal weights), not a missing field.
+
+
   const w = state.priorities?.weights ?? { yield: 3, water: 3, soil: 3, risk: 3 };
   const weightOr = (value: number | undefined): number =>
     Number.isFinite(value) ? (value as number) : 3;
@@ -1284,9 +1272,9 @@ export function buildAiInputContractFromWorkspace(
   return buildAiInputContract(vector);
 }
 
-/**
- * Builds the complete AI Input Contract package ready for immediate export or inference.
- */
+
+
+
 export function buildAiInputContract(
   input:
     | NormalizedAgronomicVector

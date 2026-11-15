@@ -1,14 +1,3 @@
-/**
- * AgroRotate Web Worker for client-side crop-rotation optimization.
- *
- * Loads ONE artefact: the real-data surrogate trained by AI/pipeline
- * (`/models/agrorotate_surrogate_weights.json`). The old synthetic GRU, ONNX
- * and pred-contribution files are retired and are no longer fetched.
- *
- * The worker only keeps the UI thread free; all decision logic stays in
- * src/engine/optimizer.ts so the browser and the Node API share one contract.
- */
-
 import {
   runBatchedOptimization,
   type OptimizationOptions,
@@ -35,8 +24,8 @@ async function fetchWeights(): Promise<SurrogateWeights | null> {
     }
   };
 
-  // Network-first: a freshly trained model must take effect on the next reload.
-  // The cache is only the offline fallback.
+
+
   try {
     const response = await fetch(WEIGHTS_URL, { cache: "no-cache" });
     if (response.ok) {
@@ -48,7 +37,7 @@ async function fetchWeights(): Promise<SurrogateWeights | null> {
       return parse(text);
     }
   } catch {
-    // Offline: fall back to the last cached model.
+
   }
 
   try {
@@ -58,10 +47,10 @@ async function fetchWeights(): Promise<SurrogateWeights | null> {
       if (cached?.ok) return parse(await cached.text());
     }
   } catch {
-    // CacheStorage unavailable.
+
   }
 
-  // Nothing loaded: the engine runs on the physical floor only.
+
   return null;
 }
 

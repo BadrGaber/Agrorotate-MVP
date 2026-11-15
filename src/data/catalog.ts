@@ -8,7 +8,7 @@ export interface CatalogCrop {
   family: string;
   season: "cool" | "warm";
   seasonRaw: string | null;
-  /** Only non-null when the v5 ledger marks the FAO pair SUPPORTED FOR SOURCE SCOPE. */
+
   salinityLimitDsm: number | null;
   salinitySlopePercentPerDsm: number | null;
   salinitySourceUrl: string | null;

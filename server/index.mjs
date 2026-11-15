@@ -1,14 +1,3 @@
-/**
- * AgroRotate local API — no external dependencies, no AI.
- *
- * Responsibilities:
- *  - Proxy NASA POWER daily AG requests and cache the raw response with an
- *    exact record of the request, so every climate number is reproducible.
- *  - Persist rotation plans as plain JSON on this machine. No account, no
- *    cloud, no telemetry.
- *
- * Run: node server/index.mjs   (PORT defaults to 8000)
- */
 import http from "node:http";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -374,9 +363,9 @@ async function handleGeocode(request, response, url) {
   }
 }
 
-// Overpass mirrors are unreachable from some networks, so parcel detection
-// reads the same OpenStreetMap data through the main OSM map API instead: a
-// small bbox is enough for a field and the response arrives in about a second.
+
+
+
 const OSM_MAP_API = "https://api.openstreetmap.org/api/0.6/map";
 
 function ringAreaHa(vertices) {
@@ -423,7 +412,7 @@ function geometryVertices(geometry) {
     .map((point) => ({ lat: point.lat, lon: point.lon }));
 }
 
-/** Convert Overpass ways/relations into candidate field outlines. */
+
 function collectParcels(elements, origin, limit) {
   const parcels = [];
   for (const element of Array.isArray(elements) ? elements : []) {
@@ -485,7 +474,7 @@ function attrValue(attributes, name) {
   return match ? match[1] : null;
 }
 
-/** Parse the OSM map XML into the way records collectParcels understands. */
+
 function parseOsmMapXml(xml) {
   const nodes = new Map();
   const nodePattern = /<node\b([^>]*?)\/?>/g;
@@ -581,8 +570,8 @@ async function detectParcels(lat, lon, radiusM, limit) {
 async function handleParcels(request, response, url) {
   const rawLat = url.searchParams.get("lat");
   const rawLon = url.searchParams.get("lon");
-  // Number(null) is 0, which would silently turn a missing coordinate into
-  // the Gulf of Guinea. Require the parameters to be present and non-empty.
+
+
   const lat =
     rawLat === null || rawLat.trim() === "" ? Number.NaN : Number(rawLat);
   const lon =
@@ -628,9 +617,9 @@ async function handleParcels(request, response, url) {
 
 async function getTerrain(analysis) {
   const { centroidLat, centroidLon, bbox, widthM, heightM } = analysis;
-  // A 5 × 5 sample grid gives the slope plane, D8 flow directions and a local
-  // TWI proxy something real to work with. It remains a screening grid, not a
-  // survey-grade DEM map.
+
+
+
   const rows = 5;
   const cols = 5;
   const samplePoints = [];
@@ -907,8 +896,8 @@ async function handleEo(request, response, url) {
       lon < -180 ||
       lon > 180
     ) {
-      // No coordinates still returns the product registry, so the Method and
-      // Sources pages can render honest statuses before a field is chosen.
+
+
       const snapshot = await buildEoSnapshot({ analysis: null, terrain: null });
       return sendJson(response, 200, {
         ...snapshot,
@@ -975,9 +964,9 @@ async function handleEoSoilGrids(request, response, url) {
     });
   }
 
-  // Answer from cache immediately; otherwise start the upstream fetch and return
-  // a pending marker the browser polls. ISRIC can take tens of seconds, and a
-  // single held-open request used to abort in the browser first.
+
+
+
   const cached = force
     ? { status: "pending" }
     : await fetchSoilGrids({ lat, lon, force: false, cacheOnly: true });

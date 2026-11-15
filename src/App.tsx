@@ -12,16 +12,16 @@ import { PrioritiesPage } from "./pages/PrioritiesPage";
 import { PlanPage } from "./pages/PlanPage";
 import { SetupGate } from "./pages/shared";
 
-// The five-step preview is lazy: it only loads when opened. It renders at the
-// app level (above AppShell) so the dialog can overlay the landing page too.
+
+
 const PreviewPlayer = lazy(() =>
   import("./components/PreviewPlayer").then((module) => ({
     default: module.PreviewPlayer,
   })),
 );
 
-// All content is live and evidence-grounded. The landing page introduces the
-// product; the preview is a read-only walkthrough, not a separate app mode.
+
+
 const FarmerWebsiteLanding = React.lazy(() =>
   import("./components/FarmerWebsiteLanding").then((module) => ({
     default: module.FarmerWebsiteLanding,
@@ -53,12 +53,12 @@ function PageLoading() {
 
 export function App() {
   const [route, navigate] = useRoute();
-  // The preview never starts by itself. The landing page offers both paths
-  // side by side, and the top bar can replay it at any time.
+
+
   const [previewOpen, setPreviewOpen] = useState(false);
   const lastRoute = useRef(route);
 
-  // A quiet transition cue for real navigation. The initial route is silent.
+
   useEffect(() => {
     if (lastRoute.current === route) return;
     lastRoute.current = route;
@@ -81,7 +81,7 @@ export function App() {
         <PrioritiesPage navigate={navigate} />
       </SetupGate>
     ) : route === "plan" ? (
-      // The plan is the last step: every setup page must be complete first.
+
       <SetupGate current="plan" navigate={navigate}>
         <PlanPage navigate={navigate} />
       </SetupGate>

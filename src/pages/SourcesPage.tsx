@@ -20,11 +20,11 @@ const EXTRA_GIBS_ROWS = [
   },
 ];
 
-/**
- * The one tab that answers "where does every number come from?": each NASA or
- * FAO source the app calls, the exact endpoint and parameters, what it feeds,
- * and the limits recorded in the evidence ledger.
- */
+
+
+
+
+
 export function SourcesPage() {
   const gibsRows = [
     ...EO_PRODUCTS.flatMap((product) =>

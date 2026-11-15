@@ -1,9 +1,4 @@
 #!/usr/bin/env node
-/**
- * Rigorous Stress Testing Suite ("حاول كسره")
- * Tests extreme biophysical stress cases, NaN/Infinity propagation, divide-by-zero risks,
- * and boundary conditions across both server and client evaluation logic.
- */
 import { optimizeWorkspace } from "../server/ai/optimizer.mjs";
 
 console.log("=================================================");
@@ -54,7 +49,7 @@ const scenarios = [
       ws.soil.lab.eceDsm = "18.5";
       ws.water.ecwDsm = "8.0";
       ws.water.sarw = "22";
-      ws.water.system = "sprinkler"; // checks sprinkler disease + crusting
+      ws.water.system = "sprinkler";
     },
   },
   {
@@ -86,7 +81,7 @@ const scenarios = [
       ws.soil.lab.no3nPpm = "1.5";
       ws.soil.lab.olsenPPpm = "1.0";
       ws.soil.lab.exchangeableKPpm = "25";
-      ws.water.quotaMm = "1500"; // Severe deficit
+      ws.water.quotaMm = "1500";
       ws.water.system = "surface";
     },
   },
@@ -152,13 +147,13 @@ for (const sc of scenarios) {
     const result = optimizeWorkspace(ws);
     const elapsed = (performance.now() - start).toFixed(1);
 
-    // Assertions:
+
     if (!result || !result.paretoSolutions || result.paretoSolutions.length !== 4) {
       throw new Error(`Expected 4 Pareto solutions, got ${result?.paretoSolutions?.length}`);
     }
 
     for (const sol of result.paretoSolutions) {
-      // Check for NaN or non-finite values
+
       const scores = [
         ["projectedNetReturnScore", sol.projectedNetReturnScore],
         ["waterSavingScore", sol.waterSavingScore],

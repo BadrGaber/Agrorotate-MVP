@@ -21,17 +21,17 @@ import {
 } from "./model";
 export const WORKSPACE_STORAGE_KEY = "agrorotate.v6.workspace";
 const STORAGE_KEY = WORKSPACE_STORAGE_KEY;
-/**
- * Keys written by earlier builds. They are removed on load so a stale example
- * record cannot be mistaken for the visitor's own data.
- */
+
+
+
+
 const LEGACY_STORAGE_KEYS = [
   "agrorotate.v5.workspace",
   "agrorotate.v5.ai.journal",
   "agrorotate.v5.ai.snapshot",
 ];
 
-/** First-visit state: genuinely empty — no field, no answers, no seeded data. */
+
 function emptyWorkspace(): WorkspaceState {
   return structuredClone(DEFAULT_WORKSPACE);
 }
@@ -124,7 +124,7 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         setSavedAtIso(new Date().toISOString());
         setDirty(false);
       } catch {
-        /* storage full or blocked — the app still works in memory */
+
       }
     }, 450);
     return () => {
@@ -158,9 +158,9 @@ export function WorkspaceProvider({ children }: { children: React.ReactNode }) {
         }),
       setWater: (patch) =>
         mutate((c) => {
-          // A value typed directly is recorded as the user's own entry, so any
-          // estimate provenance for the patched keys is dropped — same rule as
-          // the soil lab fields.
+
+
+
           const estimates = { ...c.water.estimates };
           for (const key of Object.keys(patch)) delete estimates[key];
           return { ...c, water: { ...c.water, ...patch, estimates } };

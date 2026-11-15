@@ -76,9 +76,9 @@ def metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
     }
 
 
-# ---------------------------------------------------------------------------
-# Forward pass for the *already shipped* weights (torch and JS agree).
-# ---------------------------------------------------------------------------
+
+
+
 def within_crop_spearman(y: np.ndarray, pred: np.ndarray, crops: np.ndarray, min_n: int = 15) -> float | None:
     """Average rank correlation computed *inside* each crop.
 
@@ -180,7 +180,7 @@ def arc_exam(shipped: dict | None, real_model: Surrogate | None) -> dict:
     attainable = df.groupby("standardized_crop_id")["observed_yield_t_ha"].quantile(0.95)
     df["gap"] = (100.0 * (1.0 - df["observed_yield_t_ha"] / df["standardized_crop_id"].map(attainable))).clip(0, 100)
 
-    from contract import CROP_SPECS, build_vector40  # local import to avoid cycle issues
+    from contract import CROP_SPECS, build_vector40
 
     rows = []
     for rec in df.itertuples(index=False):
@@ -283,7 +283,7 @@ def main() -> None:
         ece = df["ece_dsm_measured"].fillna(0.5).to_numpy(dtype=np.float32)
         X[:, 14] = np.clip(ece / 20.0, 0.0, 1.0)
     else:
-        # True baseline: the model never sees ECe, exactly as before this change.
+
         X[:, 14] = 0.5 / 20.0
     y = df["yield_gap_pct"].to_numpy(dtype=np.float32)
     folds = df["spatial_fold"].to_numpy()
@@ -302,8 +302,8 @@ def main() -> None:
         fold_reports.append({"fold": int(fold), **metrics(y[va], oof[va]), "best_epoch": best_epoch})
         best_epochs.append(best_epoch)
 
-    # Baselines, all fitted on the training folds only in a strict pipeline;
-    # here we report the trivial global-mean reference for scale.
+
+
     global_mean_pred = np.full_like(y, y.mean())
     crop_mean = df.groupby("crop_id")["yield_gap_pct"].transform("mean").to_numpy()
     shipped_pred = predict_shipped(shipped, X)
@@ -355,10 +355,10 @@ def main() -> None:
         "note": "Split-conformal half-width on spatially held-out real sites.",
     }
 
-    # Final model: train on every site, epochs = median of the selected CV epochs.
+
     final_epochs = int(np.median(best_epochs)) if best_epochs else 60
     final_model, _ = train_fold(X, y, X, y, epochs=final_epochs, seed=SEED)
-    # Zero the untrained heads so the runtime cannot pretend to predict them.
+
     with torch.no_grad():
         final_model.net[4].weight[1:].zero_()
         final_model.net[4].bias[1:].zero_()
@@ -367,9 +367,9 @@ def main() -> None:
     attainable_map = (
         df.groupby("crop_id")["attainable_yield_t_ha"].first().round(3).to_dict()
     )
-    # Zero-point for the runtime conversion: the gap of the crop's best-managed
-    # quartile. The global level is a management/technology artefact and cannot be
-    # subtracted from a local potential yield without making every crop unprofitable.
+
+
+
     reference_gap = df.groupby("crop_id")["yield_gap_pct"].quantile(0.25).round(2).to_dict()
     metadata = {
         "trained_on": "MAPSPAM 2020 x NASA POWER x SoilGrids (global cultivated grid cells)",

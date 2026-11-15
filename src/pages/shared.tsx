@@ -8,11 +8,11 @@ import type { WorkspaceState } from "../state/model";
 export interface SetupRequirement {
   key: string;
   label: string;
-  /** First selector that exists wins, so tabs can hide one form without losing the hint. */
+
   selectors: string[];
 }
 
-/** The entries this step still needs before the next step may open. */
+
 export function setupRequirements(
   state: WorkspaceState,
 ): Record<"field" | "soil" | "water" | "priorities", SetupRequirement[]> {
@@ -63,7 +63,7 @@ export function setupRequirements(
   };
 }
 
-/** Scroll to the first mounted target, flash it, and focus it when it can take focus. */
+
 export function focusGateRequirement(selectors: string[]) {
   let el: HTMLElement | null = null;
   for (const selector of selectors) {
@@ -103,9 +103,9 @@ export function SetupRail({ current, navigate }: { current: RouteKey; navigate: 
     water: "Water",
     priorities: "Priorities",
   };
-  // Sequential gate: a step is reachable only when every step before it is
-  // finished. The first unfinished step is the frontier; nothing beyond it
-  // unlocks until it is completed and “Continue” is pressed.
+
+
+
   let frontierIndex = 0;
   while (frontierIndex < SETUP_ROUTES.length - 1 && doneMap[SETUP_ROUTES[frontierIndex]]) {
     frontierIndex += 1;
@@ -128,8 +128,8 @@ export function SetupRail({ current, navigate }: { current: RouteKey; navigate: 
               title={locked ? `Finish ${shortLabels[SETUP_ROUTES[index - 1]]} first — the steps run in order` : undefined}
               onClick={() => {
                 if (locked) {
-                  // Behave like a failed Continue: stay put, mark the open step
-                  // and bring its missing entries into view.
+
+
                   window.dispatchEvent(
                     new CustomEvent("agrorotate:gate-attempt", {
                       detail: { step: SETUP_ROUTES[frontierIndex] },
@@ -158,11 +158,11 @@ export function SetupRail({ current, navigate }: { current: RouteKey; navigate: 
   );
 }
 
-/**
- * Hard sequential gate for the setup pages themselves (covers typing a hash
- * URL directly): the page renders only when every earlier setup step is
- * complete; otherwise a single locked card explains what is missing.
- */
+
+
+
+
+
 export function SetupGate({
   current,
   navigate,
@@ -181,14 +181,14 @@ export function SetupGate({
     priorities: completeness.priorities,
   };
   const index = SETUP_ROUTES.indexOf(current);
-  // "plan" is not itself a setup route: it needs every setup step complete.
+
   const required = index === -1 ? SETUP_ROUTES : SETUP_ROUTES.slice(0, index);
   const missing = required.filter((route) => !doneMap[route]);
   const firstMissing = missing[0];
 
-  // A direct hash to a locked page is sent back to the step that is actually
-  // open. There is no "locked page" to land on, so Continue and the tabs must
-  // explain the gap on the page the visitor is already working in.
+
+
+
   useEffect(() => {
     if (firstMissing) navigate(firstMissing);
   }, [firstMissing]);

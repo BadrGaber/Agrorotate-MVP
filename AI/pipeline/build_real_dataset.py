@@ -38,7 +38,7 @@ OUT_DIR = AI_DIR / "data" / "real"
 OUT_PARQUET = OUT_DIR / "real_crop_yield_training.parquet"
 OUT_REPORT = OUT_DIR / "real_dataset_report.json"
 
-# MAPSPAM crop name -> one of the 30 registered AgroRotate crops.
+
 CROP_NAME_MAP = {
     "Wheat": "bread-wheat",
     "Barley": "six-row-barley",
@@ -67,9 +67,9 @@ CROP_NAME_MAP = {
 WARM = {cid for cid, s in CROP_SPECS.items() if s["season"] == "warm"}
 
 
-# ---------------------------------------------------------------------------
-# FAO-56 extraterrestrial radiation + Hargreaves ETo (real NASA POWER inputs)
-# ---------------------------------------------------------------------------
+
+
+
 def extraterrestrial_radiation_mj(lat_deg: float, doy: int) -> float:
     phi = np.radians(lat_deg)
     dr = 1.0 + 0.033 * np.cos(2.0 * np.pi * doy / 365.0)
@@ -114,10 +114,10 @@ def math_sqrt(x: float) -> float:
     return float(np.sqrt(x))
 
 
-# ---------------------------------------------------------------------------
+
 def spatial_fold(lat: np.ndarray, lon: np.ndarray) -> np.ndarray:
     """5 deterministic spatial blocks so no site leaks between train and test."""
-    lat_bin = np.floor((lat + 90.0) / 18.0).astype(int)  # 10 blocks
+    lat_bin = np.floor((lat + 90.0) / 18.0).astype(int)
     lon_bin = np.floor((lon + 180.0) / 18.0).astype(int)
     cell = (lat_bin * 7 + lon_bin * 13) % 5
     return cell.astype(int)
@@ -145,7 +145,7 @@ def main() -> None:
 
     df = candidates.merge(site_features, on="site_id", how="inner", suffixes=("", "_site"))
 
-    # Real measured ECe (WoSIS ELCOSP, <= 50 km) where it exists; NaN elsewhere.
+
     ece_links_path = OUT_DIR / "site_ece_links.csv"
     if ece_links_path.exists():
         links = pd.read_csv(ece_links_path)[["site_id", "ece_dsm", "ece_km"]]
@@ -164,9 +164,9 @@ def main() -> None:
     df = df[(df["is_cultivated_in_grid_2020"] == 1) & (df["target_yield_kg_ha"] > 0)].copy()
     after_yield = len(df)
 
-    # SOC (g/kg) -> SOC% -> SOM% (Van Bemmelen factor 1.724)
+
     df["som_pct"] = (df["soilgrids_soc_0_5cm"].astype(float) / 10.0) * 1.724
-    # SoilGrids texture fractions can sum to < 100; renormalise before PTF.
+
     tex = df[["soilgrids_sand_0_5cm", "soilgrids_silt_0_5cm", "soilgrids_clay_0_5cm"]].astype(float)
     tex_sum = tex.sum(axis=1).replace(0, np.nan)
     df["sand_pct"] = (tex["soilgrids_sand_0_5cm"] / tex_sum * 100.0).fillna(40.0)
@@ -179,10 +179,10 @@ def main() -> None:
     df["slope_pct"] = df["slope_percent_approx"].astype(float).clip(0.0, 60.0).fillna(3.0)
     df["yield_t_ha"] = df["target_yield_kg_ha"].astype(float) / 1000.0
 
-    # ---- Label: yield gap against a data-driven attainable yield per crop ------
-    # p95 of the real MAPSPAM yield distribution for that crop is the attainable
-    # ceiling; the gap is 100 * (1 - observed / attainable).  It is a *relative*
-    # yield index in %, not an absolute t/ha prediction.
+
+
+
+
     attainable = df.groupby("crop_id")["yield_t_ha"].quantile(0.95)
     counts = df.groupby("crop_id")["yield_t_ha"].size()
     valid_crops = sorted(counts[counts >= 20].index)
@@ -194,7 +194,7 @@ def main() -> None:
         100.0 * (1.0 - df["yield_t_ha"] / df["attainable_yield_t_ha"])
     ).clip(0.0, 100.0)
 
-    # ---- Contract vectors -----------------------------------------------------
+
     vectors = []
     for rec in df.itertuples(index=False):
         vectors.append(
@@ -235,7 +235,7 @@ def main() -> None:
     out = out.reset_index(drop=True)
     out.to_parquet(OUT_PARQUET, compression="snappy", index=False)
 
-    # ---- Report ---------------------------------------------------------------
+
     corr = {}
     for name in FEATURE_NAMES:
         col = out[name]

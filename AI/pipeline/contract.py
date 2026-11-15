@@ -29,13 +29,13 @@ from physics_simulator import CROP_SPECS, saxton_rawls_hydraulics  # noqa: E402
 CONTRACT_VERSION = "agrorotate.model_contract/v3"
 FEATURE_COUNT = 40
 
-# ---------------------------------------------------------------------------
-# Feature specification: index, canonical name, unit, normalisation, and
-# whether the field exists in the new real global dataset.
-#   measured  -> present as a physical value in the real dataset
-#   derived   -> computed from measured values (Saxton-Rawls, Hargreaves)
-#   imputed   -> NOT available; a documented constant is used
-# ---------------------------------------------------------------------------
+
+
+
+
+
+
+
 FEATURE_SPEC: list[dict[str, Any]] = [
     {"idx": 0, "name": "sand_fraction", "unit": "frac", "norm": "sand_pct/100", "real": "measured"},
     {"idx": 1, "name": "silt_fraction", "unit": "frac", "norm": "silt_pct/100", "real": "measured"},
@@ -84,19 +84,19 @@ CROP_ORDER = list(CROP_SPECS.keys())
 CROP_INDEX = {cid: i for i, cid in enumerate(CROP_ORDER)}
 assert len(CROP_ORDER) == 30, "Crop registry must contain exactly 30 crops"
 
-# Documented constants for dimensions the real dataset cannot supply.
+
 IMPUTED_DEFAULTS: Dict[int, float] = {
-    3: 0.04,     # coarse fragments
-    10: 0.60,    # water table
-    14: 0.50 / 20.0,  # ECe = 0.5 dS/m (non-saline baseline)
-    15: 0.8 / 30.0,   # ESP = 0.8 %
-    16: 0.15,    # CaCO3 15 %
-    19: 0.25,    # nitrogen stock proxy
-    20: 0.35,    # phosphorus
-    21: 0.50,    # potassium
+    3: 0.04,
+    10: 0.60,
+    14: 0.50 / 20.0,
+    15: 0.8 / 30.0,
+    16: 0.15,
+    19: 0.25,
+    20: 0.35,
+    21: 0.50,
     22: 0.02, 23: 0.02, 24: 0.02, 25: 0.02, 26: 0.02, 27: 0.02,
-    28: 0.15,    # 1500 m3/ha
-    29: 0.10,    # ECw = 0.5 dS/m
+    28: 0.15,
+    29: 0.10,
 }
 
 

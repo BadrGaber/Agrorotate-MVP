@@ -1,12 +1,3 @@
-/*
- * AgroRotate offline worker.
- *
- * First visit: precaches the app shell, the trained AI weights, the model
- * manifest/calibration, the interface sounds and the landing hero images.
- * Every later visit: serves the cached copy with no connection. Builds add
- * `precache-manifest.json`, so hashed JS/CSS and lazy page chunks are included
- * automatically without editing this file.
- */
 const VERSION = "agrorotate-offline-v2";
 const SHELL_CACHE = `${VERSION}-shell`;
 const RUNTIME_CACHE = `${VERSION}-runtime`;
@@ -43,7 +34,7 @@ async function readManifest() {
   }
 }
 
-/** Cache every important file in the list; one 404 must not abort the install. */
+
 async function precacheAll() {
   const cache = await caches.open(SHELL_CACHE);
   const manifest = await readManifest();
@@ -61,9 +52,9 @@ async function precacheAll() {
     }),
   );
 
-  // A new build changes the hashes in the manifest. Drop those old entries so
-  // the cache reports exactly the files this version uses instead of growing on
-  // every deploy.
+
+
+
   const keep = new Set(files.map(scopeUrl));
   const metaUrl = scopeUrl(META_KEY);
   for (const request of await cache.keys()) {
@@ -89,11 +80,11 @@ async function precacheAll() {
   return meta;
 }
 
-/**
- * A rebuild changes the hashed file names in the manifest but not always this
- * worker's bytes. Compare the manifest version on navigation and download the
- * new files when it changed, so first-load coverage survives a deploy.
- */
+
+
+
+
+
 async function syncManifest() {
   const manifest = await readManifest();
   if (!manifest) return;
@@ -207,8 +198,8 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (url.pathname.startsWith("/models/")) {
-    // Network-first keeps a freshly trained model current; the cache keeps the
-    // AI usable after the connection drops.
+
+
     event.respondWith(networkFirst(request, SHELL_CACHE));
     return;
   }
@@ -222,7 +213,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Source modules in dev, favicons, and anything else same-origin.
+
   event.respondWith(networkFirst(request, SHELL_CACHE));
 });
 
@@ -235,7 +226,7 @@ async function reportCacheStatus(port) {
       const cache = await caches.open(name);
       const requests = await cache.keys();
       for (const request of requests) {
-        // The metadata record is bookkeeping, not a downloaded asset.
+
         if (request.url === scopeUrl(META_KEY)) continue;
         const response = await cache.match(request);
         if (!response) continue;
@@ -247,7 +238,7 @@ async function reportCacheStatus(port) {
           try {
             bytes += (await response.clone().blob()).size;
           } catch {
-            /* opaque body */
+
           }
         }
       }
@@ -258,7 +249,7 @@ async function reportCacheStatus(port) {
       const meta = await (await caches.open(SHELL_CACHE)).match(scopeUrl(META_KEY));
       if (meta) precache = await meta.json();
     } catch {
-      /* no meta yet */
+
     }
 
     port &&

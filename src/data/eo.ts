@@ -1,10 +1,3 @@
-/**
- * The earth-observation register shown in the Method page, the field map and
- * the field/soil panels. Keep this list aligned with server/eo.mjs: the server
- * is the authority for live values and token status, while this file gives the
- * UI an honest offline fallback.
- */
-
 export type EoStatus = "live" | "visual" | "token";
 export type EoNumeric = "live" | "token";
 
@@ -84,7 +77,7 @@ export interface EoOverlay {
   note: string;
 }
 
-/** Verified against the GIBS WMTS capabilities on 12 Nov 2026. */
+
 export const EO_OVERLAYS: EoOverlay[] = [
   {
     id: "srtm",

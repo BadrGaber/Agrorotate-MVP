@@ -1,7 +1,3 @@
-/**
- * TASK-02 — the search must describe what it actually executed, and the
- * input gate must stop invalid numbers before they reach it.
- */
 import test from "node:test";
 import assert from "node:assert/strict";
 import { optimizeWorkspace } from "../server/ai/optimizer.mjs";
@@ -44,11 +40,11 @@ test("search telemetry reports executed simulations and unique rotations separat
   );
   assert.ok(contract.search.elapsedMs >= 0);
 
-  // The theoretical space is labelled as theoretical and is not the evaluated count.
+
   assert.ok(contract.search.theoreticalSearchSpace > contract.search.uniqueRotationsEvaluated);
   assert.match(contract.search.theoreticalSearchSpaceLabel, /theoretical/i);
 
-  // No inflated explored-branch claim anywhere in the payload.
+
   const payload = JSON.stringify(contract);
   assert.doesNotMatch(payload, /million/i);
   assert.doesNotMatch(payload, /Pareto-optimal/i);

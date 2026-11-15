@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-/**
- * Generates the four original interface cues as mono 16-bit PCM WAV files.
- * High-clarity, audible waveforms synthesized mathematically (CC0 1.0).
- */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -111,7 +107,7 @@ function resolve() {
   });
 }
 
-// NOTE: type.wav is preserved untouched. We do not synthesize or overwrite type.wav!
+
 const sounds = {
   click: click(),
   whoosh: whoosh(),
@@ -125,7 +121,7 @@ for (const [name, samples] of Object.entries(sounds)) {
   }
 }
 
-// Copy the preserved type.wav from public to dist if dist exists
+
 const publicTypeWav = path.join(OUT_PUBLIC, "type.wav");
 const distTypeWav = path.join(OUT_DIST, "type.wav");
 if (fs.existsSync(publicTypeWav) && fs.existsSync(OUT_DIST)) {

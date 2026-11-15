@@ -3,8 +3,8 @@ import react from "@vitejs/plugin-react";
 import fs from "node:fs";
 import path from "node:path";
 
-// VITE_API_BASE_URL points at /api/v1 for the client; the dev proxy needs the
-// bare origin, so the route prefix is stripped here.
+
+
 const rawTarget = process.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 const proxyTarget = rawTarget.replace(/\/api\/v1\/?$/, "");
 
@@ -22,13 +22,13 @@ function walkFiles(dir: string, prefix = ""): string[] {
   return out;
 }
 
-/**
- * Offline precache manifest.
- *
- * The service worker already knows the public files. A production build adds
- * every emitted JS/CSS chunk (including lazy pages) here, so the first visit can
- * download the whole app and later visits work with no connection.
- */
+
+
+
+
+
+
+
 function offlinePrecache(): Plugin {
   let root = process.cwd();
   let outDir = "dist";
@@ -66,8 +66,8 @@ function offlinePrecache(): Plugin {
         seen.add(file.name);
         return true;
       });
-      // Vite writes index.html outside this bundle; the worker's CORE list
-      // already fetches it, but the manifest must name it too.
+
+
       if (!seen.has("/index.html")) unique.push({ name: "/index.html", bytes: 0 });
       const totalBytes = unique.reduce((sum, file) => sum + file.bytes, 0);
 

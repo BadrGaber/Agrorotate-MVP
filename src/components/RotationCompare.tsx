@@ -97,7 +97,7 @@ export function RotationCompare({
             try {
               setOptimization(runBatchedOptimization(state));
             } catch {
-              // fallback
+
             }
             setIsCalculating(false);
           }
@@ -111,14 +111,14 @@ export function RotationCompare({
           worker.terminate();
         };
       } catch {
-        // Fallback to synchronous execution
+
       }
     }
 
     try {
       setOptimization(runBatchedOptimization(state));
     } catch {
-      // fallback
+
     }
     setIsCalculating(false);
   }, [state]);

@@ -48,9 +48,9 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
   const [weights, setWeights] = useState<SurrogateWeights | null | undefined>(undefined);
   const [autofilling, setAutofilling] = useState(false);
   const [autofillNote, setAutofillNote] = useState<string | null>(null);
-  // idle → running → done. StrictMode mounts effects twice in development, so
-  // the guard is cleared when an interrupted run is cleaned up instead of
-  // staying "started" forever (the old ref bug left Year 1 empty in dev).
+
+
+
   const autofillStatus = useRef<"idle" | "running" | "done">("idle");
 
   useEffect(() => {
@@ -63,11 +63,11 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
     };
   }, []);
 
-  // Opening the board asks the AI to optimize all 3 years: all 6 warm and cool
-  // seasons are filled sequentially from the AI-First neural engine with
-  // biophysical safety guardrails, so the farmer starts from a fully realized
-  // 3-year rotation instead of six empty slots. The first run also selects
-  // Season 1 so the "Best 3" card appears immediately.
+
+
+
+
+
   useEffect(() => {
     if (weights === undefined) return;
     if (autofillStatus.current === "done" || autofillStatus.current === "running") return;
@@ -84,8 +84,8 @@ export function PlanPage({ navigate }: { navigate: (route: RouteKey) => void }) 
     setAutofillNote(null);
     let cancelled = false;
 
-    // A short, visible pause lets the loader paint before the synchronous model
-    // forward pass; the pass itself is milliseconds on this 40→64→32→4 network.
+
+
     const timer = window.setTimeout(() => {
       if (cancelled) return;
       const fill = buildFullPlanOptimization(state, weights ?? null);

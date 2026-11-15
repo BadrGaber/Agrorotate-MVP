@@ -1,14 +1,4 @@
 #!/usr/bin/env node
-/**
- * Answers one question for every input the UI collects:
- * "does this number reach the decision code at all?"
- *
- * Decision code = the engine, the worker, the browser AI context and the two
- * server AI modules. UI pages and the state store are excluded on purpose: an
- * input that only appears there is read back into a form, not used.
- *
- * Run: node scripts/audit-input-usage.mjs
- */
 import fs from "node:fs";
 import path from "node:path";
 

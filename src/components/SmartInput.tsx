@@ -2,15 +2,15 @@ import React, { useMemo } from "react";
 import { validateSingleField } from "../engine/validation";
 import { Glyph } from "../ui/icons";
 
-/**
- * A numeric lab input with one job: record a measurement, and say what the
- * engine will use instead while the field is empty.
- *
- * There is deliberately no "apply estimate" action. A field observation is an
- * EST proxy and lives on the Observations tab; a typed number here is MEAS.
- * Writing an estimate into this box would relabel it as a measurement, which
- * is exactly what this product must not do.
- */
+
+
+
+
+
+
+
+
+
 export function SmartInput({
   fieldKey,
   label,
@@ -33,7 +33,7 @@ export function SmartInput({
   proof?: React.ReactNode;
   hint?: string;
   gate?: string;
-  /** What the engine substitutes while this field is empty, in plain language. */
+
   fallback?: string;
   onValue: (value: string) => void;
 }) {

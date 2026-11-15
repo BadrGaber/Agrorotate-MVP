@@ -1,10 +1,3 @@
-/**
- * The AI choose endpoint is a deterministic reasoning layer. It receives the
- * same structured state the UI uses and returns one JSON shape for the plan:
- * a choice, the alternatives with reasons, the current state and what is
- * missing. The ranking probability activates when a trained ranker file is
- * present; no number is invented here.
- */
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
@@ -38,13 +31,13 @@ function uniqueBy(items, key) {
   });
 }
 
-/**
- * Crop registry for the AI service. `server/ai/crops.json` is exported from
- * `src/data/evidence/crops.generated.ts` (30 crops, 13 FAO salinity pairs) by
- * `scripts/export-crops-json.py`, so the server answers from the same registry
- * the browser engine uses. The fallback below keeps the service up if the
- * export file is missing.
- */
+
+
+
+
+
+
+
 const CROPS_FILE = join(dirname(fileURLToPath(import.meta.url)), "crops.json");
 
 const CROP_TABLE = (() => {
@@ -56,7 +49,7 @@ const CROP_TABLE = (() => {
     }
     if (Object.keys(table).length) return table;
   } catch {
-    // fall through to the built-in subset
+
   }
   return Object.fromEntries([
     [

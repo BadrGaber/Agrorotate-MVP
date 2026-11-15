@@ -44,9 +44,9 @@ const PIPELINE = [
   },
 ];
 
-// The planner's boundaries are explicit and visible to the user:
-// every decision is source-scoped and labeled. The EO register lives in
-// src/data/eo.ts so the Method page, map toolbar and field panel agree.
+
+
+
 
 const STATUS_BADGE: Record<string, string> = {
   Live: "badge--meas",

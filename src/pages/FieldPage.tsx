@@ -16,15 +16,15 @@ import type { RouteKey } from "../app/router";
 import type { BoundaryPoint, SlopeClass } from "../state/model";
 import { SproutLoader } from "../ui/SproutLoader";
 
-/** Slope class derived from the DEM relief — only used when the user has not
- *  recorded their own observation, which always wins. */
+
+
 function slopeClassFromPercent(percent: number): SlopeClass {
   if (percent < 2) return "flat";
   if (percent < 5) return "gentle";
   return "steep";
 }
 
-/** Stable serialisation of a ring, so the same polygon is only analysed once. */
+
 function boundarySignature(points: BoundaryPoint[]): string {
   return points
     .map((point) => `${point.lat.toFixed(5)},${point.lon.toFixed(5)}`)
@@ -68,8 +68,8 @@ export function FieldPage({
   const [analyzing, setAnalyzing] = useState(false);
   const schemaRefresh = useRef(false);
   const lastAnalysedRef = useRef<string>("");
-  // The plan uses the drawn polygon only. A typed area is not a boundary, so it
-  // is not offered as an alternative: drawing the parcel is the validation step.
+
+
   const drawnArea = metrics.areaHa;
   const areaUsed = drawnArea;
   const climate = state.climate;
@@ -111,8 +111,8 @@ export function FieldPage({
     setAnalyzing(true);
     setClimate({ status: "loading", error: null });
 
-    // Immediately record geometry and computed area so the validation gate
-    // unlocks without waiting for network or failing on backend availability.
+
+
     const localMetrics = polygonMetrics(boundary);
     setField({
       boundary,
@@ -165,8 +165,8 @@ export function FieldPage({
         error: null,
       });
     } catch (error) {
-      // If the local analysis endpoint is unavailable, keep the field usable
-      // through the direct POWER fallback. Terrain stays explicitly missing.
+
+
       const metrics = polygonMetrics(boundary);
       setField({
         boundary,
@@ -209,8 +209,8 @@ export function FieldPage({
     }
   };
 
-  // Older browser workspaces stored a climate summary without the monthly /
-  // seasonal fields. Refresh once so the chart is real rather than blank.
+
+
   useEffect(() => {
     if (schemaRefresh.current) return;
     if (!climate.summary || climate.summary.monthly) return;
@@ -219,9 +219,9 @@ export function FieldPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [climate.summary]);
 
-  // Closing the polygon is the trigger: geometry, terrain and POWER are fetched
-  // without a second click. Edits drag continuously, so the ref guard keeps the
-  // same ring from being re-analysed on every move.
+
+
+
   useEffect(() => {
     if (state.field.boundary.length < 3) return;
     if (lastAnalysedRef.current === boundarySignature(state.field.boundary))
@@ -230,8 +230,8 @@ export function FieldPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.field.boundary]);
 
-  // A field with coordinates but no climate yet (first visit, seeded or
-  // restored) loads NASA POWER for its centroid automatically.
+
+
   const climateAutoRef = useRef(false);
   useEffect(() => {
     if (climateAutoRef.current) return;
@@ -286,11 +286,11 @@ export function FieldPage({
                 void analyseCurrentField(boundary)
               }
               onPlaceSelected={(place) => {
-                // A new search is a new location. Never leave a parcel from the
-                // previous place silently attached to the new coordinates.
+
+
                 setField({
                   placeLabel: place.label,
-                  // The location label is the field's identity; no separate name.
+
                   name: place.label,
                   boundary: [],
                   centroidLat: place.lat,

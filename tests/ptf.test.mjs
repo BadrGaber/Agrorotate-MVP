@@ -1,8 +1,3 @@
-/**
- * Unit and regression tests for Pedotransfer Functions (PTF),
- * Saxton & Rawls (2006) continuous hydraulic equations, USDA textural classification,
- * and the 32-dimensional NormalizedAgronomicVector.
- */
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -18,43 +13,43 @@ import {
 import { DEFAULT_WORKSPACE } from "../src/state/model.ts";
 
 test("classifyUsdaSoilTexture accurately classifies all 12 USDA textural classes plus Vertic Heavy Clay", () => {
-  // 1. Sand
+
   assert.equal(classifyUsdaSoilTexture(90, 5, 5), "SAND");
 
-  // 2. Loamy Sand
+
   assert.equal(classifyUsdaSoilTexture(80, 15, 5), "LOAMY_SAND");
 
-  // 3. Sandy Loam
+
   assert.equal(classifyUsdaSoilTexture(65, 20, 15), "SANDY_LOAM");
 
-  // 4. Loam
+
   assert.equal(classifyUsdaSoilTexture(40, 40, 20), "LOAM");
 
-  // 5. Silt Loam
+
   assert.equal(classifyUsdaSoilTexture(20, 65, 15), "SILT_LOAM");
 
-  // 6. Silt
+
   assert.equal(classifyUsdaSoilTexture(5, 88, 7), "SILT");
 
-  // 7. Sandy Clay Loam
+
   assert.equal(classifyUsdaSoilTexture(55, 15, 30), "SANDY_CLAY_LOAM");
 
-  // 8. Clay Loam
+
   assert.equal(classifyUsdaSoilTexture(35, 35, 30), "CLAY_LOAM");
 
-  // 9. Silty Clay Loam
+
   assert.equal(classifyUsdaSoilTexture(15, 50, 35), "SILTY_CLAY_LOAM");
 
-  // 10. Sandy Clay
+
   assert.equal(classifyUsdaSoilTexture(50, 10, 40), "SANDY_CLAY");
 
-  // 11. Silty Clay
+
   assert.equal(classifyUsdaSoilTexture(10, 45, 45), "SILTY_CLAY");
 
-  // 12. Clay
+
   assert.equal(classifyUsdaSoilTexture(25, 25, 50), "CLAY");
 
-  // 13. Vertic Heavy Clay (>60% clay)
+
   assert.equal(classifyUsdaSoilTexture(10, 25, 65), "VERTIC_HEAVY_CLAY");
 });
 
@@ -68,7 +63,7 @@ test("GROUP_TO_USDA_CLASS maps simplified texture groups to representative USDA 
 });
 
 test("computeSaxtonRawlsHydraulics enforces thermodynamic and hydraulic sequencing", () => {
-  // Test across multiple texture profiles: Sandy (sand=80, clay=8), Loamy (sand=40, clay=20), Clayey (sand=20, clay=55)
+
   const profiles = [
     { sand: 85, clay: 8, som: 1.0 },
     { sand: 40, clay: 20, som: 2.0 },
@@ -78,7 +73,7 @@ test("computeSaxtonRawlsHydraulics enforces thermodynamic and hydraulic sequenci
   for (const { sand, clay, som } of profiles) {
     const hyd = computeSaxtonRawlsHydraulics(sand, clay, som);
 
-    // Saturation > Field Capacity > Wilting Point > 0
+
     assert.ok(
       hyd.saturationVolPct > hyd.fieldCapacityVolPct,
       `Saturation (${hyd.saturationVolPct}%) must be > FC (${hyd.fieldCapacityVolPct}%) for sand=${sand}, clay=${clay}`
@@ -92,13 +87,13 @@ test("computeSaxtonRawlsHydraulics enforces thermodynamic and hydraulic sequenci
       `PWP (${hyd.wiltingPointVolPct}%) must be positive`
     );
 
-    // AWC = 10 * (FC - PWP) * (1 - rock)
+
     assert.ok(hyd.awcMmM > 30 && hyd.awcMmM <= 250, `AWC out of bounds: ${hyd.awcMmM}`);
 
-    // Infiltration / Ksat is positive
+
     assert.ok(hyd.infiltrationRateMmHr > 0, `Ksat must be positive: ${hyd.infiltrationRateMmHr}`);
 
-    // Bulk density is physically plausible
+
     assert.ok(hyd.bulkDensityGCm3 >= 0.9 && hyd.bulkDensityGCm3 <= 1.95, `BD plausible: ${hyd.bulkDensityGCm3}`);
   }
 });
@@ -108,18 +103,18 @@ test("computeSaxtonRawlsHydraulics compaction shifts alter porosity and conducti
   const dense = computeSaxtonRawlsHydraulics(40, 25, 2.0, "COMPACTED_DENSE");
   const severe = computeSaxtonRawlsHydraulics(40, 25, 2.0, "SEVERE_PLOWPAN");
 
-  // Bulk density increases with compaction
+
   assert.ok(loose.bulkDensityGCm3 < dense.bulkDensityGCm3, "Loose soil has lower bulk density than compacted");
   assert.ok(dense.bulkDensityGCm3 < severe.bulkDensityGCm3, "Compacted soil has lower bulk density than plowpan");
 
-  // Saturation (porosity) decreases with compaction
+
   assert.ok(loose.saturationVolPct > dense.saturationVolPct, "Loose soil has higher porosity than compacted");
   assert.ok(dense.saturationVolPct > severe.saturationVolPct, "Compacted soil has higher porosity than plowpan");
 });
 
 test("computeSaxtonRawlsHydraulics coarse fragments reduce available water capacity", () => {
   const rockFree = computeSaxtonRawlsHydraulics(45, 25, 2.0, undefined, undefined, 0.0);
-  const rocky = computeSaxtonRawlsHydraulics(45, 25, 2.0, undefined, undefined, 0.30); // 30% gravel
+  const rocky = computeSaxtonRawlsHydraulics(45, 25, 2.0, undefined, undefined, 0.30);
 
   assert.ok(rocky.awcMmM < rockFree.awcMmM, "Gravel/coarse fragments must reduce volumetric AWC");
 });
@@ -148,12 +143,12 @@ test("normalizeFieldInputsToScientificVector creates exact 32 continuous dimensi
     options: { fieldId: "field_alpha_01" },
   });
 
-  // Verify feature length
+
   assert.equal(normalized.continuousVector32.length, 32, "Vector length must be exactly 32 dimensions");
   assert.equal(normalized.featureLabels32.length, 32, "Labels length must be exactly 32");
   assert.equal(AGRONOMIC_32_FEATURE_LABELS.length, 32);
 
-  // Verify every single dimension is finite and within [0.0, 1.0]
+
   for (let i = 0; i < 32; i++) {
     const val = normalized.continuousVector32[i];
     const label = normalized.featureLabels32[i];
@@ -164,24 +159,24 @@ test("normalizeFieldInputsToScientificVector creates exact 32 continuous dimensi
     );
   }
 
-  // Provenance check
+
   assert.ok(normalized.provenance.phH2o.source === "MEAS");
   assert.equal(normalized.provenance.phH2o.confidenceWeight, 1.0);
   assert.ok(normalized.overallConfidenceScore > 0.5 && normalized.overallConfidenceScore <= 1.0);
 });
 
 test("normalizeFieldInputsToScientificVector enforces dynamic salinity floor from irrigation water", () => {
-  // If irrigation water has ECw = 4.0 dS/m, the root zone ECe cannot physically stay lower than ~4.0
+
   const normalized = normalizeFieldInputsToScientificVector({
     measured: {
-      eceDsm: 1.5, // Unrealistically low lab value entered
-      irrigationEcwDsm: 4.0, // Water salinity is 4.0
+      eceDsm: 1.5,
+      irrigationEcwDsm: 4.0,
     },
     estimated: {},
     eoPrior: {},
   });
 
-  // Check that root zone salinity incorporates the dynamic floor
+
   assert.ok(
     normalized.soilChemical.eceDsm >= 4.0,
     `Root zone ECe (${normalized.soilChemical.eceDsm}) should respect the irrigation salinity floor of 4.0 dS/m`
@@ -206,7 +201,7 @@ test("buildAiInputContract outputs well-formed AI inference payload", () => {
 });
 
 test("computeSaxtonRawlsHydraulics enforces strict ordering even under extreme bulk density and heavy clay", () => {
-  // Extreme boundary: heavy clay (65% clay) with maximum allowable bulk density (1.95 g/cm3)
+
   const extreme = computeSaxtonRawlsHydraulics(10, 65, 1.0, "SEVERE_PLOWPAN", 1.95);
   assert.ok(
     extreme.saturationVolPct > extreme.fieldCapacityVolPct,
@@ -218,7 +213,7 @@ test("computeSaxtonRawlsHydraulics enforces strict ordering even under extreme b
   );
   assert.ok(extreme.wiltingPointVolPct > 0, "PWP must be positive");
 
-  // Pure gravel (100% coarse fragments): AWC drops to 0
+
   const pureGravel = computeSaxtonRawlsHydraulics(50, 20, 1.0, undefined, undefined, 1.0);
   assert.equal(pureGravel.awcMmM, 0, "100% coarse fragments must result in 0 AWC");
 });
@@ -312,13 +307,13 @@ test("workspaceToAgronomicVector & buildAiInputContract bridge full WorkspaceSta
   assert.equal(vector.featureLabels32.length, 32);
   assert.equal(vector.soilPhysical.usdaTextureClass, "CLAY");
   assert.equal(vector.soilChemical.eceDsm, 4.2);
-  // No diagnosis input exists in this build, so every pathogen group keeps its
-  // baseline inoculum risk instead of inferring pressure from a tick box.
+
+
   assert.equal(vector.soilBiological.pathogenInoculumRisk.ROOT_KNOT_NEMATODE, 0.02);
   assert.equal(vector.soilBiological.pathogenInoculumRisk.VASCULAR_WILT_COMPLEX, 0.02);
   assert.equal(vector.soilBiological.pathogenInoculumRisk.ALLIUM_WHITE_ROT, 0.02);
 
-  // AI Input Contract from workspace
+
   const contract = buildAiInputContract(mockWorkspace);
   assert.equal(contract.schemaVersion, "agrorotate.ai.input/v1");
   assert.equal(contract.fieldId, "Beheira Plot 4");

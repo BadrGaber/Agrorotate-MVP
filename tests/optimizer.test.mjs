@@ -60,7 +60,7 @@ test("server/ai/optimizer: optimizeWorkspace generates 4 Pareto solutions with b
   }
 
   assert.equal(contract.causalAttributionLedger.length, 6);
-  // Verify all 6 pathogens are present in the causal ledger
+
   const firstTransition = contract.causalAttributionLedger[0].soilStateTransition;
   assert.equal(firstTransition.pathogenSuppression.length, 6);
   const pathogenText = firstTransition.pathogenSuppression.join(" ");
@@ -71,7 +71,7 @@ test("server/ai/optimizer: optimizeWorkspace generates 4 Pareto solutions with b
   assert.match(pathogenText, /Heterodera/i);
   assert.match(pathogenText, /Rhizoctonia/i);
 
-  // Dynamic Uncertainty checks
+
   assert.equal(contract.confidenceIntervals.basisTier, "MEAS");
   assert.ok(contract.confidenceIntervals.overallUncertaintyPct >= 3.0 && contract.confidenceIntervals.overallUncertaintyPct <= 6.0);
 });
@@ -99,7 +99,7 @@ test("server/ai/optimizer: extreme salinity edge case (ECe = 14 dS/m) prunes sal
   const contract = optimizeWorkspace(hypersalineWorkspace);
   assert.equal(contract.paretoSolutions.length, 4);
 
-  // In hypersaline conditions, salt-tolerant crops like barley, cotton, sorghum or sugar-beet should be favoured
+
   const waterSol = contract.paretoSolutions.find((s) => s.id === "water_conservation");
   assert.ok(waterSol);
   const saltTolerantCrops = new Set(["six-row-barley", "grain-sorghum", "pearl-millet", "egyptian-cotton", "sugar-beet", "bread-wheat", "summer-cowpea-cover"]);

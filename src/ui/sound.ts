@@ -35,9 +35,9 @@ const INTERACTIVE_SELECTOR = [
   "[data-clickable='true']",
 ].join(",");
 
-// Embedded byte-exact WAV audio of public/sounds/type.wav (4,012 bytes)
-// This guarantees zero network fetch calls while typing and complete immunity
-// against browser download managers / popups while keeping the user's exact audio.
+
+
+
 const TYPE_WAV_BASE64 =
   "UklGRqQPAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YYAPAAAAADEA4QDnAGEBOAOjAZkDwAOXAkwFwwEzBSoDfQQmAkH+Avl+/O75EvPw+JD52/PB+BzyjfLs/wf33PuA95/5eARoB48RRwyzDp8UPApFGVsaSxCkBxsStA5CA+P36gSk+2jwg/H674Llyvda4k33quMi7RLy3vgQBBb6zQlyAb0S/AREDHMeVA/CFzMS1AxgE28N9RMR/sMIc/sB/zfrIvzL9EDn3+RY8MPk/u0F+tb3Se4UBv3yegbdD/oOTgNLB74WVwmmDzkYnAbnBeUVQP3q/ZoKYvht/uv2leZB8eDhOfjb9kTjAPHH54rwyPcIBuL5SfwV/fP/fQ6RDk4PzxFCD/UP+xkdHO8WCRNeChUQX/ak9OH23P2i8/P3x/cA7v707/F48QbtVAFs95EF3/NfDGb+ewRGEn4b5RV7HAYSwxQfBccMMwAYDlf4JvpHCYvt1Omb/MD0y+Qp4o33Iuxb7dT6xe0c+drvqvZ3B8n8ORI2AgUOVAYnBpkMOQs5HK4E4g3sBYQMuPeS9WD2bfYX+sHyqOLZ8uHhEvYA64TjfvXJ8d3vxgge+mIDXglcBrcMcBerDCkWnRGcHioFXglGEzgP8P+q/gz8oQLF6CP9Aut/5N7rifPL7MD0avUS6On8V/dUAPECp/08CwYM0wkfCp8MmwyTE5kWExZ5ALwV6gfzAKX5fAUR9eT04+mH+rD2POuM8wT13e+87GbsegMcBEkGKwwwAyYClBm7EtgWKw6vGLgH9BX6BDoTVf14BkoKg/kiAIHyUen97Mjk2fKQ7JXs+edo5yzy0/cO/rkE9focENkJ6wgOBsUZqRkuFdIIsQS4FcwLmAC3/JP9Dgka8Hj8AP+q7CP4vu2Y6gHlROOz72fx/eoD/fYG5whaBuUHkABpA6cN8xNUEPMZCR7kC9oWzwtZEIkH4gcV9cMCQPAj9ID7veiT9Iro/eEP6Hfxwf4U8VbwnQeiENEJQQvKFVocLhLKD+YPGAxTFYYFdAgcAtsCoAuGB9/sKvT/6RL4l+T29xrtnOpn+ujxROgz9m3vmfLUAf79fQH+DRYHKQ2PB/cKbwvaDAQUigweC8ISYven+fz9zAAy5xrt/eGX5uPx6PAT9STnJP7f/UXxwPW2DDANuQc5DEQFWxSxBQcJCglJE8wXrgHaAnMC9QMWALXwgu6n9kb8aPp66a/vN/EP5Nf7qPD5+QDw9/QY+ewEyxCeEMYI2wVfDlMUShD2HtkJQwv4E2kI7A/j9ILxEPJU/sX/KeZP7bnl9/NB76/sdOti92j2LwMnA7UAOgQrCfoNUha6EasKLRybGscW4wneDy0L5/zBCLMKT/2FABTxnfgp+1DpqvHl9L3wTOT+9jz8xPIq8AwDpQ1jBZ8U9AeiDFsapRJDDAwJ1xIkFfsEng2zA6X1XflAAjrpuPa/+yj5Ifcv9lX4c+fj98D4OPKlBOn98gvDDRIQOQLVFuMIQgw7DncIeQlBHJMLSxadDk0MbAE18jTslOkT907xqviK51rlpuVj54bptegI7pj9VPyp//gKiQHBGhkahQveGsweThXZEKEGURWuEbYG5QhfAF7wsPTM9xnkp+8W+AT5BObp4kTm/O2OAr4HhALcAbMR9xbwD30VfRxIDgYNPRgQEVUYTgxS/mAQ/wEp99z6hQJd7eXnL+1V6zH5z+1Z7TP3ePzS9hf6C/SPB5wJNBWCAiQU0R3QEZcMsBC8D2IaexTuDPP+fwJTBbnxOQIQ/d/y4fDs6VzkKON545jrUff2ACP8NfUy/hb+XQIw//IFBBIMGSkRwAg9G8UX/hQCCZYMKAUs/9XzQfyr6TzxPfiS6bbqKvdb7V/sOvnD/Kb+AvR8+HwG2AthAAYD8QdQGkgP9RyiGKMYYhDkCtEGOwpeDcv7bPvQ/7r8kury66vx8/CB5p/wsevI85fr8/+Y868F/AtVA/4BzgH3BxAGKA0jHbMUwgP2DU0JCw5t+XP71f1PAMPqYPhJ9fjxQPjS6KTlW/cf8rr/hPcJ9eMDr/xHD9ILYAocFPALjg2gD4MFvRCjFqAI6wq2CqcAzQTa8D39IO1N8gbrsenw8zT2ROT082T3SutqAaQE/gsIDYYSaQIWAuUZWhDRBTYTjAlsD5cJSBDuAff61/ii9uby6fKs6Z3pPfNa7kL24vCp8C/5+f4u8B8CzQEY/rIPOA09FRwTCA3kE+QUywdoFjQDpgD1EWMECwdmAdn+MP8o+z74JPsR5YzoLfEP5/L3uPu58/H8E/fq+moPsBG6ApIXwhKAFtgYsQguEBMDmgrvAiEHcQso9sn/E/dk8gXyC+1375brafIR7HfpXurX87v9lwSa/QcGVQheBMcDJwuMBWwT5hYTDmgOmQl9AGsRUQqIBrT4p/078CXw5vEj9VPnzPQK8D7qnPwX7Hn1HPsZ+lr9lQ4YDeADIAZSCscM8BNbCHsLtBOFERkOpwdI+9sElvI/+Ynxquri8/3v6fRh+EjvuPBX9O7/9PkK/KMG/Qqg/AgRJgN5Fl8SCBjPCfgJmAPCDUoEUgaAB5L/r/df8Yf3/ve16qL2jfr69pHyefUA+RP1/fUI82X3ugY3AfX+PgseB9YFGA/CEMMGFwhRB78Ccf5YC6IEpAHH9Rn7ee0P+MjyP/vL8X3pwPn1+ez67fzQ9Fz5iglgASoKkQpBB5gGjBTqBWAMvgt2B3wI/Quu/U0JQPsUAvD+YfJJ8yHvFPX976PphPVj9Y3ubvW/9Jr5WgAwASoI4QKdERoOzQVQCYoLwAWKCxIHagBO/XsKZgB4+IsBPvfb9WrvHu+170HyrfYK+xz5Mvty/lH9/QYX/BQH1f/3EIQS2gykEgESigXVELcNCwlqDi8GTv+EAiYF//E++1Tx6fO075LxaO1G/MvvcPA78eb+qgMA+Gr6NgJrB0sCgwTHBiIKCgyoBYkDOw59AywMqwYBBaL7AvcC99HxYfT77wP2APIb8jLzsfIU8DQAPwT0Bb4GowOdC4QBURIkBssFoA0gFKAMyANGAOwDswoq/wkGtfa699r+FPL98tPs1fjM7AHxiPS2/AfybQEuApj9twhwBBYPqgueDZcQAA7bBr8GNgweBeT+rAVaCTQCA/u9/TP2z/Po9dv02vYw8bP5qu4r9kL07/pI/cj7cgaaAhoBEwHRD9AF2An1CeUIRwNbApoNPAWqB5f8zQKjAhD7ZPUR8FTyZPoD+Xvvt+7T+Fr1PvsfAXj6oQKU/FcA6gv2AccNEgo9CnYKpwmACtsKUgu5/Gn+k/zH+zb4dP2w+pD9v/o28HX5JfgL+Av+3v3F+Vr/wABIBV8F/AmQAlsN/AWpA3kKcAbGBQUBqgAXAU/8uwQh/kAAd/zx9mv3wvDQ+iH3aPfm79f2IP8u/AL8UPpr/tIJTgZoAlEE+wegBm0ENQgrDskK9gYEBisBWwAYAjn7qfzV+Of2dfU78Qj7/fc/+/30vvQE/Jf6ygNYBWYCHgN1BMENhAYOCYAKOA/wB3AJKQyoADoFLASBAG76rffa+zH66PPN8KXwoPY1+DX68viz9Iv+U/1xBEYCvwikAMALKAIWDZcLfwmkC8wJMgmIB04F/wJjBUQArf5gAFf7Kf10+S/7tfJc9zj26/3n9VIBVvhp/tUCWARuBWMHtgM1A7MKVAmLCP8GgwN7APMD2wPs/OgAcQLt+zb9cPQ+98n2vvXf9wz8Yvg8/bX86vdjACb9CQXHCKX/RQcQAjgIFwXSA7ILCAvrA/H/3QCFBu/8zvuJ+VH7g/+a/H39yvPZ9D77SfXH/Wj4v/dv+Hv/DQDE/vEIHgSqBM8Efgy/B+QHiAkABHIItwLxAar/5/yj/q38gf/s9vT6e/Mf+pb7mflY/nz2nvgD/638F/3EBS8B7waZBoAJPgj6BmYEEwZBCkoEyAVwAlYDQ/63/Kf6ZflC9gL5SP2s9gz6Zf05/Lf4J/cv+7sCxQCPArb+WgUgBPgE3gZEBHYJTwtEBDUKVwiJBxMCdwKh/mj62fqN/z35p/jo9pr2wvek/Ev55Piw+BYBuQAd/139rQJmAooGlQM7BmgJcQlfBsUJ+wP2AegFzgAt/7L9lQCt/Qf+4/kj+k74u/wG+Ir79veD+sL9WftNAtIEtAGF/3wEmwX5AxMG6AeoCcEH9wNaBmsDlwSh/N0CSfr//1j48Pe2/E34Pv3N9gv66fsw+T/7Xv5NAkUCegAnBsgBNAZ3CPkFFgnPBIEBaQN1BfABzwID/wkByP71+WX89v6R/Ir9lPkj/Vv5M/so/DP7bgDIAeECEv8eARcGcgIZBOcD6QIaBhgH+AS7AzgCzQQvArr+ov5f/SH6mv0J//n37P3C+AP+U/6z/kX70f/0/Zb/ugKB/8AD5wT+AhQEiANKBSMFigaBBbYEGwGdBEQDYgA1/Eb8Qfwc/Er62/v0+yT9SvtZ/kP9qf68/TsBgAKgAuIDwwHdA7UG8wX2A40G5gImBBgFUwCnANr+WgE/AaQAlvz+/HP6jP2C++P8L/47/q78mv6E/98A0/1qAmsChwEoBaQC8gUDBjIC+QGiAesDHwHB/9oB4AH3/Y3/ZP0t+wn/y/6J+g37m/3B+5b9hf8u/+r+1QCH/goCNgDiA+kEowT1AV8CMAE6ASwEfASAAQ7/YwJA/3H+V/8+/PH81vt0/Cz9Bfu//rb7Rf0Y/rb/d/+iALL/mQAgAFMBHwRFAhMEUgPpAAQEqAK2AYMBAf9eACIBx/0j/UT8V//3+0z7BP40/sL79vwa/oz9fv7j/t7/AgCpAscBbQBuAwEDbwPqAiYEQwNQArsBNwHb/6sAIP8rAAL/M/2O/kz+Dv+f/nn8Vf11/wEAqAA5/hcAOP+sAVIAxwI+AZMDZwIwA/MAvQAgAkYA1gD8/yIBs/5w/gH/NP3O/er86vwi/eT+s/4y/8f/7v+CANH/bwEdALQA/gGnAowB0QLRAIcBsQIXAjcB4P/s/87/8P9W/6D+dv9l/wL+2f4c/1f+yP7P/pP/xP+j/6D/2v++/1gA8wAFASMBHgESAg4C6wEiARYAjwCLAJL/eP9PAAIAjf+B/gb/5f6i/3H/U/8D/8H/df+k/zX/o/+X/9oA1wDHAN4AAAHJAF4BvwB5APkAIQA6AO3/CgAiAFf/7/8n/8r/ef/3/qj/ov+3/13/bf/S/yQA9P/P/3EAUwBEABkAUgAtAHcAYgBuAEEAFQBtACwA3v/+/8D/BgDP/6L/of/P/8D/2//I//T/7P/3//f/+v/4/w4A/v8LAAQADgAHAA==";
 
@@ -66,7 +66,7 @@ let lastCueAt = 0;
 let installed = false;
 const muteListeners = new Set<() => void>();
 
-// Web Audio API context for instant, zero-latency, cross-browser audio playback
+
 let audioCtx: AudioContext | null = null;
 const audioBuffers = new Map<SoundName, AudioBuffer>();
 const bufferLoading = new Set<SoundName>();
@@ -83,13 +83,13 @@ function getAudioContext(): AudioContext | null {
   }
   if (audioCtx && audioCtx.state === "suspended") {
     audioCtx.resume().catch(() => {
-      /* unlocked on next gesture */
+
     });
   }
   return audioCtx;
 }
 
-/** Preload audio buffer once without polling or download-manager triggers */
+
 async function loadAudioBuffer(name: SoundName): Promise<AudioBuffer | null> {
   const ctx = getAudioContext();
   if (!ctx) return null;
@@ -98,7 +98,7 @@ async function loadAudioBuffer(name: SoundName): Promise<AudioBuffer | null> {
 
   bufferLoading.add(name);
 
-  // Type sound uses the embedded exact binary buffer of public/sounds/type.wav
+
   if (name === "type") {
     try {
       const decoded = await ctx.decodeAudioData(base64ToArrayBuffer(TYPE_WAV_BASE64));
@@ -122,14 +122,14 @@ async function loadAudioBuffer(name: SoundName): Promise<AudioBuffer | null> {
       return decoded;
     }
   } catch {
-    // Graceful offline fallback
+
   }
 
   bufferLoading.delete(name);
   return null;
 }
 
-/** Preload all audio assets once on application boot */
+
 function preloadAllSounds() {
   const names: SoundName[] = ["type", "click", "whoosh", "resolve"];
   names.forEach((name) => {
@@ -137,7 +137,7 @@ function preloadAllSounds() {
   });
 }
 
-/** Algorithmic Web Audio synthesizer fallback ensuring sound works under ANY network failure */
+
 function synthesizeSound(ctx: AudioContext, name: SoundName, volume: number) {
   const now = ctx.currentTime;
   const gain = ctx.createGain();
@@ -181,7 +181,7 @@ function synthesizeSound(ctx: AudioContext, name: SoundName, volume: number) {
     osc.start(now);
     osc.stop(now + 0.28);
   } else if (name === "resolve") {
-    const chord = [523.25, 659.25, 783.99, 1046.5]; // C major chord
+    const chord = [523.25, 659.25, 783.99, 1046.5];
     chord.forEach((freq, idx) => {
       const osc = ctx.createOscillator();
       const noteGain = ctx.createGain();
@@ -224,7 +224,7 @@ export function setSoundMuted(next: boolean): void {
   try {
     window.localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
   } catch {
-    /* storage blocked */
+
   }
   notifyMuted();
 }
@@ -236,14 +236,14 @@ export function subscribeSoundMuted(listener: () => void): () => void {
   };
 }
 
-/** React hook for audio mute state */
+
 export function useSoundMuted(): [boolean, (next: boolean) => void] {
   const [current, setCurrent] = useState(isSoundMuted);
   useEffect(() => subscribeSoundMuted(() => setCurrent(isSoundMuted())), []);
   return [current, setSoundMuted];
 }
 
-/** Primary sound playback engine: Web Audio API with buffer playback + synth fallback */
+
 export function playSound(name: SoundName): void {
   if (muted) return;
   const now = nowMs();
@@ -255,7 +255,7 @@ export function playSound(name: SoundName): void {
 
   const ctx = getAudioContext();
   if (!ctx) {
-    // HTMLAudioElement legacy fallback
+
     try {
       const url = resolveSoundUrl(name);
       const audio = new Audio(url);
@@ -265,7 +265,7 @@ export function playSound(name: SoundName): void {
     return;
   }
 
-  // Ensure AudioContext is running
+
   if (ctx.state === "suspended") {
     ctx.resume().catch(() => {});
   }
@@ -282,26 +282,26 @@ export function playSound(name: SoundName): void {
       source.start();
       return;
     } catch {
-      // Fallback to synthesis
+
     }
   }
 
-  // Synthesize directly if buffer not yet decoded or offline
+
   try {
     synthesizeSound(ctx, name, VOLUMES[name]);
   } catch {}
 }
 
-/**
- * Route changes get the transition whoosh cue.
- */
+
+
+
 export function playRouteSound(): void {
   if (nowMs() - lastCueAt < ROUTE_SOUND_GAP_MS) return;
   playSound("whoosh");
 }
 
 function handleClick(event: MouseEvent) {
-  // Unlock audio context on any user interaction
+
   getAudioContext();
 
   const target = event.target;
@@ -320,7 +320,7 @@ function handleClick(event: MouseEvent) {
     return;
   }
 
-  // Submit buttons get resolve cue from handleSubmit
+
   if (control instanceof HTMLButtonElement && control.type === "submit") return;
 
   playSound("click");
@@ -344,14 +344,14 @@ function handleInput(event: Event) {
   playSound("type");
 }
 
-/**
- * Delegated UI cues: listener attached once on application startup.
- */
+
+
+
 export function installSoundEffects(): () => void {
   if (installed || typeof document === "undefined") return () => undefined;
   installed = true;
 
-  // Preload sound buffers
+
   preloadAllSounds();
 
   const unlockAudio = () => {

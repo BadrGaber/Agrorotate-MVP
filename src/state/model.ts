@@ -8,16 +8,16 @@ export interface BoundaryPoint {
 
 export type SlopeClass = "flat" | "gentle" | "steep" | "unknown";
 
-// ============================================================================
-// THREE-TIER RESOLUTION HIERARCHY & 20-FACTOR TYPES
-// ============================================================================
 
-/**
- * Three-Tier Resolution Hierarchy:
- *  - MEAS: Direct laboratory-verified measurement (Confidence alpha = 1.00)
- *  - EST: Field sensory, tactile or historical estimation with PTF (Confidence alpha = 0.75)
- *  - EO_PRIOR: Geospatial / Earth observation prior (NASA POWER, SRTM, SoilGrids) (Confidence alpha = 0.50)
- */
+
+
+
+
+
+
+
+
+
 export type DataProvenance = "MEAS" | "EST" | "EO_PRIOR" | "EO_FALLBACK";
 
 export interface ConfidenceInterval {
@@ -27,7 +27,7 @@ export interface ConfidenceInterval {
 
 export interface FeatureProvenanceMeta {
   source: DataProvenance;
-  confidenceWeight: number; // 1.00 (MEAS), 0.75 (EST), 0.50 (EO_PRIOR)
+  confidenceWeight: number;
   lowerBound95?: number;
   upperBound95?: number;
   uncertaintyPct?: number;
@@ -190,34 +190,34 @@ export type FunctionalCropGroup =
   | "SUGAR_CROPS"
   | "MAJOR_VEGETABLES";
 
-// ============================================================================
-// NORMALIZED AGRONOMIC VECTOR (32 DIMENSIONS) & AI CONTRACT
-// ============================================================================
+
+
+
 
 export interface NormalizedAgronomicVector {
   fieldId: string;
   centroid: { lat: number; lon: number } | null;
 
-  /**
-   * Continuous 32-dimensional float vector scaled strictly to [0.0, 1.0].
-   * Standard order:
-   * [0]  sand_fraction               [1]  silt_fraction
-   * [2]  clay_fraction               [3]  coarse_fragments_fraction
-   * [4]  bulk_density_norm           [5]  field_capacity_norm
-   * [6]  wilting_point_norm          [7]  awc_norm
-   * [8]  ksat_norm                   [9]  drainage_index_norm
-   * [10] water_table_depth_norm      [11] root_depth_norm
-   * [12] aeration_stress_norm        [13] ph_norm
-   * [14] ece_norm                    [15] esp_norm
-   * [16] caco3_norm                  [17] som_norm
-   * [18] cec_norm                    [19] avail_n_norm
-   * [20] avail_p_norm                [21] avail_k_norm
-   * [22] nematode_risk               [23] fusarium_wilt_risk
-   * [24] allium_white_rot_risk       [25] orobanche_risk
-   * [26] water_quota_norm            [27] water_ecw_norm
-   * [28] irrigation_efficiency       [29] annual_eto_norm
-   * [30] heat_days_norm              [31] slope_norm
-   */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   continuousVector32: number[];
   featureLabels32: string[];
 
@@ -382,7 +382,7 @@ export interface AiParetoSolution {
   confidenceBandPercent: number;
 }
 
-/** What the budgeted search actually did. Numbers, not marketing claims. */
+
 export interface AiSearchTelemetry {
   method: "mcts_ucb1";
   searchType: "approximate_budgeted_sample";
@@ -392,7 +392,7 @@ export interface AiSearchTelemetry {
   candidatesGenerated: number;
   uniqueRotationsEvaluated: number;
   duplicateRolloutsSkipped: number;
-  /** Ordered 6-season sequences with this candidate pool, family rule ignored. */
+
   theoreticalSearchSpace: number;
   theoreticalSearchSpaceLabel: string;
   elapsedMs: number;
@@ -404,7 +404,7 @@ export interface AiParetoAssessment {
   label: string;
   objectives: Array<"netReturn" | "waterSaving" | "soilHealth" | "risk">;
   nonDominatedWithinEvaluatedSet: boolean;
-  /** Ranked by the farmer's four weights, not a global optimality claim. */
+
   rankingByUserWeights: Array<{ solutionId: string; weightedScore: number }>;
   note: string;
 }
@@ -444,16 +444,16 @@ export interface FieldState {
   name: string;
   placeLabel: string;
   areaHa: number | null;
-  /** Null until the user chooses; the UI infers it when only one area exists. */
+
   areaSource: "drawn" | "declared" | null;
   boundary: BoundaryPoint[];
   centroidLat: number | null;
   centroidLon: number | null;
   slopeClass: SlopeClass;
-  /** Where the slope class came from: DEM samples or the user's own observation. */
+
   slopeSource: "dem" | "observation" | null;
   elevationM: number | null;
-  /** Where elevation came from: the DEM lookup or a value the user typed. */
+
   elevationSource: "dem" | "user" | null;
 }
 
@@ -485,7 +485,7 @@ export interface LabSoil {
 export interface SoilState {
   observations: Record<string, string | null>;
   lab: LabSoil;
-  /** Fields filled from a plain-language answer; never a lab measurement. */
+
   estimates: Record<string, EstimateRecord>;
 }
 
@@ -517,7 +517,7 @@ export interface WaterState {
   ecwDsm: string;
   sarw: string;
   no3nPpm?: string;
-  /** Fields filled from a plain-language answer; never a lab measurement. */
+
   estimates: Record<string, EstimateRecord>;
 }
 
@@ -557,7 +557,7 @@ export interface ClimateSummary {
   annualPrecipMm: number;
   etoAnnualMm: number | null;
   etoMethod: "fao56_pm";
-  /** Daily records for which every FAO-56 PM input was available. */
+
   etoDaysComputed: number;
   etoDaysTotal: number;
   etoStatus: "complete" | "partial" | "unavailable";
@@ -567,7 +567,7 @@ export interface ClimateSummary {
   elevationM: number;
   parameters: string[];
   timeStandard: string;
-  /** Long-term seasonal context for the field, computed from the same daily series. */
+
   summer: SeasonSummary;
   winter: SeasonSummary;
   monthly: MonthSummary[];
@@ -589,7 +589,7 @@ export interface ClimateState {
 export type PriorityKey = "yield" | "water" | "soil" | "risk";
 
 export interface PrioritiesState {
-  /** Null until the user picks a lens; equal weights are neutral, not a choice. */
+
   preset: "balanced" | "water" | "soil" | "risk" | "custom" | null;
   weights: Record<PriorityKey, number>;
   excluded: Record<string, string>;
@@ -665,7 +665,7 @@ export const DEFAULT_WORKSPACE: WorkspaceState = {
     estimates: {},
   },
   water: {
-    // No pre-selected answers: a choice counts only when the user makes it.
+
     regime: null,
     system: null,
     source: null,
@@ -733,10 +733,10 @@ export const CROP_DISPLAY_NAMES: Record<string, string> = {
   "bio-fumigant-mustard-cover": "Biofumigant Mustard (Cover)",
 };
 
-/**
- * Infers a realistic 6-season baseline rotation based on farmer inputs or geographic coordinates
- * for NASA Space Apps challenge Field Shift: Adapting Farms with NASA Data.
- */
+
+
+
+
 export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
   seasonIndex: number;
   cropId: string;
@@ -763,7 +763,7 @@ export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
 
   let crops: string[];
 
-  // 1. Egypt / Nile Valley & Delta
+
   if (lat >= 21 && lat <= 32 && lon >= 24 && lon <= 36) {
     if (prev === "bread-wheat") {
       crops = [
@@ -794,7 +794,7 @@ export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
       ];
     }
   }
-  // 2. US Corn Belt / Midwest
+
   else if (lat >= 36 && lat <= 49 && lon >= -105 && lon <= -80) {
     crops = [
       "grain-maize",
@@ -805,7 +805,7 @@ export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
       "forage-oat-cover",
     ];
   }
-  // 3. Temperate Europe
+
   else if (lat >= 42 && lat <= 60 && lon >= -10 && lon <= 32) {
     crops = [
       "grain-maize",
@@ -816,7 +816,7 @@ export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
       "six-row-barley",
     ];
   }
-  // 4. Australia (Dry plains)
+
   else if (lat >= -40 && lat <= -15 && lon >= 112 && lon <= 155) {
     crops = [
       "grain-sorghum",
@@ -827,7 +827,7 @@ export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
       "winter-canola-rapeseed",
     ];
   }
-  // 5. South America (Cerrado/Pampas)
+
   else if (lat >= -35 && lat <= 5 && lon >= -75 && lon <= -34) {
     crops = [
       "soybean",
@@ -838,7 +838,7 @@ export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
       "bread-wheat",
     ];
   }
-  // 6. Global Arid / Mediterranean / Default
+
   else {
     crops = [
       "grain-maize",
@@ -856,4 +856,3 @@ export function inferRegionalBaselineRotation(state: WorkspaceState): Array<{
     cropName: CROP_DISPLAY_NAMES[cid] ?? cid,
   }));
 }
-

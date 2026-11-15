@@ -2,10 +2,10 @@ import type { ClimateSummary } from "../state/model";
 
 const MONTHS = ["J", "F", "M", "A", "M", "J", "J", "A", "S", "O", "N", "D"];
 
-/**
- * A compact climate fingerprint. Rain is drawn as bars, reference ETo as a
- * line. This is context, not a crop water requirement or an irrigation plan.
- */
+
+
+
+
 export function MonthlyClimateChart({
   summary,
   height = 150,

@@ -1,15 +1,3 @@
-/**
- * AUTO-GENERATED from the Agrorotate research package v5 (29 Oct 2026).
- * Regenerate with: node scripts/generate-evidence.mjs
- *
- * Catalogue + package metadata only. The 120-row audit ledger lives in
- * ./generated.ts and is code-split so it does not load on first paint.
- *
- * 26 of 120 crop claims are supported for a named
- * source scope (FAO salinity tables). The rest are preserved as supplied by the
- * project file and must not be treated as a verified agronomic fact.
- */
-
 export type EvidenceStatus = string;
 
 export interface EvidenceCrop {
@@ -780,7 +768,7 @@ export interface ModelFeature {
   unit: string;
   role: "learned" | "constant" | "physics_only" | "crop_trait";
   signal: number | null;
-  /** The code path, if any, that consumes this dimension. "none" = display only. */
+
   usedBy: string;
   note: string;
 }

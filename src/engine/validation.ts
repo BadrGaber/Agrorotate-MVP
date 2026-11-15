@@ -1,15 +1,3 @@
-/**
- * ============================================================================
- * AgroRotate — TRIPLE-LAYER AGRONOMIC VALIDATION GUARDRAILS ENGINE
- * NASA Space Apps Challenge
- * ============================================================================
- *
- * Enforces three simultaneous defense layers:
- *  - Layer 1: Hard physical range constraints (biophysical bounds per parameter)
- *  - Layer 2: Cross-parameter coherence & sanity checks (hydrologic, chemical & pedologic)
- *  - Layer 3: Data provenance tracking & confidence weighting (MEAS, EST, EO_PRIOR)
- */
-
 import type { DataProvenance, NormalizedAgronomicVector } from "../state/model";
 import { parseNumericInput } from "./numericInput.ts";
 
@@ -31,8 +19,8 @@ export interface ValidationReport {
   warnings: ValidationIssue[];
   info: ValidationIssue[];
   confidenceSummary: {
-    overallConfidenceScore: number; // 0.50 to 1.00
-    uncertaintyBandPercent: number; // e.g. ±5% to ±25%
+    overallConfidenceScore: number;
+    uncertaintyBandPercent: number;
     tierCounts: Record<DataProvenance, number>;
   };
 }
@@ -44,12 +32,12 @@ export interface PhysicalBound {
   label: string;
 }
 
-/**
- * Layer 1 Master Physical Bounds Table.
- * Any entry outside these bounds violates thermodynamic, chemical, or biophysical reality.
- */
+
+
+
+
 export const PHYSICAL_BOUNDS: Record<string, PhysicalBound> = {
-  // Canonical scientific names
+
   sandPercent: { min: 0.0, max: 100.0, unit: "%", label: "Sand fraction" },
   siltPercent: { min: 0.0, max: 100.0, unit: "%", label: "Silt fraction" },
   clayPercent: { min: 0.0, max: 100.0, unit: "%", label: "Clay fraction" },
@@ -176,7 +164,7 @@ export const PHYSICAL_BOUNDS: Record<string, PhysicalBound> = {
   },
   slopePercent: { min: 0.0, max: 45.0, unit: "%", label: "Topographic slope" },
 
-  // UI & Lab state aliases (matching SmartInput fieldKeys)
+
   sandPct: { min: 0.0, max: 100.0, unit: "%", label: "Sand fraction" },
   siltPct: { min: 0.0, max: 100.0, unit: "%", label: "Silt fraction" },
   clayPct: { min: 0.0, max: 100.0, unit: "%", label: "Clay fraction" },
@@ -244,9 +232,9 @@ export const PHYSICAL_BOUNDS: Record<string, PhysicalBound> = {
   quotaMm: { min: 0.0, max: 1800.0, unit: "mm", label: "Seasonal water quota" },
 };
 
-/**
- * Checks a single value against Layer 1 physical bounds.
- */
+
+
+
 export function validateSingleField(
   fieldKey: string,
   value: number | string | null | undefined,
@@ -291,9 +279,9 @@ export function validateSingleField(
   };
 }
 
-/**
- * Validates the complete scientific agronomic vector against all 3 layers.
- */
+
+
+
 export function validateAgronomicVector(
   vector: NormalizedAgronomicVector,
 ): ValidationReport {
@@ -301,9 +289,9 @@ export function validateAgronomicVector(
   const warnings: ValidationIssue[] = [];
   const info: ValidationIssue[] = [];
 
-  // --------------------------------------------------------------------------
-  // LAYER 1: HARD PHYSICAL BOUND CHECKS
-  // --------------------------------------------------------------------------
+
+
+
   const phys = vector.soilPhysical;
   const chem = vector.soilChemical;
   const nut = vector.soilNutrients;
@@ -349,11 +337,11 @@ export function validateAgronomicVector(
 
   checkField("slopePercent", eo.slopePercent);
 
-  // --------------------------------------------------------------------------
-  // LAYER 2: CROSS-PARAMETER SANITY & COHERENCE CHECKS
-  // --------------------------------------------------------------------------
 
-  // 1. Soil Texture Particle-size sum
+
+
+
+
   const textureSum = phys.sandPercent + phys.siltPercent + phys.clayPercent;
   if (Math.abs(textureSum - 100.0) > 1.5) {
     errors.push({
@@ -367,7 +355,7 @@ export function validateAgronomicVector(
     });
   }
 
-  // 2. Hydraulic sequence: Wilting Point < Field Capacity < Saturation
+
   if (phys.wiltingPointVolPct >= phys.fieldCapacityVolPct) {
     errors.push({
       id: "cross_hydraulic_pwp_fc",
@@ -391,7 +379,7 @@ export function validateAgronomicVector(
     });
   }
 
-  // 3. Calcium Carbonate (Lime) vs. pH contradiction
+
   if (chem.caco3Percent > 15.0 && chem.phH2o < 6.5) {
     errors.push({
       id: "cross_lime_ph_contradiction",
@@ -404,7 +392,7 @@ export function validateAgronomicVector(
     });
   }
 
-  // 4. Irrigation Water Salinity vs. Steady-State Soil Salinity
+
   if (
     water.waterSupplyRegime !== "RAINFED" &&
     chem.eceDsm < 0.75 * water.irrigationEcwDsm &&
@@ -421,7 +409,7 @@ export function validateAgronomicVector(
     });
   }
 
-  // 5. Effective root depth vs. Water table depth
+
   if (phys.effectiveRootDepthCm > phys.waterTableDepthCm - 10) {
     warnings.push({
       id: "cross_root_water_table",
@@ -434,7 +422,7 @@ export function validateAgronomicVector(
     });
   }
 
-  // 6. Sodicity (ESP) vs. Infiltration collapse
+
   if (chem.espPercent > 15.0 && phys.infiltrationRateMmHr > 25.0) {
     warnings.push({
       id: "cross_esp_ksat_dispersion",
@@ -447,9 +435,9 @@ export function validateAgronomicVector(
     });
   }
 
-  // --------------------------------------------------------------------------
-  // LAYER 3: PROVENANCE & CONFIDENCE SUMMARY
-  // --------------------------------------------------------------------------
+
+
+
   const tierCounts: Record<DataProvenance, number> = {
     MEAS: 0,
     EST: 0,
@@ -469,7 +457,7 @@ export function validateAgronomicVector(
 
   const overallConfidenceScore =
     featureCount > 0 ? Number((totalWeight / featureCount).toFixed(3)) : 0.75;
-  // Uncertainty band: 100% MEAS => ±5%, 75% EST => ±14%, 50% EO => ±24%
+
   const uncertaintyBandPercent = Number(
     ((1.0 - overallConfidenceScore) * 38.0 + 4.5).toFixed(1),
   );

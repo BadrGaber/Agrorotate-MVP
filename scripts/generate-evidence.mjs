@@ -1,18 +1,3 @@
-/**
- * Builds the typed evidence dataset from the Agrorotate research package v5.
- *
- * Source of truth: docs/evidence_sources/*.csv (an audit trail, not a claim that
- * every crop value is valid).
- *
- * Outputs:
- *  - src/data/evidence/crops.generated.ts  (small: catalogue + meta)
- *  - src/data/evidence/generated.ts        (large: 564 claims, sources, inputs)
- *
- * Splitting keeps the audit ledger out of the first-paint bundle while the
- * catalogue stays eager.
- *
- * Run: node scripts/generate-evidence.mjs
- */
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -75,10 +60,10 @@ const ledgerFile = parseCsv(
   ),
 );
 
-// Keep only the claims whose value reaches a decision: family and season drive
-// the rotation checks, and the salinity limit/slope pair is the sourced crop
-// numeric the salt balance reads. Every other parameter in the audit file is
-// read by no rule, no model and no form, so it is dropped instead of shipped.
+
+
+
+
 const DECISION_PARAMETERS = new Set([
   "Family",
   "Season",
@@ -107,10 +92,10 @@ const sources = parseCsv(
   ),
 );
 
-// The two CSVs disagree on spacing around slashes for three crops
-// ("Alfalfa/Lucerne" vs "Alfalfa / Lucerne") and on one crop name
-// ("Forage Oat" vs "Forage Oat Cover"). Match on a normalised key so no crop
-// silently loses its claim ledger.
+
+
+
+
 const normalizeCropName = (value) =>
   value
     .toLowerCase()
@@ -209,8 +194,8 @@ const CLAIMS = ledger.map((c) => ({
 }));
 
 const INPUTS = inputs
-  // Section 16 was pathogen scouting; no form in this build collects a
-  // diagnosis, so its rule has no input to govern.
+
+
   .filter((i) => !/pathogen/i.test(i.Section_Name))
   .map((i) => ({
   section: Number(i.Original_Section),
@@ -231,10 +216,10 @@ const SOURCES = sources.map((s) => ({
   limits: s.Limits_and_Nonclaims,
 }));
 
-// ---------------------------------------------------------------------------
-// Model card: read straight from the trained artefacts so the UI cannot drift
-// from what the model actually learned.
-// ---------------------------------------------------------------------------
+
+
+
+
 const AI_DIR = path.resolve(root, "AI");
 
 function readJson(file) {
@@ -271,9 +256,9 @@ for (const key of Object.keys(DATASET?.imputed_dimensions ?? {})) {
 
 const signals = DATASET?.feature_spearman_with_label ?? {};
 
-// What actually consumes a dimension the model never learned. Verified against
-// the engine: anything marked "none" is written into the vector but no rule and
-// no trained response reads it, so the UI must not call it a decision input.
+
+
+
 const READ_BY = {
   12: "none — aeration is held at one value and no rule reads it",
   14: "salinity physics: Maas–Hoffman threshold/slope from the crop registry",
@@ -303,8 +288,8 @@ const CROP_TRAITS = [
 ];
 
 const MODEL_FEATURES = [
-  // Contract indices 0-31 are the continuous state; 32-39 are the crop traits
-  // (added below from the explicit table, so they are not classified twice).
+
+
   ...contractFeatures().filter((f) => f.idx < 32).map((f) => {
     const signal = signals[`f${f.idx}`] ?? null;
     const role = imputedIndices.has(f.idx)

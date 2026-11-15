@@ -1,5 +1,3 @@
-// Landing imagery lives in public/hero so it is fetched and cached as assets
-// rather than being inlined into the JavaScript bundle.
 function resolvePublicAsset(path: string): string {
   const base = (typeof import.meta !== "undefined" && import.meta.env?.BASE_URL
     ? import.meta.env.BASE_URL

@@ -24,7 +24,7 @@ REAL_DIR = AI_DIR / "models" / "real_v1"
 BACKUP_ROOT = AI_DIR / "models" / "legacy_v3"
 RETIRED = AI_DIR / "models" / "retired_runtime"
 
-# Old synthetic-pipeline artefacts that must not stay in the runtime.
+
 OBSOLETE = [
     "agrorotate_fp16.onnx",
     "agrorotate_gru_fp16.onnx",
@@ -57,13 +57,13 @@ def deploy() -> dict:
     for runtime_dir in RUNTIME_DIRS:
         runtime_dir.mkdir(parents=True, exist_ok=True)
 
-        # 1. Back up the currently active weights once per directory.
+
         active = runtime_dir / "agrorotate_surrogate_weights.json"
         if active.exists():
             backup_dir.mkdir(parents=True, exist_ok=True)
             shutil.copy2(active, backup_dir / f"{runtime_dir.parent.name}_surrogate_weights.json")
 
-        # 2. Retire obsolete artefacts.
+
         for name in OBSOLETE:
             path = runtime_dir / name
             if path.exists():
@@ -74,13 +74,13 @@ def deploy() -> dict:
                 shutil.move(str(path), str(target))
                 manifest["retired"].append(str(path))
 
-        # 3. Install the real model + its real calibration.
+
         for src_name, dst_name in DEPLOY_FILES.items():
             src = REAL_DIR / src_name
             if src.exists():
                 shutil.copy2(src, runtime_dir / dst_name)
 
-    # 4. A small marker the health endpoint can report.
+
     weights = json.loads(weights_src.read_text(encoding="utf-8"))
     meta = weights.get("metadata", {})
     marker = {

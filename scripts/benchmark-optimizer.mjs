@@ -1,13 +1,4 @@
 #!/usr/bin/env node
-/**
- * TASK-02 acceptance 5 — one reproducible benchmark for the budgeted search.
- *
- * Prints the machine, the exact workspace, the simulation budget the engine
- * actually executed and the measured wall time. It never converts a single
- * laptop result into a guarantee for other machines.
- *
- * Run: npm run benchmark:optimizer
- */
 import os from "node:os";
 import { optimizeWorkspace } from "../server/ai/optimizer.mjs";
 

@@ -1,13 +1,3 @@
-/**
- * AUTO-GENERATED from the Agrorotate research package v5 (29 Oct 2026).
- * Regenerate with: node scripts/generate-evidence.mjs
- *
- * Full audit trail: the 120 crop-parameter claims a decision reads,
- * the 19 input evidence rules and the 30-source registry.
- * 26 claims reached a
- * named source scope. The rest are preserved, never used as verified facts.
- */
-
 import type { EvidenceStatus } from "./crops.generated";
 
 export * from "./crops.generated";

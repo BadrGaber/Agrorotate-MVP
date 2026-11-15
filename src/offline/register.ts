@@ -1,10 +1,3 @@
-/**
- * Offline support: one service worker for the whole site.
- *
- * The worker precaches the shell, the trained model, the evidence bundle (which
- * ships inside the app chunks), the sounds and the hero images. Registration
- * starts after first paint so it never delays the first screen.
- */
 export interface OfflineCacheStatus {
   supported: boolean;
   ready: boolean;
@@ -58,7 +51,7 @@ export function registerOfflineSupport(): void {
   });
 }
 
-/** Ask the active worker for the number of files and bytes it holds. */
+
 export async function requestOfflineStatus(): Promise<OfflineCacheStatus> {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) {
     return { ...EMPTY_OFFLINE_STATUS, supported: false };
@@ -81,7 +74,7 @@ export async function requestOfflineStatus(): Promise<OfflineCacheStatus> {
   }
 }
 
-/** Fire-and-forget request to re-run the precache list (e.g. after deploy). */
+
 export function precacheNow(): void {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
   navigator.serviceWorker.ready

@@ -43,15 +43,15 @@ def _find_col(df: pd.DataFrame, candidates: list[str]) -> str | None:
     return None
 
 
-# ==============================================================================
-# [1/7] ISRIC WoSIS Real Laboratory Profiles (Starting Point: Real Ground Coordinates and Samples)
-# ==============================================================================
+
+
+
 def fetch_1_isric_wosis_sites(target_sites: int = 550) -> pd.DataFrame:
     out_sites = RAW_DIR / "1a_wosis_authentic_550_sites.parquet"
     out_lab_props = RAW_DIR / "1b_wosis_real_lab_measurements.parquet"
     print("\n[1/7] Downloading Real Laboratory Soil Profiles from ISRIC WoSIS WFS...")
 
-    # 1A. Fetch real laboratory profiles (ground coordinates and countries)
+
     wfs_profiles = (
         "https://maps.isric.org/mapserv?map=/map/wosis_latest.map"
         "&SERVICE=WFS&VERSION=2.0.0&REQUEST=GetFeature"
@@ -81,14 +81,14 @@ def fetch_1_isric_wosis_sites(target_sites: int = 550) -> pd.DataFrame:
         "lon": pd.to_numeric(df_raw[lon_col], errors="coerce"),
     }).dropna(subset=["lat", "lon"])
 
-    # Filter valid global arable lat-band (-55 to +65 degrees latitude) and deduplicate
+
     df_clean = df_clean[(df_clean["lat"].between(-55.0, 65.0)) & (df_clean["lon"].between(-180.0, 180.0))]
     df_clean = df_clean.drop_duplicates(subset=["lat", "lon"]).copy()
 
-    # Stratified sampling of 550 sites across 5x5 degree global grid cells
+
     df_clean["geo_bin"] = (df_clean["lat"] // 5).astype(int).astype(str) + "_" + (df_clean["lon"] // 5).astype(int).astype(str)
     sampled_list = []
-    # Pass 1: Select representative sample per grid cell for global spatial coverage
+
     for _, grp in df_clean.groupby("geo_bin"):
         sampled_list.append(grp.sample(n=1, random_state=42))
     df_diverse = pd.concat(sampled_list, ignore_index=True)
@@ -106,7 +106,7 @@ def fetch_1_isric_wosis_sites(target_sites: int = 550) -> pd.DataFrame:
     df_550.to_parquet(out_sites, index=False)
     print(f"  [+] Saved {out_sites.name}: {len(df_550)} real lab sites across {df_550['country'].nunique()} countries.")
 
-    # 1B. Fetch real laboratory measurements for pH and clay (for empirical uncertainty calibration)
+
     lab_frames = []
     for prop_layer, prop_name in [("ms:wosis_latest_phaq", "ph_h2o_lab"), ("ms:wosis_latest_clay", "clay_pct_lab")]:
         try:
@@ -131,9 +131,9 @@ def fetch_1_isric_wosis_sites(target_sites: int = 550) -> pd.DataFrame:
     return df_550
 
 
-# ==============================================================================
-# [2/7] NASA POWER API (Real climate parameters for the 550 ground sites)
-# ==============================================================================
+
+
+
 def fetch_2_nasa_power(df_sites: pd.DataFrame):
     out_file = RAW_DIR / "2_nasa_power_550.parquet"
     print("\n[2/7] Downloading NASA POWER Real Climate Data for the 550 WoSIS sites...")
@@ -175,15 +175,15 @@ def fetch_2_nasa_power(df_sites: pd.DataFrame):
     print(f"  [+] Saved {out_file.name} ({len(records)} rows)")
 
 
-# ==============================================================================
-# [3/7] NASA SRTM 30m DEM (Real elevation and terrain slope)
-# ==============================================================================
+
+
+
 def fetch_3_nasa_srtm30m(df_sites: pd.DataFrame):
     out_file = RAW_DIR / "3_nasa_srtm30m_550.parquet"
     print("\n[3/7] Downloading NASA SRTM 30m Elevation & Slope for the 550 sites...")
     records = []
     batch_size = 30
-    delta = 0.0003  # ~33m
+    delta = 0.0003
 
     for start in range(0, len(df_sites), batch_size):
         batch = df_sites.iloc[start : start + batch_size]
@@ -219,9 +219,9 @@ def fetch_3_nasa_srtm30m(df_sites: pd.DataFrame):
     print(f"  [+] Saved {out_file.name} ({len(records)} rows)")
 
 
-# ==============================================================================
-# [4/7] ISRIC SoilGrids 250m v2.0 (High-resolution soil property rasters for the 550 sites)
-# ==============================================================================
+
+
+
 def fetch_4_isric_soilgrids(df_sites: pd.DataFrame):
     out_file = RAW_DIR / "4_isric_soilgrids_550.parquet"
     print("\n[4/7] Downloading ISRIC SoilGrids 250m v2.0 Priors for the 550 sites...")
@@ -259,9 +259,9 @@ def fetch_4_isric_soilgrids(df_sites: pd.DataFrame):
     print(f"  [+] Saved {out_file.name} ({len(records)} rows)")
 
 
-# ==============================================================================
-# [5/7] FAOSTAT Producer Prices & EPPO Global Pathogen Taxonomy
-# ==============================================================================
+
+
+
 def fetch_5_fao_and_eppo():
     print("\n[5/7] Downloading FAOSTAT Producer Prices & EPPO Pathogen Records...")
     fao_zip_url = "https://fenixservices.fao.org/faostat/static/bulkdownloads/Prices_E_All_Data_(Normalized).zip"
@@ -300,9 +300,9 @@ def fetch_5_fao_and_eppo():
     print(f"  [+] Saved {out_eppo.name} ({len(eppo_dump)}/6 EPPO records)")
 
 
-# ==============================================================================
-# [6/7] NASA GRACE / GRACE-FO Mascon NetCDF (Terrestrial water storage anomaly / groundwater)
-# ==============================================================================
+
+
+
 def fetch_6_nasa_grace():
     out_nc = RAW_DIR / "6_nasa_grace_mascon_rl06.nc"
     print("\n[6/7] Downloading NASA GRACE/GRACE-FO Mascon Groundwater NetCDF...")

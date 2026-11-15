@@ -22,11 +22,11 @@ export interface Proof {
   sourceId?: string;
   sourceUrl?: string;
   limitation?: string;
-  /** The yield basis the source actually tabulates. */
+
   endpoint?: string;
-  /** Whether the same pair appears in the second FAO table. */
+
   crossCheck?: string;
-  /** Date the value was re-read from the live source. */
+
   checkedOn?: string;
 }
 

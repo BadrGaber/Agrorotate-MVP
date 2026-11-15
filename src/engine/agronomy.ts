@@ -26,7 +26,7 @@ export interface SalinityResult {
   relativeYieldPct: number | null;
   thresholdDsm: number | null;
   slopePctPerDsm: number | null;
-  /** Yield basis the FAO table actually reports, e.g. grain yield or ear FW. */
+
   endpoint: string | null;
   detail: string;
 }
@@ -107,7 +107,7 @@ export function salinityAssessment(
   };
 }
 
-/** Approximate USDA texture class from measured fractions (nearest class centroid). */
+
 export function textureClassFromFractions(
   sand: number,
   silt: number,
@@ -168,7 +168,7 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
   const next = nextCropForSlot(state, index);
   const slotMeta = SLOT_META[index];
 
-  // 1. User exclusion is the only hard, unambiguous conflict.
+
   if (state.priorities.excluded[crop.id]) {
     findings.push({
       id: "excluded",
@@ -180,7 +180,7 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
     });
   }
 
-  // 2. Measured salinity versus a source-supported crop threshold.
+
   if (salinity.state === "above" && salinity.relativeYieldPct !== null) {
     const severe = salinity.relativeYieldPct < 50;
     findings.push({
@@ -193,8 +193,8 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
     });
   }
 
-  // 2b. Verification pass: the FAO pair may describe a different endpoint
-  // than the harvested product (e.g. maize is tabulated as ear fresh weight).
+
+
   const endpointCheck = SALINITY_CHECK_BY_CROP[crop.name];
   if (salinity.state === "above" && endpointCheck?.endpointCaveat) {
     findings.push({
@@ -219,7 +219,7 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
         : salinity.detail,
   });
 
-  // 3. Botanical family repetition — a principle, not a measured penalty (S28).
+
   if (previous && previous.id !== crop.id && previous.family === crop.family) {
     findings.push({
       id: "family-repeat",
@@ -237,7 +237,7 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
       : "No previous crop is recorded, so the break cannot be assessed for the first season.",
   });
 
-  // 4. Planting window — convention level only, calendar record still required.
+
   if (slotMeta) {
     const expected = slotMeta.season;
     if (crop.season !== expected) {
@@ -264,7 +264,7 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
       "No diagnosis input exists in this build, so no break claim is made either way.",
   });
 
-  // 6. Next-season family preview.
+
   if (next && next.family === crop.family) {
     findings.push({
       id: "family-forward",
@@ -274,7 +274,7 @@ export function evaluateSlot(state: WorkspaceState, index: number): SlotEvaluati
     });
   }
 
-  // 7. Nutrient and water dimensions are calibrated locally.
+
   dimensions.push({
     key: "water",
     label: "Crop water demand",
@@ -318,18 +318,18 @@ export interface Alternative {
   seasonMatch: boolean;
   reasons: string[];
   blockedByUser: boolean;
-  /** Expected yield loss (%) from the trained head or the physics floor. */
+
   yieldLossPct: number | null;
-  /** Which engine produced the yield term for this crop. */
+
   yieldSource: "model" | "floor" | null;
-  /** 0–100 hybrid ordering score: model/floor yield term + your four weights. */
+
   fitScore: number;
 }
 
-/**
- * Candidates that clear the checks the engine can assess, ordered by the
- * sourced evidence behind each one. Reasons are printed beside every candidate.
- */
+
+
+
+
 export function alternativeCrops(
   state: WorkspaceState,
   index: number,
@@ -395,17 +395,17 @@ function plantedFamilies(state: WorkspaceState): Set<string> {
   );
 }
 
-/**
- * The same 0–100 ordering score applied to a suggestion, exposed for the
- * selected crop itself so the season card and the best-three list agree.
- */
-/**
- * Hybrid 0–100 fit score. The yield term is the trained surrogate's yield-gap
- * head, or the biophysical floor where the model has no row for the crop; the
- * water, soil and risk terms are sourced rules. The four priority weights decide
- * how much each term matters, so the number is traceable to a model and to the
- * farmer's own priorities — never a fixed hand-tuning.
- */
+
+
+
+
+
+
+
+
+
+
+
 export function scoreAlternative(
   priority: WorkspaceState["priorities"],
   usedFamilies: Set<string>,
@@ -422,7 +422,7 @@ export function scoreAlternative(
       ? 55
       : Math.max(0, Math.min(100, 100 - yieldLossPct));
 
-  // Active biophysical adjustments:
+
   if ((context?.caco3Pct ?? 0) > 12 && ["potato", "sweet-potato", "sesame", "bulb-onion", "flax-linseed"].includes(alt.crop.id)) {
     yieldScore = Math.max(10, yieldScore - 15);
   }
@@ -461,7 +461,7 @@ export function scoreAlternative(
   return Math.max(5, Math.min(99, Math.round(blended)));
 }
 
-/** 0–100 ordering score for the crop currently planted in a slot. */
+
 export function cropFitScore(
   state: WorkspaceState,
   index: number,
@@ -547,15 +547,15 @@ export function planCoverage(state: WorkspaceState): PlanCoverage {
 }
 
 export function setupCompleteness(state: WorkspaceState) {
-  // Drawing the parcel is the validation step: area, centroid and climate all
-  // derive from it, so a field with no polygon is not a usable field.
+
+
   const fieldOk = (state.field.areaHa ?? 0) > 0 && state.field.boundary.length >= 3;
   const soilOk =
     Object.values(state.soil.observations).filter(Boolean).length > 0 ||
     measuredEce(state) !== null;
-  // Defaults are pre-selected so the form is never blank. That is not the same
-  // as the user having supplied anything, so "done" needs an explicit entry.
-  // Rain-fed farmers have no irrigation supply or quota, so selecting rain-fed regime/source satisfies the requirement.
+
+
+
   const waterOk = Boolean(
     state.water.regime === "rainfed" ||
     state.water.source === "rain" ||

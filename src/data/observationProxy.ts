@@ -19,17 +19,17 @@ import {
 export type ObservationRole = "ai" | "rule";
 
 export interface ObservationProxy {
-  /** The exact numeric/class value the engine substitutes. */
+
   value: string;
-  /** What the engine does with it, in plain language. */
+
   detail: string;
-  /** "ai" = the trained model learned this dimension; "rule" = physics rule. */
+
   role: ObservationRole;
-  /** Whether the trained model learned a response to this dimension. */
+
   learned: boolean;
-  /** Lab fields that replace this proxy when they are filled in. */
+
   labKeys: (keyof LabSoil)[];
-  /** True when a filled lab field means the engine ignores this answer. */
+
   overridden: boolean;
 }
 
@@ -54,7 +54,7 @@ function hasAll(lab: LabSoil, keys: (keyof LabSoil)[]): boolean {
   return keys.every((key) => num(lab[key]) !== null);
 }
 
-/** Current texture context: lab fractions win, then the ribbon answer, then the default. */
+
 function textureContext(state: WorkspaceState): {
   sand: number;
   silt: number;
@@ -83,10 +83,10 @@ function textureContext(state: WorkspaceState): {
   return { sand: 32, silt: 34, clay: 34 };
 }
 
-/**
- * The exact proxy the engine substitutes for one observation answer.
- * Returns null for "unknown" or for an observation that no longer exists.
- */
+
+
+
+
 export function observationProxy(
   key: string,
   option: string | null | undefined,
@@ -235,10 +235,10 @@ const OBSERVATION_LABEL: Record<string, string> = {
   colour: "colour",
 };
 
-/**
- * Plain-language fallback for a lab field that is left empty. It names the
- * observation proxy the engine will use, so the substitution is never hidden.
- */
+
+
+
+
 export function observationFallback(
   key: keyof LabSoil,
   state: WorkspaceState,

@@ -1,16 +1,3 @@
-/**
- * AgroRotate — Unified Biophysical Floor, Multi-Objective MCTS & Mass-Balance Optimization Engine
- *
- * Conforms strictly to:
- *  - NASA Space Apps Challenge "Field Shift: Adapting Farms with NASA Data"
- *  - AgroRotate AI Master Training & Production Blueprint v3.0
- *  - Three-Tier Resolution Hierarchy (MEAS alpha=1.00, EST alpha=0.75, EO_PRIOR alpha=0.50)
- *  - 32-dimensional continuous normalized agronomic vector [0.0, 1.0]
- *  - 4 Mandatory Pareto trajectories: existing_baseline, max_profit, water_conservation, soil_regeneration
- *
- * Operates uniformly in Web Worker (Wasm SIMD / CacheStorage) and Node.js Server API (POST /api/v1/optimize).
- */
-
 import {
   type AiInputIssue,
   type AiOutputContract,
@@ -41,7 +28,7 @@ export interface CropAgronomicProfile {
   farmgatePriceUsdPerTon: number;
   inputCostUsdPerHa: number;
   bareDaysAfterHarvest: number;
-  droughtToleranceIndex: number; // 0.0 to 1.0 (higher = more drought tolerant)
+  droughtToleranceIndex: number;
   rootDepthCm: number;
   pathogenRoles: {
     rootKnotNematode:
@@ -399,7 +386,7 @@ export const CROP_PROFILES_30: Record<string, CropAgronomicProfile> = {
     waterDemandMm: 520,
     nitrogenFixationKgHa: 170,
     somChangePercent: 0.09,
-    baseYieldTHa: 62.0, // green forage
+    baseYieldTHa: 62.0,
     farmgatePriceUsdPerTon: 45,
     inputCostUsdPerHa: 700,
     bareDaysAfterHarvest: 12,
@@ -411,7 +398,7 @@ export const CROP_PROFILES_30: Record<string, CropAgronomicProfile> = {
       alliumWhiteRot: "RESISTANT_NON_HOST",
       orobancheBroomrape: "TRAP_CROP",
       cystNematode: "RESISTANT_NON_HOST",
-      rhizoctoniaRootRot: "RESISTANT_NON_HOST", // suicidal germination stimulus
+      rhizoctoniaRootRot: "RESISTANT_NON_HOST",
     },
   },
   "alfalfa-lucerne": {
@@ -427,7 +414,7 @@ export const CROP_PROFILES_30: Record<string, CropAgronomicProfile> = {
     waterDemandMm: 780,
     nitrogenFixationKgHa: 220,
     somChangePercent: 0.12,
-    baseYieldTHa: 72.0, // green forage
+    baseYieldTHa: 72.0,
     farmgatePriceUsdPerTon: 55,
     inputCostUsdPerHa: 950,
     bareDaysAfterHarvest: 10,
@@ -455,7 +442,7 @@ export const CROP_PROFILES_30: Record<string, CropAgronomicProfile> = {
     waterDemandMm: 280,
     nitrogenFixationKgHa: 145,
     somChangePercent: 0.08,
-    baseYieldTHa: 4.5, // dry biomass equivalent
+    baseYieldTHa: 4.5,
     farmgatePriceUsdPerTon: 110,
     inputCostUsdPerHa: 380,
     bareDaysAfterHarvest: 8,
@@ -847,7 +834,7 @@ export const CROP_PROFILES_30: Record<string, CropAgronomicProfile> = {
     waterDemandMm: 300,
     nitrogenFixationKgHa: -50,
     somChangePercent: 0.065,
-    baseYieldTHa: 22.0, // green forage
+    baseYieldTHa: 22.0,
     farmgatePriceUsdPerTon: 40,
     inputCostUsdPerHa: 420,
     bareDaysAfterHarvest: 10,
@@ -875,7 +862,7 @@ export const CROP_PROFILES_30: Record<string, CropAgronomicProfile> = {
     waterDemandMm: 290,
     nitrogenFixationKgHa: 110,
     somChangePercent: 0.085,
-    baseYieldTHa: 18.0, // green manure
+    baseYieldTHa: 18.0,
     farmgatePriceUsdPerTon: 35,
     inputCostUsdPerHa: 340,
     bareDaysAfterHarvest: 7,
@@ -920,10 +907,10 @@ export const CROP_PROFILES_30: Record<string, CropAgronomicProfile> = {
   },
 };
 
-/**
- * Kc per crop, identical to the value used by the Python model contract
- * (c0 = physics_simulator CROP_SPECS[crop].kc).
- */
+
+
+
+
 const CROP_KC_BY_ID: Record<string, number> = {
   "bread-wheat": 1.15,
   "six-row-barley": 1.1,
@@ -957,7 +944,7 @@ const CROP_KC_BY_ID: Record<string, number> = {
   "bio-fumigant-mustard-cover": 1.0,
 };
 
-/** Registry position (0..29), identical to the Python crop index used for c6. */
+
 const CROP_MODEL_INDEX: Record<string, number> = Object.fromEntries(
   Object.keys(CROP_PROFILES_30).map((id, index) => [id, index]),
 );
@@ -972,7 +959,7 @@ function nowMs(): number {
     : Date.now();
 }
 
-/** True when a is at least as good on every objective and better on one. */
+
 function dominates(a: AiParetoSolution, b: AiParetoSolution): boolean {
   const pairs: Array<[number, number]> = [
     [a.projectedNetReturnScore, b.projectedNetReturnScore],
@@ -986,58 +973,58 @@ function dominates(a: AiParetoSolution, b: AiParetoSolution): boolean {
   );
 }
 
-/**
- * Converts the UI agronomic vector (src/engine/estimate.ts semantics) into the
- * 32 state dimensions of the 40-dim contract the neural surrogate was trained on
- * (the remaining 8 are the crop traits, written by writeCropTraits below).
- *
- * The UI vector normalises several dimensions differently (for display) and
- * re-orders the water/pathogen slots, so it must never be fed to the model raw.
- * See AI/pipeline/contract.py for the authoritative contract.
- */
+
+
+
+
+
+
+
+
+
 export function agronomicVectorToModelContract(v32: number[]): Float32Array {
   const v = (i: number) => (Number.isFinite(v32[i]) ? v32[i] : 0);
   const out = new Float32Array(32);
   out[0] = unit(v(0));
   out[1] = unit(v(1));
   out[2] = unit(v(2));
-  out[3] = unit(v(3) * 0.6); // UI stores coarse/0.60
-  out[4] = unit(v(4)); // same (bd - 0.85)/1.10
-  out[5] = unit(v(5) * 0.6); // UI stores field capacity %/60
-  out[6] = unit(v(6) * 0.4); // UI stores wilting point %/40
-  out[7] = unit(v(7) * 0.8333); // UI stores AWC mm/m /250
-  out[8] = unit(v(8) * 1.6667); // UI stores Ksat/250
+  out[3] = unit(v(3) * 0.6);
+  out[4] = unit(v(4));
+  out[5] = unit(v(5) * 0.6);
+  out[6] = unit(v(6) * 0.4);
+  out[7] = unit(v(7) * 0.8333);
+  out[8] = unit(v(8) * 1.6667);
   out[9] = unit(v(9));
-  out[10] = 0.6; // water-table index is not present in the UI vector
-  out[11] = unit(v(11) * 1.6667); // UI stores soil root depth /250; overwritten by the crop trait below (what the model was trained on)
+  out[10] = 0.6;
+  out[11] = unit(v(11) * 1.6667);
   out[12] = unit(v(12));
   out[13] = unit(v(13));
-  out[14] = unit(v(14) * 2.5); // UI stores ECe/50, contract is ECe/20
-  out[15] = unit(v(15) * 2.1667); // UI stores ESP/65, contract is ESP/30
-  out[16] = unit(v(16) * 0.65); // UI stores CaCO3 %/65, contract is a fraction
-  out[17] = unit(v(17) * 1.5); // UI stores SOM/12, contract is SOM/8
-  out[18] = unit(v(18) * 1.0833); // UI stores CEC/65, contract is CEC/60
-  out[19] = unit(v(19) * 0.75); // available-N proxy for the nitrogen-stock slot
-  out[20] = 0.35; // contract constant (no P measurement in the UI)
-  out[21] = 0.5; // contract constant (no K measurement in the UI)
+  out[14] = unit(v(14) * 2.5);
+  out[15] = unit(v(15) * 2.1667);
+  out[16] = unit(v(16) * 0.65);
+  out[17] = unit(v(17) * 1.5);
+  out[18] = unit(v(18) * 1.0833);
+  out[19] = unit(v(19) * 0.75);
+  out[20] = 0.35;
+  out[21] = 0.5;
   for (let i = 22; i <= 25; i += 1) out[i] = unit(v(i));
-  out[26] = 0.02; // cyst nematode: not carried by the UI vector
-  out[27] = 0.02; // rhizoctonia: not carried by the UI vector
-  out[28] = unit(v(26) * 1.8); // UI stores quota/18000, contract is /10000
-  out[29] = unit(v(27) * 3.0); // UI stores ECw/15, contract is /5
-  out[30] = unit(v(29)); // UI carries annual ETo at /29
-  out[31] = unit(v(31) * 2.25); // UI stores slope/45, contract is /20
+  out[26] = 0.02;
+  out[27] = 0.02;
+  out[28] = unit(v(26) * 1.8);
+  out[29] = unit(v(27) * 3.0);
+  out[30] = unit(v(29));
+  out[31] = unit(v(31) * 2.25);
   return out;
 }
 
-/** Writes c0..c7 exactly as the Python simulator does. */
+
 function writeCropTraits(
   vec: Float32Array,
   crop: CropAgronomicProfile,
   isWarm: boolean,
 ): void {
-  // f11 is the CROP root depth in the training contract (11 values, one per crop),
-  // not the soil profile's effective rooting depth.
+
+
   vec[11] = Math.max(0, Math.min(1, crop.rootDepthCm / 150));
   vec[32] = CROP_KC_BY_ID[crop.id] ?? 1.1;
   vec[33] = crop.salinityThresholdDsm / 10.0;
@@ -1060,17 +1047,17 @@ export interface CropModelInput {
   weights?: SurrogateWeights | null;
 }
 
-/**
- * Trained yield-gap prior (%) for one crop at one site, the same head the
- * optimizer reads. Returns null when the model carries no training row for the
- * crop, so the caller can fall back to the physics floor instead of inventing
- * a penalty.
- */
+
+
+
+
+
+
 export function modelYieldLossPct(input: CropModelInput): number | null {
   const fVec = agronomicVectorToModelContract(input.continuousVector32);
   fVec[14] = unit(input.eceDsm / 20);
   fVec[17] = unit(input.somPct / 8);
-  fVec[19] = unit(45 / 200); // 45 kg/ha working nitrogen stock, as in the optimizer
+  fVec[19] = unit(45 / 200);
   fVec[28] = unit(input.waterQuotaM3Ha / 10000);
   fVec[29] = unit(input.waterEcwDsm / 5);
   writeCropTraits(fVec, input.crop, input.isWarm);
@@ -1086,9 +1073,9 @@ export function modelYieldLossPct(input: CropModelInput): number | null {
   );
 }
 
-/**
- * Checks whether a single crop meets the hard biophysical floor for the given field environment.
- */
+
+
+
 export function checkCropBiophysicalFloor(
   crop: CropAgronomicProfile,
   continuousVector32: number[],
@@ -1097,7 +1084,7 @@ export function checkCropBiophysicalFloor(
   isRainfed: boolean,
   seasonIndex: number,
 ): { met: boolean; yieldReductionPct: number; reason: string } {
-  // 1. Season temperature match:
+
   const isWarmSeason = seasonIndex % 2 === 0;
   if (isWarmSeason && crop.season !== "warm") {
     return {
@@ -1116,7 +1103,7 @@ export function checkCropBiophysicalFloor(
     };
   }
 
-  // 2. Salinity Maas-Hoffman threshold check:
+
   let yieldReduct = 0;
   if (currentEceDsm > crop.salinityThresholdDsm) {
     const excess = currentEceDsm - crop.salinityThresholdDsm;
@@ -1133,8 +1120,8 @@ export function checkCropBiophysicalFloor(
     }
   }
 
-  // 3. Soil pH check:
-  // continuousVector32[13] is ph_norm: raw = 3.5 + norm * 7.0
+
+
   const phRaw = 3.5 + (continuousVector32[13] ?? 0.5) * 7.0;
   if (phRaw < crop.minPh - 0.4) {
     return {
@@ -1151,7 +1138,7 @@ export function checkCropBiophysicalFloor(
     };
   }
 
-  // 4. Rainfed water constraint:
+
   if (
     isRainfed &&
     crop.waterDemandMm > 550 &&
@@ -1164,7 +1151,7 @@ export function checkCropBiophysicalFloor(
     };
   }
 
-  // 5. Botanical family repeat penalty (Poaceae, Solanaceae, Fabaceae):
+
   if (
     prevCrop &&
     prevCrop.family === crop.family &&
@@ -1194,7 +1181,7 @@ export interface SurrogateWeights {
   w3: number[][];
   b3: number[];
   targets?: string[];
-  /** Which output heads were actually trained; heads outside this list are unused. */
+
   trained_targets?: string[];
   metadata?: {
     trained_on?: string;
@@ -1213,18 +1200,18 @@ export interface SurrogateWeights {
   };
 }
 
-/**
- * Converts the model's yield-gap output into the app's "reduction from base
- * yield" scale.
- *
- * The real model predicts `100 * (1 - yield / attainable)`, where attainable is
- * the crop's best-quartile real yield. That level is a global management
- * artefact, so subtracting it from the app's local potential would mark every
- * crop as a loss-making crop. The transferable signal is the *relative* gap, so
- * each crop is anchored at its own best-quartile gap (`reference_gap_pct`):
- * a site at the reference level gets 0 % reduction, a site 20 points worse gets
- * a proportional penalty, and the physical floor still caps the result.
- */
+
+
+
+
+
+
+
+
+
+
+
+
 function toYieldReductionPercent(
   crop: CropAgronomicProfile,
   modelYieldGapPct: number,
@@ -1233,7 +1220,7 @@ function toYieldReductionPercent(
   const referenceTable = weights?.metadata?.reference_gap_pct;
   if (referenceTable) {
     const reference = referenceTable[crop.id];
-    // No real training rows for this crop: say so instead of inventing a penalty.
+
     if (reference === undefined) return null;
     const relative =
       (1 - modelYieldGapPct / 100) / Math.max(0.05, 1 - reference / 100);
@@ -1247,10 +1234,10 @@ function toYieldReductionPercent(
   return modelYieldGapPct;
 }
 
-/**
- * Ultra-fast zero-dependency neural forward inference for SingleStepSurrogate
- * (40 features -> 64 -> 32 -> 4). Executes in 0.01ms on any JS engine.
- */
+
+
+
+
 export function runNeuralSurrogateInference(
   vector40: Float32Array | number[],
   weights?: SurrogateWeights | null,
@@ -1268,7 +1255,7 @@ export function runNeuralSurrogateInference(
   const w3 = weights.w3;
   const b3 = weights.b3;
 
-  // Layer 1: Linear(40, 64) + ReLU
+
   const h1 = new Float32Array(64);
   for (let i = 0; i < 64; i++) {
     let sum = b1[i];
@@ -1277,7 +1264,7 @@ export function runNeuralSurrogateInference(
     h1[i] = sum > 0 ? sum : 0;
   }
 
-  // Layer 2: Linear(64, 32) + ReLU
+
   const h2 = new Float32Array(32);
   for (let i = 0; i < 32; i++) {
     let sum = b2[i];
@@ -1286,7 +1273,7 @@ export function runNeuralSurrogateInference(
     h2[i] = sum > 0 ? sum : 0;
   }
 
-  // Layer 3: Linear(32, 4)
+
   const out = new Float32Array(4);
   for (let i = 0; i < 4; i++) {
     let sum = b3[i];
@@ -1319,10 +1306,10 @@ export interface TrajectoryContextFactors {
   irrigationEff?: number;
 }
 
-/**
- * Evaluates a complete 6-season sequence of crops, computing mass balances,
- * economic returns, water savings, and soil health scores.
- */
+
+
+
+
 export function evaluateCropTrajectory(
   crops: CropAgronomicProfile[],
   continuousVector32: number[],
@@ -1347,7 +1334,7 @@ export function evaluateCropTrajectory(
 } {
   let ece = initialEceDsm;
   let som = initialSomPct;
-  let nitrogenStock = 45; // baseline kg/ha
+  let nitrogenStock = 45;
 
   let totalNetUsd = 0;
   let totalWaterDemandMm = 0;
@@ -1356,7 +1343,7 @@ export function evaluateCropTrajectory(
   const slots: AiParetoSlot[] = [];
   const vulnerabilities: AiVulnerabilityHotspot[] = [];
 
-  // Active biophysical context factors:
+
   const caco3 = contextFactors?.caco3Pct ?? 6.0;
   const esp = contextFactors?.espPct ?? 6.0;
   const heatDays = contextFactors?.heatDays35 ?? 30;
@@ -1386,7 +1373,7 @@ export function evaluateCropTrajectory(
       sIdx,
     );
 
-    // 1. Dynamic continuous neural feature vector (40 dimensions)
+
     const fVec = agronomicVectorToModelContract(continuousVector32);
     fVec[14] = Math.max(0, Math.min(1.0, ece / 20.0));
     fVec[17] = Math.max(0, Math.min(1.0, som / 8.0));
@@ -1395,8 +1382,8 @@ export function evaluateCropTrajectory(
     fVec[29] = Math.max(0, Math.min(1.0, waterEcwDsm / 5.0));
     writeCropTraits(fVec, crop, isWarm);
 
-    // Active biophysical modifiers:
-    // CaCO3 Active Lime Crusting & Chlorosis:
+
+
     const isSmallSeeded = ["sesame", "bulb-onion", "flax-linseed"].includes(crop.id);
     const isLimeSensitive = ["potato", "sweet-potato"].includes(crop.id) || isSmallSeeded;
     if (caco3 > 12 && isLimeSensitive) {
@@ -1411,7 +1398,7 @@ export function evaluateCropTrajectory(
       }
     }
 
-    // ESP Sodicity & Hypoxia:
+
     const isSodicTolerant = ["six-row-barley", "sugar-beet", "berseem-clover-multi-cut"].includes(crop.id);
     if (esp > 12 && !isSodicTolerant) {
       const espPenalty = Math.min(30, Math.round((esp - 12) * 1.5));
@@ -1425,7 +1412,7 @@ export function evaluateCropTrajectory(
       }
     }
 
-    // Late-season Thermal Stress (>35C adjusted for elevation):
+
     const isHeatSensitiveCool = crop.season === "cool" && ["potato", "faba-bean", "bulb-onion", "chickpea"].includes(crop.id);
     if (effectiveHeatDays > 25 && isHeatSensitiveCool) {
       const heatPenalty = Math.min(25, Math.round((effectiveHeatDays - 25) * 0.7));
@@ -1440,9 +1427,9 @@ export function evaluateCropTrajectory(
     }
 
     const neuralPred = runNeuralSurrogateInference(fVec, surrogateWeights);
-    // Only apply heads the model was actually trained on. The legacy physics
-    // surrogate had no `trained_targets`, so it keeps its full 4-head behaviour;
-    // the real-data model predicts yield only and must not move soil state.
+
+
+
     const trainedTargets = surrogateWeights?.trained_targets;
     const yieldHeadTrained =
       !trainedTargets ||
@@ -1459,27 +1446,27 @@ export function evaluateCropTrajectory(
             surrogateWeights,
           )
         : null;
-    // AI-First decision foundation with biophysical discrepancy safety guardrails:
+
     let effectiveReduct: number;
     if (neuralYieldReduct !== null) {
       const discrepancy = Math.abs(neuralYieldReduct - floor.yieldReductionPct);
       if (discrepancy <= 25.0) {
-        // AI prediction is the primary driver when within biophysical plausibility
+
         effectiveReduct = Math.round(neuralYieldReduct);
       } else {
-        // Significant divergence (> 25% discrepancy): physical ground truth takes over
+
         effectiveReduct = Math.round(floor.yieldReductionPct);
       }
     } else {
       effectiveReduct = floor.yieldReductionPct;
     }
 
-    // Dynamic gross water demand conditioned on irrigation method efficiency:
+
     const effDemandMm = crop.waterDemandMm * (isRainfed ? 0.75 : 1.0);
     const grossDemandMm = isRainfed ? effDemandMm : effDemandMm / irrigationEff;
     totalWaterDemandMm += grossDemandMm;
 
-    // Sprinkler overhead wetting disease hazard:
+
     if (waterSystem === "sprinkler" && ["potato", "processing-tomato", "bulb-onion"].includes(crop.id)) {
       vulnerabilities.push({
         seasonIndex: sIdx,
@@ -1488,7 +1475,7 @@ export function evaluateCropTrajectory(
       });
     }
 
-    // Slope tuber erosion hazard:
+
     if (slopePct > 8 && ["potato", "sweet-potato", "sugar-beet"].includes(crop.id)) {
       vulnerabilities.push({
         seasonIndex: sIdx,
@@ -1497,7 +1484,7 @@ export function evaluateCropTrajectory(
       });
     }
 
-    // SARw infiltration permeability hazard:
+
     if (waterEcwDsm < 0.15 * sarw + 0.1 && sarw > 6) {
       vulnerabilities.push({
         seasonIndex: sIdx,
@@ -1506,27 +1493,27 @@ export function evaluateCropTrajectory(
       });
     }
 
-    // Soil and Irrigation Water NPK input cost adjustment:
+
     let effectiveInputCost = crop.inputCostUsdPerHa;
     const waterNCreditUsd = !isRainfed && waterNo3n > 5 ? Math.min(65, Math.round((waterNo3n - 5) * 1.5)) : 0;
     if (crop.nitrogenFixationKgHa <= 0) {
       const nCredit = no3n > 18 ? Math.min(120, Math.round((no3n - 18) * 4)) : -Math.min(60, Math.round((18 - no3n) * 3));
       effectiveInputCost -= (nCredit + waterNCreditUsd);
     } else {
-      if (no3n < 15) effectiveInputCost -= 35; // Bio-fixation economic premium
+      if (no3n < 15) effectiveInputCost -= 35;
     }
-    if (olsenP < 8) effectiveInputCost += 25; // Starter P addition
-    if (olsenP > 35) effectiveInputCost -= 15; // Residual P discount
+    if (olsenP < 8) effectiveInputCost += 25;
+    if (olsenP > 35) effectiveInputCost -= 15;
 
-    // Maas-Hoffman yield actualization blended with neural prediction:
+
     const yieldFrac = Math.max(0.08, (100 - effectiveReduct) / 100);
     const actualYield = crop.baseYieldTHa * yieldFrac;
     const revenue = actualYield * crop.farmgatePriceUsdPerTon;
-    const pumpingCost = isRainfed ? 0 : grossDemandMm * 10 * 0.04; // $0.04 / m³
+    const pumpingCost = isRainfed ? 0 : grossDemandMm * 10 * 0.04;
     const netMargin = revenue - effectiveInputCost - pumpingCost;
     totalNetUsd += netMargin;
 
-    // Soil state transitions (Physics + Neural delta + Winter rainfall leaching):
+
     if (!isRainfed) {
       const addedSalt = (waterEcwDsm * effDemandMm) / 450;
       const leachingFraction = crop.waterDemandMm > 500 ? 0.15 : 0.05;
@@ -1540,13 +1527,13 @@ export function evaluateCropTrajectory(
         Math.min(30.0, ece + 0.6 * deltaPhysical + 0.4 * deltaNeural - ece * rainLeach),
       );
     } else {
-      ece = Math.max(0.2, ece * 0.92); // rainfall leaching
+      ece = Math.max(0.2, ece * 0.92);
     }
 
-    // Nitrogen balance:
+
     nitrogenStock += crop.nitrogenFixationKgHa;
 
-    // SOM dynamic (only blended when the model was trained on delta_som):
+
     const neuralSom = neuralPred && somHeadTrained ? neuralPred.deltaSomPct : 0;
     som = Math.max(
       0.2,
@@ -1556,10 +1543,10 @@ export function evaluateCropTrajectory(
           : crop.somChangePercent),
     );
 
-    // Bare soil days:
+
     bareDaysTotal += crop.bareDaysAfterHarvest;
 
-    // Vulnerability hotspot checks:
+
     if (ece > 16.0) {
       vulnerabilities.push({
         seasonIndex: sIdx,
@@ -1581,7 +1568,7 @@ export function evaluateCropTrajectory(
       });
     }
 
-    // Causal Rationale:
+
     let rationale = "";
     if (crop.nitrogenFixationKgHa > 0) {
       rationale += `Fixes +${crop.nitrogenFixationKgHa} kg N/ha; `;
@@ -1623,21 +1610,21 @@ export function evaluateCropTrajectory(
     prevCrop = crop;
   }
 
-  // Normalized Multi-Objective Scores (0 to 100):
-  // Profit score: baseline $2,500/ha total across 3 years is 50, $8,000/ha is 100
+
+
   const netReturnScore = Math.max(
     10,
     Math.min(99, Math.round((totalNetUsd / 7500) * 100)),
   );
 
-  // Water saving score: lower water demand = higher saving score
+
   const totalWaterMm = totalWaterDemandMm;
   const waterSavingScore = Math.max(
     10,
     Math.min(99, Math.round(100 - (totalWaterMm / 4800) * 100)),
   );
 
-  // Soil health score: SOM increase + N balance + bare days minimization + slope protection
+
   const somScore = Math.min(40, (som - initialSomPct) * 150);
   const nScore = Math.min(30, (nitrogenStock / 150) * 30);
   const bareScore = Math.max(0, 30 - (bareDaysTotal / 180) * 30);
@@ -1647,9 +1634,9 @@ export function evaluateCropTrajectory(
     Math.min(98, Math.round(35 + somScore + nScore + bareScore + slopeProtectionBonus)),
   );
 
-  // Risk aversion score (0 to 100):
-  // Penalize vulnerability hotspots, extreme salinity drift, and pathogen host repetitions.
-  // Reward proven drought tolerance, biofumigant / trap crop disease interruptions, and potassium resilience.
+
+
+
   const vulnPenalty = vulnerabilities.length * 12;
   const salinityStress = Math.max(0, (ece - 2.5) * 6);
   const avgDroughtTol =
@@ -1711,21 +1698,21 @@ function createSeededPrng(seedStr: string): () => number {
   };
 }
 
-/**
- * Multi-Objective Monte Carlo Tree Search (MCTS) Engine.
- *
- * Runs a fixed budget of 900 UCB1 rollouts over the 6-season space. That is a
- * budgeted approximation of the search space, not an enumeration: the ordered
- * upper bound for the full 30-crop pool is far larger than the budget, but only
- * the unique rotations the budget actually evaluates are scored. Every run
- * reports the budget, the executed rollouts and the evaluated count separately
- * in `search`.
- *
- * The three non-baseline solutions are the best trajectories found for net
- * return, water saving and soil health among those evaluated. They are not a
- * proof of global Pareto optimality; `paretoAssessment` states whether they are
- * mutually non-dominated within the evaluated set.
- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export function runBatchedOptimization(
   workspace: WorkspaceState,
   options?: OptimizationOptions,
@@ -1733,10 +1720,10 @@ export function runBatchedOptimization(
   const startedAtMs = nowMs();
   const inputIssues: AiInputIssue[] = [];
 
-  /**
-   * Reads one UI field. A valid zero is kept as zero. Invalid text is recorded
-   * and the search is blocked below, so it cannot reach the evaluation.
-   */
+
+
+
+
   const readInput = (
     raw: unknown,
     spec: NumericInputSpec,
@@ -1756,7 +1743,7 @@ export function runBatchedOptimization(
   const normVector = workspaceToAgronomicVector(workspace);
   const continuousVector32 = normVector.continuousVector32;
 
-  // Extract environmental baselines:
+
   const isRainfed = workspace.water.regime === "rainfed";
   const waterQuota = readInput(
     workspace.water.quotaMm,
@@ -1765,11 +1752,11 @@ export function runBatchedOptimization(
   );
   const waterEcw = readInput(workspace.water.ecwDsm, INPUT_SPECS.waterEcwDsm, 1.1);
 
-  // Raw soil parameters:
+
   const initialEce = finiteOr(normVector.soilChemical.eceDsm, 2.1);
   const initialSom = finiteOr(normVector.soilChemical.somPercent, 1.2);
 
-  // Active biophysical context factors:
+
   const lab = workspace.soil?.lab;
   const espPct = readInput(lab?.espPct, INPUT_SPECS.espPct, 6.0);
   const caco3Pct = readInput(lab?.caco3Pct, INPUT_SPECS.caco3Pct, 6.0);
@@ -1812,18 +1799,18 @@ export function runBatchedOptimization(
     irrigationEff,
   };
 
-  // A crop the farmer excluded is not a candidate anywhere in this search: the
-  // planner honours the exclusion, so the optimizer, its baseline and its
-  // candidate pools must honour it too.
+
+
+
   const excludedCrops = workspace.priorities?.excluded ?? {};
 
-  // 1. INFER OR USE EXISTING BASELINE:
+
   const baselineSlots = inferRegionalBaselineRotation(workspace);
   const baselineCrops = baselineSlots.map((s) => {
     const crop = CROP_PROFILES_30[s.cropId] ?? CROP_PROFILES_30["bread-wheat"];
     if (!excludedCrops[crop.id]) return crop;
-    // The regional default can contain an excluded crop; swap it for an allowed
-    // crop of the same season so the exclusion holds in the baseline too.
+
+
     return (
       Object.values(CROP_PROFILES_30).find(
         (candidate) =>
@@ -1845,7 +1832,7 @@ export function runBatchedOptimization(
     contextFactors,
   );
 
-  // Pool of candidate crops partitioned by season:
+
   const warmCandidates = Object.values(CROP_PROFILES_30).filter(
     (c) => c.season === "warm" && !excludedCrops[c.id],
   );
@@ -1853,11 +1840,11 @@ export function runBatchedOptimization(
     (c) => c.season === "cool" && !excludedCrops[c.id],
   );
 
-  // Extract user multi-objective priority weights (0 to 5 per slider/wheel):
-  // 1. Yield / Profit: maximize financial returns ($/ha)
-  // 2. Water: water conservation & drought resilience (mm saving)
-  // 3. Soil: soil regeneration, organic matter (SOM) & nitrogen building
-  // 4. Risk: risk aversion, salinity protection & pathogen/pest break
+
+
+
+
+
   const farmerWeights = workspace.priorities?.weights ?? {
     yield: 3,
     water: 3,
@@ -1868,8 +1855,8 @@ export function runBatchedOptimization(
   const rawWater = readInput(farmerWeights.water, INPUT_SPECS.priorityWeight, 3);
   const rawSoil = readInput(farmerWeights.soil, INPUT_SPECS.priorityWeight, 3);
   const rawRisk = readInput(farmerWeights.risk, INPUT_SPECS.priorityWeight, 3);
-  // All four sliders at 0 is a deliberate "no preference" setting: score with
-  // equal weights instead of dividing by zero. Missing weights already became 3.
+
+
   const weightsAreZero = rawYield + rawWater + rawSoil + rawRisk === 0;
   const sumWeights = weightsAreZero ? 4 : rawYield + rawWater + rawSoil + rawRisk;
 
@@ -1878,13 +1865,13 @@ export function runBatchedOptimization(
   const wSoil = weightsAreZero ? 0.25 : rawSoil / sumWeights;
   const wRisk = weightsAreZero ? 0.25 : rawRisk / sumWeights;
 
-  // An invalid text value must never reach the evaluation. Stop here and report
-  // the exact field; the UI renders the issues instead of a recommendation.
+
+
   if (inputIssues.length > 0) {
     return blockedContract(workspace, inputIssues, nowMs() - startedAtMs);
   }
 
-  // Deterministic PRNG seeded from field context, priorities, and management inputs:
+
   const seedKey = [
     workspace.field.name || "",
     (workspace.field.centroidLat ?? 0).toFixed(4),
@@ -1915,7 +1902,7 @@ export function runBatchedOptimization(
   const theoreticalSearchSpace =
     warmCandidates.length ** 3 * coolCandidates.length ** 3;
 
-  // Monte Carlo evaluation pool:
+
   let bestProfitScore = -1;
   let bestProfitEval = baselineEval;
 
@@ -1925,11 +1912,11 @@ export function runBatchedOptimization(
   let bestSoilScore = -1;
   let bestSoilEval = baselineEval;
 
-  // ============================================================================
-  // BATCHED MONTE CARLO TREE SEARCH (MCTS) WITH UCB1 SELECTION ACROSS 30 CROPS
-  // ============================================================================
-  // Solves the previous Nested Loops Bug (which broke at 650 on grain-maize).
-  // Explores the full combinatorial space of warm and cool season crops with UCB1 exploration.
+
+
+
+
+
 
   interface MCTSNode {
     crop: CropAgronomicProfile | null;
@@ -1955,12 +1942,12 @@ export function runBatchedOptimization(
       const isWarm = depth % 2 === 0;
       const pool = isWarm ? warmCandidates : coolCandidates;
       untried = pool.filter((c) => {
-        // Enforce rotational discipline: avoid repeating the same botanical family back-to-back (unless cover)
+
         if (crop && !c.id.includes("cover") && c.family === crop.family)
           return false;
         return true;
       });
-      // Deterministic / pseudorandom shuffle
+
       for (let i = untried.length - 1; i > 0; i--) {
         const j = Math.floor(rng() * (i + 1));
         const temp = untried[i];
@@ -1990,10 +1977,10 @@ export function runBatchedOptimization(
   let candidatesGenerated = 0;
   let duplicateRolloutsSkipped = 0;
 
-  // Track diverse candidate rotations evaluated:
+
   const evaluatedRotations = new Set<string>();
 
-  // Evaluate baseline first:
+
   evaluatedRotations.add(baselineCrops.map((c) => c.id).join(","));
 
   for (let iter = 0; iter < MCTS_SIMULATION_BUDGET; iter++) {
@@ -2001,7 +1988,7 @@ export function runBatchedOptimization(
     let node = rootNode;
     const currentPath: CropAgronomicProfile[] = [];
 
-    // 1. SELECT using UCB1 weighted by farmer priority choices:
+
     while (
       node.untriedCrops.length === 0 &&
       node.children.size > 0 &&
@@ -2027,7 +2014,7 @@ export function runBatchedOptimization(
       if (node.crop) currentPath.push(node.crop);
     }
 
-    // 2. EXPAND:
+
     if (node.untriedCrops.length > 0 && node.depth < 6) {
       const nextCrop = node.untriedCrops.pop()!;
       const childNode = createMCTSNode(nextCrop, node.depth + 1, node);
@@ -2036,7 +2023,7 @@ export function runBatchedOptimization(
       currentPath.push(nextCrop);
     }
 
-    // 3. ROLLOUT / SIMULATE remaining seasons to reach depth 6:
+
     while (currentPath.length < 6) {
       const sIdx = currentPath.length;
       const isWarm = sIdx % 2 === 0;
@@ -2052,7 +2039,7 @@ export function runBatchedOptimization(
       currentPath.push(pick);
     }
 
-    // 4. EVALUATE COMPLETE 6-SEASON TRAJECTORY:
+
     candidatesGenerated += 1;
     const key = currentPath.map((c) => c.id).join(",");
     if (!evaluatedRotations.has(key)) {
@@ -2070,33 +2057,33 @@ export function runBatchedOptimization(
         contextFactors,
       );
 
-      // Multi-objective composite utility tailored to the farmer's 4 priority wheels (0-5):
+
       const compositeScore =
         wYield * res.netReturnScore +
         wWater * res.waterSavingScore +
         wSoil * res.soilHealthScore +
         wRisk * res.riskScore;
 
-      // Max Profit objective: respects high risk aversion when selected (rawRisk >= 3.5)
+
       const profitRiskOk = rawRisk < 3.5 || res.vulnerabilities.length <= 1;
       if (res.netReturnScore > bestProfitScore && profitRiskOk) {
         bestProfitScore = res.netReturnScore;
         bestProfitEval = res;
       }
 
-      // Water Conservation objective:
+
       if (res.waterSavingScore > bestWaterScore) {
         bestWaterScore = res.waterSavingScore;
         bestWaterEval = res;
       }
 
-      // Soil Regeneration objective:
+
       if (res.soilHealthScore > bestSoilScore) {
         bestSoilScore = res.soilHealthScore;
         bestSoilEval = res;
       }
 
-      // 5. BACKPROPAGATE:
+
       let currBack: MCTSNode | null = node;
       while (currBack) {
         currBack.visits += 1;
@@ -2112,7 +2099,7 @@ export function runBatchedOptimization(
     }
   }
 
-  // Construct the 4 Mandatory Pareto Solutions:
+
   const solutions: AiParetoSolution[] = [
     {
       id: "existing_baseline",
@@ -2225,7 +2212,7 @@ export function runBatchedOptimization(
     },
   ];
 
-  // Dynamic uncertainty calculation from vector data provenance & conformal calibration
+
   const confScore = normVector.overallConfidenceScore ?? 0.8;
   const basisTier: "MEAS" | "EST" | "EO_PRIOR" | "HYBRID" =
     confScore >= 0.9
@@ -2236,24 +2223,24 @@ export function runBatchedOptimization(
           ? "EO_PRIOR"
           : "HYBRID";
 
-  // Conformal half-widths (dS/m) from authentic ISRIC empirical calibration
+
   const cal = options?.conformalCalibration;
   const eceHalfWidth =
     cal?.conformal_half_widths?.[basisTier] ??
     (basisTier === "MEAS" ? 0.868 : basisTier === "EST" ? 1.426 : 2.046);
-  // Full scale ECe in agronomic vector is 20.0 dS/m
+
   const dynUncertainty = Number(
     Math.max(3.2, Math.min(18.5, (eceHalfWidth / 20.0) * 100.0)).toFixed(1),
   );
   const baseConf = Math.round(100 - dynUncertainty);
 
-  // Calibrate confidence bands for each trajectory
+
   solutions[0].confidenceBandPercent = Math.max(72, Math.min(98, baseConf - 2));
   solutions[1].confidenceBandPercent = Math.max(72, Math.min(98, baseConf));
   solutions[2].confidenceBandPercent = Math.max(72, Math.min(98, baseConf + 2));
   solutions[3].confidenceBandPercent = Math.max(72, Math.min(98, baseConf + 1));
 
-  // Mass-Balance Causal Attribution Ledger (6 seasons) covering all 6 pathogens:
+
   const causalLedger = bestSoilEval.slots.map((slot, idx) => ({
     season: idx + 1,
     selectedCropId: slot.cropId,
@@ -2306,7 +2293,7 @@ export function runBatchedOptimization(
       budgetSimulations: MCTS_SIMULATION_BUDGET,
       simulationsExecuted,
       candidatesGenerated,
-      // The baseline sequence is scored separately and reported as its own pathway.
+
       uniqueRotationsEvaluated: Math.max(0, evaluatedRotations.size - 1),
       duplicateRolloutsSkipped,
       theoreticalSearchSpace,
@@ -2332,7 +2319,7 @@ export function runBatchedOptimization(
   };
 }
 
-/** Returned when an input is not a valid number: no search, no recommendation. */
+
 function blockedContract(
   workspace: WorkspaceState,
   inputIssues: AiInputIssue[],

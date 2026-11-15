@@ -1,14 +1,4 @@
 #!/usr/bin/env node
-/**
- * Differential audit: does changing one input change the decision?
- *
- * It calls the same optimizeWorkspace the /api/v1/optimize endpoint uses, with a
- * fixed baseline field, and re-runs it once per input with a realistic low/high
- * pair. If the four Pareto solutions are identical, that input does not reach the
- * decision and the UI must not say it does.
- *
- * Run: node scripts/audit-decision-sensitivity.mjs
- */
 import { optimizeWorkspace } from "../server/ai/optimizer.mjs";
 
 const base = () => ({
@@ -55,8 +45,8 @@ function signature(ws) {
   );
 }
 
-// The search uses Math.random, so every comparison is repeated with the same
-// seeds on both variants; otherwise every run would look like a change.
+
+
 const SEEDS = [1, 2, 3, 4, 5];
 function mulberry32(a) {
   return function random() {
@@ -111,7 +101,7 @@ const CASES = [
   ["priorities.excluded", (w) => { w.priorities.excluded = { "grain-maize": "user exclusion" }; }, null, null],
 ];
 
-// Longer, independent scenarios that must also matter.
+
 function compare(label, mutate) {
   const ws = base();
   mutate(ws);

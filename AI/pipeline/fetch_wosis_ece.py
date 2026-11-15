@@ -54,7 +54,7 @@ def build() -> dict:
         raw = pd.read_csv(io.BytesIO(zf.read(name)), usecols=["X", "Y", "profile_id", "upper_depth", "lower_depth", "value_avg"])
     n_raw = len(raw)
     raw = raw.dropna(subset=["value_avg"])
-    raw = raw[raw["value_avg"].between(0, 200)]  # drop unit errors / absurd ECe
+    raw = raw[raw["value_avg"].between(0, 200)]
     n_invalid = n_raw - len(raw)
 
     top = raw[(raw.upper_depth < 30) & (raw.lower_depth > 0)].copy()

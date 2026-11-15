@@ -1,8 +1,4 @@
 #!/usr/bin/env node
-/**
- * Reports the first-load offline payload written by the production build.
- * Run after `npm run build`: node scripts/audit-offline-cache.mjs
- */
 import fs from "node:fs";
 import path from "node:path";
 

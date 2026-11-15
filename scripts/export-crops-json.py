@@ -6,7 +6,7 @@ Run after regenerating the evidence dataset:
 """
 import io, json, os, re
 
-base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # project root
+base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 src = os.path.join(base, "src", "data", "evidence", "crops.generated.ts")
 dst = os.path.join(base, "server", "ai", "crops.json")
 

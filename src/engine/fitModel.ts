@@ -1,11 +1,3 @@
-/**
- * The score behind "Best 3": a hybrid fit, not a hand-tuned vibe.
- *
- * The yield term comes from the trained surrogate's yield-gap head (22 crops)
- * and the biophysical floor of the engine — the module keeps whichever is more
- * conservative, exactly like the optimizer. When the weights file cannot be
- * loaded the physics floor alone answers, and the UI says which one ran.
- */
 import { workspaceToAgronomicVector } from "./estimate";
 import { INPUT_SPECS, finiteOr, resolveNumericInput } from "./numericInput.ts";
 import {
@@ -36,7 +28,7 @@ function parseWeights(text: string): SurrogateWeights | null {
   }
 }
 
-/** Read the last model this browser cached, for offline use after a first visit. */
+
 async function readCachedWeights(): Promise<SurrogateWeights | null> {
   if (typeof caches === "undefined") return null;
   try {
@@ -44,22 +36,22 @@ async function readCachedWeights(): Promise<SurrogateWeights | null> {
     const cached = await cache.match(WEIGHTS_URL);
     if (cached?.ok) return parseWeights(await cached.text());
   } catch {
-    /* CacheStorage may be blocked in private windows. */
+
   }
   try {
     const response = await fetch(WEIGHTS_URL, { cache: "force-cache" });
     if (response.ok) return parseWeights(await response.text());
   } catch {
-    /* Offline and no HTTP cache. */
+
   }
   return null;
 }
 
-/**
- * One shared load: network first so a freshly trained model takes effect, then
- * the service-worker / HTTP cache so the AI still runs with no connection.
- * The parsed weights are kept in memory for the rest of the session.
- */
+
+
+
+
+
 export function loadSurrogateWeights(): Promise<SurrogateWeights | null> {
   if (weightsLoad) return weightsLoad;
   weightsLoad = (async () => {
@@ -78,7 +70,7 @@ export function loadSurrogateWeights(): Promise<SurrogateWeights | null> {
         }
       }
     } catch {
-      /* Offline: fall through to the cache. */
+
     }
     weightsCache = await readCachedWeights();
     return weightsCache;
@@ -93,13 +85,13 @@ export function cachedSurrogateWeights(): SurrogateWeights | null {
 export type YieldScoreSource = "model" | "floor";
 
 export interface SlotFitModel {
-  /** cropId → expected yield loss (%) for this slot. */
+
   lossPct: Record<string, number>;
-  /** Per-crop provenance: trained yield head or the biophysical floor. */
+
   sourceByCrop: Record<string, YieldScoreSource>;
-  /** True when at least one crop was scored by the trained head. */
+
   modelBacked: boolean;
-  /** True when no crop had a training row and only the physics floor ran. */
+
   floorOnly: boolean;
 }
 
@@ -118,10 +110,10 @@ function previousProfile(state: WorkspaceState, slotIndex: number): CropAgronomi
   return profileFor(previousId);
 }
 
-/**
- * Yield-loss estimate per catalog crop for one slot: trained head when the crop
- * has training rows, biophysical floor otherwise, never less than the floor.
- */
+
+
+
+
 export function slotFitModel(
   state: WorkspaceState,
   slotIndex: number,
@@ -136,8 +128,8 @@ export function slotFitModel(
   const vector = workspaceToAgronomicVector(state);
   const continuous = vector.continuousVector32;
   const isRainfed = state.water.regime === "rainfed";
-  // resolveNumericInput keeps a valid 0 (e.g. a zero quota) and only falls back
-  // when the field is genuinely empty. The optimizer gate reports invalid text.
+
+
   const quota = resolveNumericInput(
     state.water.quotaMm,
     INPUT_SPECS.waterQuotaMm,
@@ -182,18 +174,18 @@ export function slotFitModel(
       modelBacked = true;
       floorOnly = false;
       const discrepancy = Math.abs(neural - floor.yieldReductionPct);
-      // AI is the primary decision foundation when within biophysical plausibility bounds.
+
       if (discrepancy <= DISCREPANCY_THRESHOLD_PCT) {
         loss = Math.round(neural);
         source = "model";
       } else {
-        // When AI diverges significantly (> 25% discrepancy) from verified physical reality
-        // (e.g. extreme salinity toxicity or thermal season mismatch), grounded physical laws take over.
+
+
         loss = Math.round(floor.yieldReductionPct);
         source = "floor";
       }
     } else {
-      // Crops without real training rows (cover crops, unobserved forages) rely directly on the physical floor.
+
       loss = floor.yieldReductionPct;
       source = "floor";
     }
@@ -212,7 +204,7 @@ export function slotFitModel(
   return model;
 }
 
-/** The catalog crop the plan UI knows, if it has a model profile. */
+
 export function fitProfileFor(cropId: string | null | undefined): CropAgronomicProfile | null {
   if (!cropId) return null;
   if (!cropById(cropId)) return null;

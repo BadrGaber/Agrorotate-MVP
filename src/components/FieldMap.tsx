@@ -39,7 +39,7 @@ function toRadians(value: number): number {
   return (value * Math.PI) / 180;
 }
 
-/** Great-circle distance between two WGS84 points, in metres. */
+
 export function haversineMeters(
   a: { lat: number; lon: number },
   b: { lat: number; lon: number },
@@ -54,10 +54,10 @@ export function haversineMeters(
   return 2 * EARTH_RADIUS_M * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
-/**
- * Spherical polygon area on a sphere, not a percentage of a screen rectangle.
- * This is accurate at field scale and does not require a heavy GIS dependency.
- */
+
+
+
+
 export function sphericalAreaM2(points: BoundaryPoint[]): number {
   if (points.length < 3) return 0;
   let sum = 0;
@@ -72,7 +72,7 @@ export function sphericalAreaM2(points: BoundaryPoint[]): number {
   return Math.abs((sum * EARTH_RADIUS_M * EARTH_RADIUS_M) / 2);
 }
 
-/** Area-weighted centroid in local metres, then converted back to WGS84. */
+
 function polygonCentroid(points: BoundaryPoint[]): { lat: number; lon: number } {
   if (points.length === 0) return { lat: 0, lon: 0 };
   if (points.length < 3) {
@@ -157,33 +157,33 @@ export function polygonMetrics(points: BoundaryPoint[]): PolygonMetrics {
 
 const GIBS_WMTS = "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best";
 
-/** Clear base maps under the NASA GIBS overlay. */
+
 const SATELLITE_TILE_URL =
   "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}";
 const STREET_TILE_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
-/**
- * GIBS WMTS tiles are pre-rendered in the same Web Mercator grid Leaflet
- * uses. Requesting them as WMS instead re-projects every 256 px request on
- * the server, and the per-request bbox rounding draws a visible grid over
- * the imagery. The WMTS matrix has no seams.
- */
+
+
+
+
+
+
 function gibsTileUrl(layer: string, matrix: string, extension: string, time: string) {
   return `${GIBS_WMTS}/${layer}/default/${time}/${matrix}/{z}/{y}/{x}.${extension}`;
 }
 
-/**
- * One GIBS product is visible at a time. The layers are rendered imagery, not
- * numbers the engine can read: switching products changes the context picture
- * and nothing in the decision model.
- */
 
-/**
- * The map opens on Dina Farms (Beheira, Cairo–Alexandria desert road), a
- * well-known Egyptian farm, purely as a place to start looking. Nothing is
- * selected: no marker, no polygon and no field record until the visitor
- * searches or draws.
- */
+
+
+
+
+
+
+
+
+
+
+
 const DEFAULT_VIEW = {
   lat: 30.2828488,
   lon: 30.6079612,
@@ -265,27 +265,27 @@ export function FieldMap({
     onBoundaryRef.current?.(next);
   };
 
-  // Create the map once. Leaflet owns the DOM after mount; React only supplies
-  // data and callbacks.
+
+
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
     const initial = polygonMetrics(pointsRef.current);
     const map = L.map(containerRef.current, {
       center: [initial.centroidLat || DEFAULT_VIEW.lat, initial.centroidLon || DEFAULT_VIEW.lon],
-      // Open close enough to read fields and roads, like a normal map app.
-      // The GIBS overlay sits above the base as a soft, switchable product.
+
+
       zoom: initial.centroidLat ? 15 : 14,
       zoomControl: false,
       attributionControl: true,
       preferCanvas: true,
-      // Instant zoom avoids a stuck Leaflet zoom animation swallowing every
-      // later zoomIn/zoomOut after fitBounds runs during mount.
+
+
       zoomAnimation: false,
     });
     map.attributionControl.setPrefix(false);
     mapRef.current = map;
-    // Zoom is supplied by the overlay control below: it calls map.zoomIn/out
-    // directly and keeps the z readout in the same place the visitor clicks.
+
+
     L.control.scale({ position: "bottomleft", imperial: false, maxWidth: 150 }).addTo(map);
     setZoom(map.getZoom());
 
@@ -337,7 +337,7 @@ export function FieldMap({
       attachLayer(layer);
       layer.bringToFront();
       setDrawing(false);
-      // A drawn outline replaces any suggestion from the map data.
+
       setParcels([]);
       setParcelNotice(null);
       setActiveParcelId(null);
@@ -352,8 +352,8 @@ export function FieldMap({
       drawingRef.current = false;
       setDrawing(false);
     });
-    // Clicking the first vertex closes the ring. `finishDraw` only completes a
-    // valid geometry, so it is safe to call on any vertex click during drawing.
+
+
     map.on("pm:vertexclick", () => {
       if (!drawingRef.current) return;
       map.pm.finishDraw();
@@ -380,8 +380,8 @@ export function FieldMap({
         map.fitBounds(bounds.pad(0.35), { maxZoom: 18, animate: false });
       }
     }
-    // StrictMode mounts, cleans up and mounts again. The generation counter
-    // makes the overlay effect run against the new Leaflet instance.
+
+
     setMapGeneration((value) => value + 1);
 
     const invalidateTimer = window.setTimeout(() => {
@@ -408,8 +408,8 @@ export function FieldMap({
     };
   }, []);
 
-  // Base map choice is switched without rebuilding the map, so the drawn
-  // polygon and its edit handles stay untouched.
+
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -425,7 +425,7 @@ export function FieldMap({
     }
   }, [baseKind]);
 
-  // One GIBS overlay at a time. It is rendered imagery, never a numeric layer.
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -456,8 +456,8 @@ export function FieldMap({
     overlayRef.current?.setOpacity(overlayOpacity / 100);
   }, [overlayOpacity]);
 
-  // Synchronise workspace geometry into Leaflet when a saved plan, reset or
-  // saved plan or field data changes the map geometry.
+
+
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -885,7 +885,7 @@ export function FieldMap({
   );
 }
 
-/** Local pin glyph keeps the map independent of the page icon set. */
+
 function GlyphPin() {
   return (
     <svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true">

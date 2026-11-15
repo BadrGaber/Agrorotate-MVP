@@ -1,12 +1,4 @@
 #!/usr/bin/env node
-/**
- * The evidence ledger is authored as a TypeScript module for the UI. The local
- * Node API cannot import it directly (extensionless type imports), so this
- * script extracts the three JSON-shaped arrays once and writes a runtime copy.
- *
- * Run after regenerating src/data/evidence/generated.ts:
- *   npm run export:ai
- */
 import fs from "node:fs/promises";
 import path from "node:path";
 
@@ -44,7 +36,7 @@ function extractArray(source, exportName) {
   const marker = `export const ${exportName}:`;
   const start = source.indexOf(marker);
   if (start < 0) throw new Error(`Could not find ${exportName}`);
-  // Skip the TypeScript type annotation, which can itself contain `[]`.
+
   const equals = source.indexOf("=", start);
   const open = source.indexOf("[", equals);
   const close = matchingBracket(source, open);

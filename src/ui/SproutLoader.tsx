@@ -1,7 +1,3 @@
-/**
- * A small, honest loading mark: a seed stem grows while the app waits for a
- * real request. It is used instead of a generic spinner for NASA and AI work.
- */
 export function SproutLoader({
   size = "sm",
   label = "Loading",

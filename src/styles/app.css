@@ -1,7 +1,3 @@
-/* AgroRotate — v5.1 night-field interface
-   Near-black soil, mint signal, amber weather, coral warnings.
-   One navigation bar, one contextual setup strip, evidence always visible. */
-
 :root {
   --paper: #060a07;
   --paper-raised: #0c1310;
@@ -67,8 +63,6 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-
-/* Night-field texture: contour lines and a mint glow, all gradients. */
 body::before {
   content: "";
   position: fixed;
@@ -158,8 +152,6 @@ button {
   background: rgba(125, 255, 178, 0.22);
   color: #fff;
 }
-
-/* ---------- Shell ---------- */
 
 .shell {
   min-height: 100vh;
@@ -325,8 +317,6 @@ button {
   border-color: var(--rule-strong);
   background: rgba(255, 255, 255, 0.05);
 }
-
-/* Responsive layout for Tablets & Mobiles */
 @media (max-width: 980px) {
   .topbar__inner {
     padding: 7px 14px 8px 14px;
@@ -387,8 +377,6 @@ button {
     flex-shrink: 0;
   }
 }
-
-/* Mobile optimizations: prevent any action or sound button from disappearing */
 @media (max-width: 680px) {
   .topbar__status-text {
     display: none;
@@ -496,8 +484,6 @@ button {
   color: var(--ink-faint);
 }
 
-/* ---------- Type ---------- */
-
 .eyebrow {
   font-size: 10.5px;
   letter-spacing: 0.19em;
@@ -595,8 +581,6 @@ button {
   flex-direction: column;
   gap: 9px;
 }
-
-/* ---------- Setup strip ---------- */
 
 .setup-tabs {
   display: flex;
@@ -711,8 +695,6 @@ button {
     padding-right: 4px;
   }
 }
-
-/* ---------- Cards & layout ---------- */
 
 .card {
   background: linear-gradient(
@@ -896,8 +878,6 @@ button {
   display: none !important;
 }
 
-/* ---------- Buttons ---------- */
-
 .btn {
   display: inline-flex;
   align-items: center;
@@ -979,8 +959,6 @@ button {
 .link-arrow:hover {
   gap: 10px;
 }
-
-/* ---------- Badges / provenance ---------- */
 
 .badge {
   display: inline-flex;
@@ -1065,8 +1043,6 @@ button {
   color: var(--ink-soft);
   border-color: var(--forest);
 }
-
-/* ---------- Forms ---------- */
 
 .field {
   display: flex;
@@ -1269,8 +1245,6 @@ button {
   word-break: break-word;
 }
 
-/* ---------- Notes ---------- */
-
 .note {
   display: flex;
   align-items: flex-start;
@@ -1324,8 +1298,6 @@ button {
   opacity: 0.85;
 }
 
-/* ---------- Stats ---------- */
-
 .stat {
   background: rgba(255, 255, 255, 0.022);
   border: 1px solid var(--rule);
@@ -1366,8 +1338,6 @@ button {
   overflow-wrap: break-word;
 }
 
-/* ---------- Stamp ---------- */
-
 .stamp {
   display: inline-flex;
   align-items: center;
@@ -1394,8 +1364,6 @@ button {
 .stamp--conflict {
   color: var(--clay);
 }
-
-/* ---------- Plan board ---------- */
 
 .ai-fill {
   display: flex;
@@ -1568,8 +1536,6 @@ button {
   border: 1px solid var(--rule-strong);
 }
 
-/* ---------- Tables ---------- */
-
 .table-wrap {
   overflow-x: auto;
   border: 1px solid var(--rule);
@@ -1616,8 +1582,6 @@ table.data tbody tr:hover {
   color: var(--ink-faint);
 }
 
-/* ---------- Segmented ---------- */
-
 .seg {
   display: inline-flex;
   max-width: 100%;
@@ -1652,8 +1616,6 @@ table.data tbody tr:hover {
   color: #05130c;
   box-shadow: 0 4px 16px -8px rgba(125, 255, 178, 0.7);
 }
-
-/* ---------- Drawer ---------- */
 
 .drawer-backdrop {
   position: fixed;
@@ -1712,8 +1674,6 @@ table.data tbody tr:hover {
   cursor: pointer;
   color: var(--ink-faint);
 }
-
-/* ---------- Sources / misc ---------- */
 
 .source-item {
   display: grid;
@@ -1923,8 +1883,6 @@ details summary:hover {
 input[type="range"] {
   accent-color: var(--forest);
 }
-
-/* ---------- Real map ---------- */
 
 .field-map {
   border: 1px solid var(--rule);
@@ -2198,9 +2156,6 @@ input[type="range"] {
 .field-map__canvas-wrap {
   position: relative;
 }
-
-/* The map is its own stacking context: Leaflet panes run at z-index 400+ and
-   without isolation they cover dialogs and every other page element. */
 .field-map {
   isolation: isolate;
 }
@@ -2212,8 +2167,6 @@ input[type="range"] {
   color: var(--forest);
   text-transform: uppercase;
 }
-
-/* SMAP is the base overlay, stated rather than offered as a toggle. */
 .field-map__default-layer {
   display: inline-flex;
   align-items: center;
@@ -2248,8 +2201,6 @@ input[type="range"] {
   font-family: var(--font-sans);
   outline: none;
 }
-
-/* Ensure Leaflet and Geoman vector and tile layers are completely unconstrained */
 .leaflet-container svg,
 .leaflet-container img,
 .leaflet-container canvas,
@@ -2261,9 +2212,6 @@ input[type="range"] {
   max-width: none !important;
   max-height: none !important;
 }
-
-/* WMS tiles meet at their own edges; drop borders and pin the pane background
-   so no light seams or dark lines show between 256 px request tiles. */
 .field-map .leaflet-tile {
   border: 0 !important;
   outline: 0 !important;
@@ -2365,8 +2313,6 @@ input[type="range"] {
   bottom: 10px;
   right: 10px;
   z-index: 500;
-  /* The readout sits over Leaflet's bottom-right zoom control; let clicks
-     through so +/− keep working. */
   pointer-events: none;
   background: rgba(4, 9, 6, 0.86);
   border: 1px solid var(--rule);
@@ -2415,8 +2361,6 @@ input[type="range"] {
   font-size: 10.5px;
   color: var(--ink-soft);
 }
-
-/* ---------- Climate charts ---------- */
 
 .climate-chart {
   border: 1px solid var(--rule);
@@ -2524,8 +2468,6 @@ input[type="range"] {
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-
-/* ---------- Compare ---------- */
 
 .compare {
   display: flex;
@@ -2641,8 +2583,6 @@ input[type="range"] {
   word-break: break-word;
 }
 
-/* ---------- Plan reset ---------- */
-
 .plan-reset {
   margin-top: 26px;
   border: 1px solid rgba(125, 255, 178, 0.24);
@@ -2670,8 +2610,6 @@ input[type="range"] {
 .plan-reset p {
   max-width: 72ch;
 }
-
-/* ---------- Landing ---------- */
 
 .landing {
   position: relative;
@@ -3134,8 +3072,6 @@ input[type="range"] {
   }
 }
 
-/* ---- edit marker + choice popup ------------------------------------ */
-
 .edit-choice {
   display: flex;
   align-items: center;
@@ -3217,8 +3153,6 @@ input[type="range"] {
   font-size: 18px;
 }
 
-/* ---- locked-step guidance ------------------------------------------- */
-
 .gate-hint {
   display: flex;
   align-items: flex-start;
@@ -3291,10 +3225,6 @@ input[type="range"] {
     box-shadow: 0 0 0 3px rgba(251, 191, 36, 0.5);
   }
 }
-
-/* The board header carries three actions (count, build, clear). Let the title
-   keep a readable basis and move the whole action group to its own line when
-   the card is narrow, instead of breaking every button onto a separate row. */
 #plan-board .card__head {
   flex-wrap: wrap;
   row-gap: 10px;
@@ -3323,8 +3253,6 @@ input[type="range"] {
     white-space: normal;
   }
 }
-
-/* ---- self-contained preview dialog --------------------------------- */
 
 .preview-box {
   position: fixed;
@@ -3816,8 +3744,6 @@ input[type="range"] {
   }
 }
 
-/* ---- best three picks ---------------------------------------------- */
-
 .best-three {
   display: flex;
   flex-direction: column;
@@ -3911,9 +3837,6 @@ input[type="range"] {
 .best-pick__score small {
   font-size: 10px;
 }
-
-/* The selected crop in the season card carries the same ordering score as
-   the suggestion rows, so the two numbers can be compared at a glance. */
 .season-score strong {
   color: var(--forest);
 }
@@ -3924,8 +3847,6 @@ input[type="range"] {
   gap: 8px;
   margin-top: 12px;
 }
-
-/* Base-map switcher and NDVI overlay controls */
 .field-map__layer-label {
   color: var(--ink-faint);
   font-size: 9px;
@@ -3992,8 +3913,6 @@ input[type="range"] {
   cursor: pointer;
 }
 
-/* ---- three-column plan workspace ----------------------------------- */
-
 .plan-work {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(330px, 380px);
@@ -4004,9 +3923,6 @@ input[type="range"] {
 .plan-work > .stack {
   min-width: 0;
 }
-
-/* The summary panel and the plan-reset card form one rail. The rail grows with its
-   content so it never needs an internal scrollbar. */
 .plan-summary {
   display: flex;
   flex-direction: column;
@@ -4039,9 +3955,6 @@ input[type="range"] {
   margin-top: auto;
   padding-top: 14px;
 }
-
-/* The plan-reset card lives in the right rail under the summary. It stacks
-   vertically and stays compact so the rail needs no internal scroll. */
 .plan-reset--rail {
   margin-top: 0;
   flex-direction: column;
@@ -4230,8 +4143,6 @@ input[type="range"] {
   }
 }
 
-/* ---- per-page entry mode -------------------------------------------- */
-
 .record-mode {
   display: flex;
   align-items: center;
@@ -4261,8 +4172,6 @@ input[type="range"] {
   padding: 10px 12px;
   background: rgba(255, 255, 255, 0.02);
 }
-
-/* ---- plain-language estimates --------------------------------------- */
 
 .smart-field {
   display: flex;

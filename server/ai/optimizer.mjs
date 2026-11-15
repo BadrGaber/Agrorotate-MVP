@@ -1,8 +1,3 @@
-/**
- * AgroRotate Server-Side AI Optimization Endpoint
- * Conforms to the AgroRotate Master Plan v3.0 & AiOutputContract schema.
- */
-
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -10,7 +5,7 @@ import { fileURLToPath } from "node:url";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const modelsDir = path.resolve(here, "..", "models");
 
-// Load the conformal calibration produced by AI/pipeline/build_conformal_calibration.py
+
 let conformalCalibration = null;
 try {
   const calPath = path.join(modelsDir, "conformal_calibration.json");
@@ -18,10 +13,10 @@ try {
     conformalCalibration = JSON.parse(fs.readFileSync(calPath, "utf8"));
   }
 } catch {
-  // Graceful fallback
+
 }
 
-// Load authentic trained surrogate weights for zero-dependency ultra-fast neural inference
+
 let surrogateWeights = null;
 try {
   const surrPath = path.join(modelsDir, "agrorotate_surrogate_weights.json");
@@ -29,14 +24,14 @@ try {
     surrogateWeights = JSON.parse(fs.readFileSync(surrPath, "utf8"));
   }
 } catch {
-  // Graceful fallback
+
 }
 
-/**
- * Executes feedforward inference on the 40-dimensional feature vector
- * using the exact PyTorch-trained MLP weights (40 -> 64 -> 32 -> 4).
- * Returns predicted yield reduction %, delta ECe, water demand, and delta SOM.
- */
+
+
+
+
+
 export function runNeuralSurrogateInference(vector40) {
   if (!surrogateWeights || !surrogateWeights.w1) return null;
   const w1 = surrogateWeights.w1;
@@ -46,7 +41,7 @@ export function runNeuralSurrogateInference(vector40) {
   const w3 = surrogateWeights.w3;
   const b3 = surrogateWeights.b3;
 
-  // Layer 1: Linear(40, 64) + ReLU
+
   const h1 = new Float32Array(64);
   for (let i = 0; i < 64; i++) {
     let sum = b1[i];
@@ -55,7 +50,7 @@ export function runNeuralSurrogateInference(vector40) {
     h1[i] = sum > 0 ? sum : 0;
   }
 
-  // Layer 2: Linear(64, 32) + ReLU
+
   const h2 = new Float32Array(32);
   for (let i = 0; i < 32; i++) {
     let sum = b2[i];
@@ -64,7 +59,7 @@ export function runNeuralSurrogateInference(vector40) {
     h2[i] = sum > 0 ? sum : 0;
   }
 
-  // Layer 3: Linear(32, 4)
+
   const out = new Float32Array(4);
   for (let i = 0; i < 4; i++) {
     let sum = b3[i];
@@ -979,14 +974,14 @@ function parseNumeric(value) {
   if (typeof value === "number") return Number.isFinite(value) ? value : null;
   if (value === null || value === undefined) return null;
   const text = String(value).trim();
-  // Blank is absent; trailing garbage ("12abc") is not silently truncated.
+
   if (text === "") return null;
   const parsed = Number(text.replace(",", "."));
   return Number.isFinite(parsed) ? parsed : null;
 }
 
-/** Field-specific bounds for the values the optimizer reads (zero is allowed
- * wherever it is physically meaningful, e.g. a zero quota or zero slope). */
+
+
 const OPT_INPUT_SPECS = {
   quotaMm: { key: "water.quotaMm", label: "Seasonal water quota", unit: "mm / season (the unit the app stores)", min: 0, max: 18000 },
   ecwDsm: { key: "water.ecwDsm", label: "Irrigation water salinity (ECw)", unit: "dS/m", min: 0.1, max: 15 },
@@ -1002,7 +997,7 @@ const OPT_INPUT_SPECS = {
   weight: { key: "priorities.weight", label: "Priority weight", unit: "0–5", min: 0, max: 5 },
 };
 
-/** Returns an issue for non-empty, non-finite or out-of-range input; null otherwise. */
+
 function numericInputIssue(raw, spec) {
   if (raw === null || raw === undefined) return null;
   if (typeof raw === "string" && raw.trim() === "") return null;
@@ -1092,7 +1087,7 @@ function blockedContract(workspace, inputIssues, elapsedMs) {
   };
 }
 
-/** Saxton & Rawls (2006), identical to AI/pipeline/contract.py. */
+
 function saxtonRawls(sandPct, clayPct, somPct) {
   const S = Math.max(0.01, Math.min(0.96, sandPct / 100));
   const C = Math.max(0.01, Math.min(0.70, clayPct / 100));
@@ -1124,10 +1119,10 @@ const CROP_KC = {
 };
 const CROP_INDEX = Object.fromEntries(Object.keys(CROP_PROFILES).map((id, i) => [id, i]));
 
-/**
- * Builds the exact 40-dim contract vector from the workspace. This replaces the
- * old 8-dimension stub (f0 = 0.35) that made the API return meaningless plans.
- */
+
+
+
+
 export function buildRuntimeVector40(workspace, crop, state) {
   const lab = workspace.soil?.lab ?? {};
   const clay = parseNumeric(lab.clayPct) ?? 30;
@@ -1214,7 +1209,7 @@ function evaluateTrajectory(crops, workspace) {
   const systemEffMap = { drip: 0.90, sprinkler: 0.75, surface: 0.60, pivot: 0.82, none: 1.0 };
   const irrigationEff = systemEffMap[waterSystem] ?? 0.85;
 
-  // Temperature lapse rate: elevation moderates heat stress frequency
+
   const effectiveHeatDays = Math.max(0, heatDays - Math.round((elevationM / 150) * 2.0));
 
   let ece = parseNumeric(workspace.soil?.lab?.eceDsm) ?? 2.1;
@@ -1259,7 +1254,7 @@ function evaluateTrajectory(crops, workspace) {
       );
     }
 
-    // 1. CaCO3 Active Lime Crusting & Chlorosis:
+
     const isSmallSeeded = ["sesame", "bulb-onion", "flax-linseed"].includes(crop.id);
     const isLimeSensitive = ["potato", "sweet-potato"].includes(crop.id) || isSmallSeeded;
     if (caco3 > 12 && isLimeSensitive) {
@@ -1274,7 +1269,7 @@ function evaluateTrajectory(crops, workspace) {
       }
     }
 
-    // 2. ESP Sodicity & Hypoxia:
+
     const isSodicTolerant = ["six-row-barley", "sugar-beet", "berseem-clover-multi-cut"].includes(crop.id);
     if (esp > 12 && !isSodicTolerant) {
       const espPenalty = Math.min(30, Math.round((esp - 12) * 1.5));
@@ -1288,7 +1283,7 @@ function evaluateTrajectory(crops, workspace) {
       }
     }
 
-    // 3. Late-season Thermal Stress (>35C adjusted for elevation):
+
     const isHeatSensitiveCool = crop.season === "cool" && ["potato", "faba-bean", "bulb-onion", "chickpea"].includes(crop.id);
     if (effectiveHeatDays > 25 && isHeatSensitiveCool) {
       const heatPenalty = Math.min(25, Math.round((effectiveHeatDays - 25) * 0.7));
@@ -1310,7 +1305,7 @@ function evaluateTrajectory(crops, workspace) {
       const hasReferenceTable = Object.keys(referenceGap).length > 0;
       const cropReference = referenceGap[crop.id];
       if (cropReference !== undefined) {
-        // Relative transfer: anchor each crop at its own best-quartile gap.
+
         const relative =
           (1 - neuralPred.yieldReductPct / 100) / Math.max(0.05, 1 - cropReference / 100);
         neuralReduct = Math.max(0, Math.min(100, 100 * (1 - relative)));
@@ -1320,29 +1315,29 @@ function evaluateTrajectory(crops, workspace) {
       } else if (!hasReferenceTable) {
         neuralReduct = neuralPred.yieldReductPct;
       }
-      // Crops absent from the real dataset keep the physics-only floor.
+
     }
-    // AI-First decision foundation with biophysical discrepancy safety guardrails:
+
     let yieldReduct;
     if (neuralReduct !== null) {
       const discrepancy = Math.abs(neuralReduct - physicalFloorReduct);
       if (discrepancy <= 25.0) {
-        // AI is the primary predictor when within physical reality bounds
+
         yieldReduct = Math.round(neuralReduct);
       } else {
-        // AI diverged significantly (> 25% discrepancy) from physical ground truth
+
         yieldReduct = Math.round(physicalFloorReduct);
       }
     } else {
       yieldReduct = physicalFloorReduct;
     }
 
-    // Gross water demand conditioned on irrigation method efficiency:
+
     const effWater = crop.waterDemandMm * (isRainfed ? 0.75 : 1.0);
     const grossWater = isRainfed ? effWater : effWater / irrigationEff;
     totalWaterMm += grossWater;
 
-    // Sprinkler overhead wetting disease hazard:
+
     if (waterSystem === "sprinkler" && ["potato", "processing-tomato", "bulb-onion"].includes(crop.id)) {
       vulnerabilities.push({
         seasonIndex: sIdx,
@@ -1351,7 +1346,7 @@ function evaluateTrajectory(crops, workspace) {
       });
     }
 
-    // Slope tuber erosion hazard:
+
     if (slopePct > 8 && ["potato", "sweet-potato", "sugar-beet"].includes(crop.id)) {
       vulnerabilities.push({
         seasonIndex: sIdx,
@@ -1360,7 +1355,7 @@ function evaluateTrajectory(crops, workspace) {
       });
     }
 
-    // SARw infiltration hazard:
+
     if (ecw < 0.15 * sarw + 0.1 && sarw > 6) {
       vulnerabilities.push({
         seasonIndex: sIdx,
@@ -1369,17 +1364,17 @@ function evaluateTrajectory(crops, workspace) {
       });
     }
 
-    // Soil and Irrigation Water NPK input cost adjustment:
+
     let effectiveInputCost = crop.inputCostUsdPerHa;
     const waterNCreditUsd = !isRainfed && waterNo3n > 5 ? Math.min(65, Math.round((waterNo3n - 5) * 1.5)) : 0;
     if (crop.nitrogenFixationKgHa <= 0) {
       const nCredit = no3n > 18 ? Math.min(120, Math.round((no3n - 18) * 4)) : -Math.min(60, Math.round((18 - no3n) * 3));
       effectiveInputCost -= (nCredit + waterNCreditUsd);
     } else {
-      if (no3n < 15) effectiveInputCost -= 35; // Bio-fixation economic premium
+      if (no3n < 15) effectiveInputCost -= 35;
     }
-    if (olsenP < 8) effectiveInputCost += 25; // Starter P addition
-    if (olsenP > 35) effectiveInputCost -= 15; // Residual P discount
+    if (olsenP < 8) effectiveInputCost += 25;
+    if (olsenP > 35) effectiveInputCost -= 15;
 
     const yieldFrac = Math.max(0.08, (100 - yieldReduct) / 100);
     const revenue = crop.baseYieldTHa * yieldFrac * crop.farmgatePriceUsdPerTon;
@@ -1453,7 +1448,7 @@ function evaluateTrajectory(crops, workspace) {
   const slopeProtectionBonus = (slopePct > 6 && crops.some((c) => c.id.includes("cover"))) ? 6 : 0;
   const soilHealthScore = Math.max(15, Math.min(98, Math.round(35 + somScore + nScore + bareScore + slopeProtectionBonus)));
 
-  // Risk aversion score (0 to 100):
+
   const vulnPenalty = vulnerabilities.length * 12;
   const salinityStress = Math.max(0, (ece - 2.5) * 6);
   const avgDroughtTol = crops.reduce((acc, c) => acc + (c.droughtToleranceIndex ?? 0.6), 0) / 6;
@@ -1493,8 +1488,8 @@ function createSeededPrng(seedStr) {
 
 export function optimizeWorkspace(workspace) {
   const startedAt = typeof performance !== "undefined" ? performance.now() : Date.now();
-  // An invalid text value must never reach the evaluation. Stop here and report
-  // the exact field; the API returns no recommendation for this request.
+
+
   const inputIssues = collectInputIssues(workspace);
   if (inputIssues.length > 0) {
     return blockedContract(workspace, inputIssues, (typeof performance !== "undefined" ? performance.now() : Date.now()) - startedAt);
@@ -1506,10 +1501,10 @@ export function optimizeWorkspace(workspace) {
   const initialEce = parseNumeric(workspace.soil?.lab?.eceDsm) ?? 2.1;
   const phInitial = parseNumeric(workspace.soil?.lab?.ph) ?? 7.8;
 
-  // Excluded crops are not candidates anywhere in this search, baseline included.
+
   const excludedCrops = workspace.priorities?.excluded ?? {};
 
-  // 1. Existing baseline:
+
   const baselineInfo = inferRegionalBaseline(workspace);
   const baselineCrops = baselineInfo.map((s) => {
     const crop = CROP_PROFILES[s.cropId] ?? CROP_PROFILES["bread-wheat"];
@@ -1522,12 +1517,12 @@ export function optimizeWorkspace(workspace) {
   });
   const baselineEval = evaluateTrajectory(baselineCrops, workspace);
 
-  // Candidate pools partitioned by season:
+
   const allCrops = Object.values(CROP_PROFILES).filter((c) => !excludedCrops[c.id]);
   const warmCandidates = allCrops.filter((c) => c.season === "warm");
   const coolCandidates = allCrops.filter((c) => c.season === "cool");
 
-  // Multi-objective farmer priorities (yield, water, soil, risk: 0-5):
+
   const farmerWeights = workspace.priorities?.weights ?? {
     yield: 3,
     water: 3,
@@ -1542,7 +1537,7 @@ export function optimizeWorkspace(workspace) {
   const rawWater = readWeight(farmerWeights.water);
   const rawSoil = readWeight(farmerWeights.soil);
   const rawRisk = readWeight(farmerWeights.risk);
-  // All four at 0 is a deliberate "no preference": equal weights, not NaN.
+
   const weightsAreZero = rawYield + rawWater + rawSoil + rawRisk === 0;
   const sumWeights = weightsAreZero ? 4 : rawYield + rawWater + rawSoil + rawRisk;
 
@@ -1551,7 +1546,7 @@ export function optimizeWorkspace(workspace) {
   const wSoil = weightsAreZero ? 0.25 : rawSoil / sumWeights;
   const wRisk = weightsAreZero ? 0.25 : rawRisk / sumWeights;
 
-  // Deterministic PRNG seeded from workspace inputs:
+
   const seedKey = [
     workspace.field?.name || "",
     Number(workspace.field?.centroidLat ?? 0).toFixed(4),
@@ -1569,7 +1564,7 @@ export function optimizeWorkspace(workspace) {
   ].join("|");
   const rng = createSeededPrng(seedKey);
 
-  // Batched Monte Carlo Tree Search (MCTS) exploration with UCB1:
+
   let bestProfitCrops = [
     CROP_PROFILES["grain-maize"],
     CROP_PROFILES["bread-wheat"],
@@ -1600,9 +1595,9 @@ export function optimizeWorkspace(workspace) {
   ];
   let bestSoilEval = evaluateTrajectory(bestSoilCrops, workspace);
 
-  // ============================================================================
-  // BATCHED MONTE CARLO TREE SEARCH (MCTS) WITH UCB1 SELECTION ACROSS 30 CROPS
-  // ============================================================================
+
+
+
   function createMCTSNode(crop, depth, parent) {
     let untried = [];
     if (depth < 6) {
@@ -1612,7 +1607,7 @@ export function optimizeWorkspace(workspace) {
         if (crop && !c.id.includes("cover") && c.family === crop.family) return false;
         return true;
       });
-      // Deterministic / pseudo-random shuffle
+
       for (let i = untried.length - 1; i > 0; i--) {
         const j = Math.floor(rng() * (i + 1));
         const temp = untried[i];
@@ -1649,7 +1644,7 @@ export function optimizeWorkspace(workspace) {
     let node = rootNode;
     const currentPath = [];
 
-    // 1. SELECT using UCB1 weighted by farmer priorities:
+
     while (node.untriedCrops.length === 0 && node.children.size > 0 && node.depth < 6) {
       let bestUcb = -Infinity;
       let selectedChild = null;
@@ -1670,7 +1665,7 @@ export function optimizeWorkspace(workspace) {
       if (node.crop) currentPath.push(node.crop);
     }
 
-    // 2. EXPAND:
+
     if (node.untriedCrops.length > 0 && node.depth < 6) {
       const nextCrop = node.untriedCrops.pop();
       const childNode = createMCTSNode(nextCrop, node.depth + 1, node);
@@ -1679,7 +1674,7 @@ export function optimizeWorkspace(workspace) {
       currentPath.push(nextCrop);
     }
 
-    // 3. ROLLOUT to depth 6:
+
     while (currentPath.length < 6) {
       const s = currentPath.length;
       const isWarm = s % 2 === 0;
@@ -1692,7 +1687,7 @@ export function optimizeWorkspace(workspace) {
       currentPath.push(pick);
     }
 
-    // 4. EVALUATE:
+
     candidatesGenerated += 1;
     const key = currentPath.map((c) => c.id).join(",");
     if (!evaluatedRotations.has(key)) {
@@ -1719,7 +1714,7 @@ export function optimizeWorkspace(workspace) {
         bestSoilCrops = [...currentPath];
       }
 
-      // 5. BACKPROPAGATE:
+
       let currBack = node;
       while (currBack) {
         currBack.visits += 1;
@@ -1739,16 +1734,16 @@ export function optimizeWorkspace(workspace) {
   const waterEval = bestWaterEval;
   const soilEval = bestSoilEval;
 
-  // Dynamic Uncertainty & Confidence calibrated against WoSIS vs SoilGrids
+
   const hasEce = parseNumeric(workspace.soil?.lab?.eceDsm) !== null;
   const hasPh = parseNumeric(workspace.soil?.lab?.ph) !== null;
   const hasLab = hasEce && hasPh;
   const basisTier = hasLab ? "MEAS" : (hasEce ? "EST" : (workspace.field?.centroidLat ? "EO_PRIOR" : "HYBRID"));
-  
-  // Conformal half widths (dS/m) from empirical ISRIC calibration
+
+
   const eceHalfWidth = conformalCalibration?.conformal_half_widths?.[basisTier] ??
     (basisTier === "MEAS" ? 0.868 : basisTier === "EST" ? 1.426 : 2.046);
-  // Full scale ECe in agronomic vector is 20.0 dS/m
+
   const dynUncertainty = Number(Math.max(3.2, Math.min(18.5, (eceHalfWidth / 20.0) * 100.0)).toFixed(1));
   const baseConf = Math.round(100 - dynUncertainty);
 
@@ -1851,7 +1846,7 @@ export function optimizeWorkspace(workspace) {
     ((typeof performance !== "undefined" ? performance.now() : Date.now()) - startedAt).toFixed(2)
   );
 
-  // Mass-Balance Causal Attribution Ledger covering all 6 soil-borne pathogens:
+
   const causalAttributionLedger = soilEval.slots.map((s, idx) => ({
     season: idx + 1,
     selectedCropId: s.cropId,
@@ -1882,7 +1877,7 @@ export function optimizeWorkspace(workspace) {
       budgetSimulations: MCTS_ROUNDS,
       simulationsExecuted,
       candidatesGenerated,
-      // The baseline sequence is scored separately and reported as its own pathway.
+
       uniqueRotationsEvaluated: Math.max(0, evaluatedRotations.size - 1),
       duplicateRolloutsSkipped,
       theoreticalSearchSpace,

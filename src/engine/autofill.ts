@@ -1,13 +1,3 @@
-/**
- * Opening the rotation board: fill all 3 years (6 seasons) sequentially from the
- * AI-First hybrid engine that produces the "Best 3" recommendations.
- *
- * The seasons are picked sequentially so each subsequent pick respects botanical
- * family breaks, water quotas, and soil carryovers from the preceding crop.
- * The AI neural surrogate model serves as the primary decision driver, with
- * grounded biophysical equations acting as safety guardrails when neural
- * predictions diverge beyond calibrated physical bounds.
- */
 import { alternativeCrops, cropFitScore, evaluateSlot } from "./agronomy";
 import { slotFitModel } from "./fitModel";
 import type { SurrogateWeights } from "./optimizer";
@@ -23,11 +13,11 @@ export interface YearOnePick {
 export interface YearOneFill {
   slots: SlotState[];
   picks: YearOnePick[];
-  /** True when at least one pick used the trained yield-gap head. */
+
   modelBacked: boolean;
 }
 
-/** Fills empty or conflicted seasons in Year 1 with the top AI-ranked candidates. */
+
 export function buildYearOneFill(
   state: WorkspaceState,
   weights: SurrogateWeights | null,
@@ -50,8 +40,8 @@ export function buildYearOneFill(
 
     let shouldAssign = !existingCropId;
 
-    // If a crop already exists in this slot, check if it has a severe conflict or low score (< 50)
-    // while a vastly superior AI candidate (>= 80) exists without conflicts.
+
+
     if (existingCropId) {
       const evaluation = evaluateSlot(stepState, index);
       const score = cropFitScore(stepState, index, fit) ?? 0;
@@ -75,11 +65,11 @@ export function buildYearOneFill(
   return { slots, picks, modelBacked };
 }
 
-/**
- * Optimizes the full 6-season rotation plan (Years 1–3) sequentially,
- * selecting the top AI-ranked crop for each slot while guaranteeing botanical
- * family breaks, seasonal compatibility, and biophysical safety guardrails.
- */
+
+
+
+
+
 export function buildFullPlanOptimization(
   state: WorkspaceState,
   weights: SurrogateWeights | null,
@@ -97,7 +87,7 @@ export function buildFullPlanOptimization(
     const topAlternatives = alternativeCrops(stepState, index, 8, fit);
     if (topAlternatives.length === 0) continue;
 
-    // Filter viable alternatives: season match, safe salinity tolerance, and family break
+
     const viable = topAlternatives.filter(
       (alt) => alt.seasonMatch && alt.salinity.state !== "above" && alt.breaksFamily !== false,
     );

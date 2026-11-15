@@ -1,13 +1,3 @@
-/**
- * Independent verification pass — 10 November 2026.
- *
- * The v5 package supplied 26 "SUPPORTED FOR SOURCE SCOPE" salinity claims. This
- * file records an independent re-check of every one of them against the live
- * FAO pages, plus the endpoint each pair actually describes. It does not add new
- * crop values: a claim only becomes verified when the source prints that exact
- * species, pair and endpoint.
- */
-
 export const VERIFICATION_DATE = "2026-11-10";
 export const VERIFICATION_LABEL = "10 November 2026";
 
@@ -15,15 +5,15 @@ export const FAO_ANNEX_URL = "https://www.fao.org/4/Y4263E/y4263e0e.htm";
 export const FAO56_CH8_URL = "https://www.fao.org/4/X0490E/x0490e0e.htm";
 
 export interface SalinityCheck {
-  /** Catalog crop name, exactly as generated from the ledger. */
+
   crop: string;
   annexLimitDsm: number;
   annexSlopePctPerDsm: number;
-  /** What the table says the yield basis is. */
+
   endpoint: string;
-  /** FAO-56 Chapter 8, Table 23 lists the same pair. */
+
   fao56Table23: boolean;
-  /** Set when the endpoint differs from the crop's harvested product. */
+
   endpointCaveat?: string;
 }
 
@@ -127,18 +117,18 @@ export const SALINITY_CHECK_BY_CROP: Record<string, SalinityCheck> =
   Object.fromEntries(SALINITY_CHECKS.map((check) => [check.crop, check]));
 
 export const VERIFICATION_SUMMARY = {
-  /** Claims the v5 ledger marks SUPPORTED FOR SOURCE SCOPE. */
+
   supportedClaims: 26,
-  /** Claims whose value was found verbatim in the live source on 2026-11-10. */
+
   confirmedClaims: 26,
   cropsChecked: SALINITY_CHECKS.length,
-  /** 12 of 13 pairs also appear in FAO-56 Table 23. Sunflower is "–" there. */
+
   fao56CrossCheckedCrops: SALINITY_CHECKS.filter((check) => check.fao56Table23).length,
-  /** Claims carrying a yield-endpoint mismatch note (maize pair). */
+
   endpointCaveatClaims: SALINITY_CHECKS.filter((check) => check.endpointCaveat).length * 2,
-  /** New crop values found in the 30-source registry during this pass. */
+
   additionalVerifiedClaims: 0,
-  /** 120 − 26: source attachment in progress after checking every supplied source. */
+
   stillProvisionalClaims: 94,
 };
 
@@ -150,10 +140,10 @@ export interface RegistryCheck {
   url?: string;
 }
 
-/**
- * What the supplied registry can and cannot verify. "Checked" means the page
- * was opened and searched for the project's crop values on 2026-11-10.
- */
+
+
+
+
 export const REGISTRY_CHECKS: RegistryCheck[] = [
   {
     id: "S23",
@@ -233,10 +223,10 @@ export const REGISTRY_CHECKS: RegistryCheck[] = [
   },
 ];
 
-/**
- * Parameter families calibrated locally per the 30-source registry. Listed so
- * the source-attachment label is an audit result, not a default.
- */
+
+
+
+
 export const UNVERIFIABLE_PARAMETERS: { parameter: string; reason: string }[] = [
   {
     parameter: "Net Water (mm)",

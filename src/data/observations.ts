@@ -1,7 +1,3 @@
-/**
- * Field observations. Each one is stored as a class or flag and carries the
- * exact v5 instruction about what must NOT be inferred from it.
- */
 export interface ObservationOption {
   value: string;
   label: string;
@@ -15,9 +11,9 @@ export interface ObservationDef {
   glyph: "layers" | "drop" | "sprout" | "flask";
   hint: string;
   options: ObservationOption[];
-  /** The inference the engine deliberately leaves to the measurement. */
+
   removedInference: string;
-  /** What a lab test replaces this with. */
+
   replacesWith: string;
 }
 

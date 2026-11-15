@@ -9,9 +9,9 @@ import "./styles/app.css";
 
 installSoundEffects();
 
-// Register after the first paint. The worker precaches the whole shell, while
-// this call downloads the trained model in parallel so the AI is ready even if
-// the visitor opens the rotation board before the worker finishes installing.
+
+
+
 registerOfflineSupport();
 void loadSurrogateWeights();
 

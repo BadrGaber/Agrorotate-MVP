@@ -1,15 +1,3 @@
-/**
- * Earth-observation integration for AgroRotate.
- *
- * Public, credential-free data is fetched live:
- *  - SoilGrids 250 m v2.0 mapped soil priors (ISRIC REST API).
- *  - SRTM/Copernicus-backed elevation samples, turned into a local
- *    slope/aspect/D8/TWI screening grid by server/terrain.mjs.
- *
- * NASA products that need an Earthdata Login are never faked. The server can
- * see whether a token is configured, exposes that status, and keeps the GIBS
- * visual layers available as context. The browser never receives a credential.
- */
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
@@ -25,7 +13,7 @@ export const GIBS_WMTS_BASE =
   "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best";
 export const SOILGRIDS_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
-/** Product registry shared by the API and the UI. */
+
 export const EO_PRODUCTS = [
   {
     id: "srtm",
@@ -142,7 +130,7 @@ const SOILGRIDS_PROPERTIES = [
 
 const SOILGRIDS_DEPTHS = ["0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm"];
 
-/** USDA texture classes, nearest centroid to the mapped fractions. */
+
 const TEXTURE_CLASSES = [
   ["Sand", 85, 10, 5],
   ["Loamy sand", 80, 15, 5],
@@ -181,10 +169,10 @@ function round(value, digits = 2) {
   return Math.round(value * scale) / scale;
 }
 
-/**
- * Depth-weighted mean of SoilGrids horizons. Weights are horizon thickness in
- * cm, so 0–30 cm is not the plain average of three unequal layers.
- */
+
+
+
+
 export function depthWeightedMean(depths, topDepth, bottomDepth) {
   let weighted = 0;
   let weight = 0;
@@ -258,10 +246,10 @@ function normaliseProperty(layer, definition) {
   };
 }
 
-/**
- * Converts the raw SoilGrids feature into display units and depth summaries.
- * Kept pure so the same conversion can be tested without the network.
- */
+
+
+
+
 export function normaliseSoilGrids(payload, meta = {}) {
   const layers = Array.isArray(payload?.properties?.layers)
     ? payload.properties.layers
@@ -329,8 +317,8 @@ async function readCache(file, ttlMs) {
 
 const soilGridsInflight = new Map();
 const soilGridsMemoryCache = new Map();
-// ISRIC's REST API is often slow or paused, and the client polls instead of
-// holding one request open. Short attempts keep the poll responsive.
+
+
 const SOILGRIDS_TIMEOUT_MS = 12_000;
 const SOILGRIDS_MAX_RETRIES = 2;
 const SOILGRIDS_ERROR_TTL_MS = 10 * 60 * 1000;
@@ -368,7 +356,7 @@ export async function fetchSoilGrids({
 
   const coordKey = `${latitude.toFixed(5)},${longitude.toFixed(5)}`;
 
-  // 1. In-memory coordinate cache check
+
   if (!force && soilGridsMemoryCache.has(coordKey)) {
     const memRecord = soilGridsMemoryCache.get(coordKey);
     const stamp = Date.parse(memRecord?.fetchedAtIso ?? "");
@@ -383,7 +371,7 @@ export async function fetchSoilGrids({
     }
   }
 
-  // 2. Disk cache check
+
   const file = soilGridsCacheFile(latitude, longitude, cacheDir);
   if (!force) {
     const cached = await readCache(file, SOILGRIDS_TTL_MS);
@@ -412,7 +400,7 @@ export async function fetchSoilGrids({
   }
 
   const task = (async () => {
-    // Single Batch Query containing all properties and all depth layers
+
     const url = new URL(SOILGRIDS_ENDPOINT);
     url.searchParams.set("lon", String(longitude));
     url.searchParams.set("lat", String(latitude));
@@ -427,10 +415,10 @@ export async function fetchSoilGrids({
 
     let lastError = null;
 
-    // Retry loop: initial attempt (0) + 2 retries = 3 attempts total with exponential backoff
+
     for (let attempt = 0; attempt <= SOILGRIDS_MAX_RETRIES; attempt += 1) {
       if (attempt > 0) {
-        const backoffMs = 1000 * Math.pow(2, attempt - 1); // 1000ms, 2000ms
+        const backoffMs = 1000 * Math.pow(2, attempt - 1);
         await new Promise((resolve) => setTimeout(resolve, backoffMs));
       }
 
@@ -440,7 +428,7 @@ export async function fetchSoilGrids({
             Accept: "application/json",
             "User-Agent": "AgroRotateDSS/0.1 (soil priors; contact: local app)",
           },
-          // 25s timeout per attempt as specified in requirements
+
           signal: AbortSignal.timeout(SOILGRIDS_TIMEOUT_MS),
         });
 
@@ -461,13 +449,13 @@ export async function fetchSoilGrids({
           cache: "live",
         };
 
-        // Populate both in-memory and disk cache
+
         soilGridsMemoryCache.set(coordKey, record);
         try {
           await fs.mkdir(cacheDir, { recursive: true });
           await fs.writeFile(file, JSON.stringify(record), "utf8");
         } catch {
-          // Non-fatal if disk write fails
+
         }
 
         return record;
@@ -476,16 +464,16 @@ export async function fetchSoilGrids({
       }
     }
 
-    // Strictly maintain the principle of never inventing or mocking data when connection fails.
-    // If fetching fails after retries, values remain null and user is asked to enter lab (MEAS) or field estimation (EST).
+
+
     const isTimeout =
       lastError?.name === "TimeoutError" ||
       lastError?.name === "AbortError" ||
       String(lastError?.message ?? "").toLowerCase().includes("timeout") ||
       String(lastError?.message ?? "").toLowerCase().includes("aborted");
 
-    // The reason only; the policy sentence belongs to the UI, and duplicating it
-    // here is what produced the doubled message.
+
+
     const errMessage = isTimeout
       ? `ISRIC did not answer within ${SOILGRIDS_TIMEOUT_MS / 1000} s (${SOILGRIDS_MAX_RETRIES + 1} attempts).`
       : `ISRIC responded: ${lastError instanceof Error ? lastError.message : String(lastError)}`;
@@ -501,8 +489,8 @@ export async function fetchSoilGrids({
       fetchedAtIso: new Date().toISOString(),
       cache: "none",
     };
-    // Remember the failure briefly so polling clients get a definite answer
-    // instead of repeating three slow attempts on every poll.
+
+
     soilGridsMemoryCache.set(coordKey, failure);
     return failure;
   })();
@@ -527,10 +515,10 @@ function netrcEntry(text) {
   return { login: login[1], password: password[1] };
 }
 
-/**
- * Reports whether numeric NASA access is configured, without ever returning
- * the credential itself. The browser only sees booleans and a source label.
- */
+
+
+
+
 export async function detectEarthdataCredentials(env = process.env) {
   const token = String(env.EARTHDATA_TOKEN ?? "").trim();
   const bearer = String(env.EARTHDATA_BEARER_TOKEN ?? "").trim();
@@ -547,7 +535,7 @@ export async function detectEarthdataCredentials(env = process.env) {
         netrc = netrcEntry(await fs.readFile(file, "utf8"));
         if (netrc) break;
       } catch {
-        // No netrc on this machine is a normal state.
+
       }
     }
   }
@@ -603,13 +591,13 @@ const FLOW_LABELS = {
   8: "NE",
 };
 
-/**
- * Local terrain metrics on a row-major DEM sample grid.
- *
- * This is deliberately a screening calculation: a plane-fit slope/aspect,
- * D8 steepest-descent routing without depression filling, and a local TWI
- * proxy. It is not a survey and never claims to be a full DEM analysis.
- */
+
+
+
+
+
+
+
 export function analyseDemGrid(
   elevations,
   { rows, cols, cellSizeXm, cellSizeYm } = {},
@@ -651,7 +639,7 @@ export function analyseDemGrid(
     return { error: "Positive cell sizes are required" };
   }
 
-  // Plane fit z = a*x + b*y + c over the finite cells.
+
   let n = 0;
   let sx = 0;
   let sy = 0;
@@ -682,7 +670,7 @@ export function analyseDemGrid(
   let a = null;
   let b = null;
   if (n >= 3) {
-    // Solve the normal equations with Cramer's rule.
+
     const m = [
       [sxx, sxy, sx],
       [sxy, syy, sy],
@@ -702,7 +690,7 @@ export function analyseDemGrid(
     slope === null ? null : round((Math.atan(slope) * 180) / Math.PI, 2);
   let aspectDeg = null;
   if (a !== null && b !== null && slope > 1e-9) {
-    // Downslope vector is (-a, -b); clockwise from north.
+
     aspectDeg = round(
       ((Math.atan2(-a, -b) * 180) / Math.PI + 360) % 360,
       1,
@@ -865,7 +853,7 @@ function replaceColumn(matrix, index, column) {
   );
 }
 
-/** Public product statuses, without exposing any credential. */
+
 export function buildProductStatuses(earthdata, terrain) {
   return EO_PRODUCTS.map((product) => {
     const numericLive = product.numeric === "live";
@@ -905,7 +893,7 @@ export function buildProductStatuses(earthdata, terrain) {
   });
 }
 
-/** Everything the front-end needs for one field, in one response. */
+
 export async function buildEoSnapshot({
   analysis = null,
   terrain = null,

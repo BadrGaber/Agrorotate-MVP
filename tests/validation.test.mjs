@@ -1,7 +1,3 @@
-/**
- * Unit and integration tests for Triple-Layer Agronomic Validation Guardrails.
- * Tests Layer 1 (Physical bounds), Layer 2 (Cross-parameter sanity), and Layer 3 (Provenance & confidence).
- */
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -12,7 +8,7 @@ import {
 import { normalizeFieldInputsToScientificVector } from "../src/engine/estimate.ts";
 
 test("Layer 1: validateSingleField enforces hard biophysical bounds", () => {
-  // pH bounds [3.5, 10.5]
+
   assert.equal(validateSingleField("phH2o", 7.0), null);
   assert.equal(validateSingleField("phH2o", 3.5), null);
   assert.equal(validateSingleField("phH2o", 10.5), null);
@@ -26,24 +22,24 @@ test("Layer 1: validateSingleField enforces hard biophysical bounds", () => {
   assert.ok(phTooHigh !== null);
   assert.equal(phTooHigh.severity, "error");
 
-  // Salinity ECe bounds [0.1, 50.0]
+
   assert.equal(validateSingleField("eceDsm", 2.5), null);
   const ecTooHigh = validateSingleField("eceDsm", 85.0);
   assert.ok(ecTooHigh !== null);
   assert.equal(ecTooHigh.severity, "error");
 
-  // Non-numeric string rejects gracefully
+
   const nanIssue = validateSingleField("sandPercent", "not_a_number");
   assert.ok(nanIssue !== null);
   assert.equal(nanIssue.severity, "error");
   assert.equal(nanIssue.id, "sandPercent_not_number");
 
-  // Empty string or null is allowed (unfilled)
+
   assert.equal(validateSingleField("phH2o", null), null);
   assert.equal(validateSingleField("phH2o", ""), null);
   assert.equal(validateSingleField("phH2o", undefined), null);
 
-  // UI state key aliases validation
+
   assert.equal(validateSingleField("ph", 7.2), null);
   const phUiTooHigh = validateSingleField("ph", 12.0);
   assert.ok(phUiTooHigh !== null);
@@ -99,9 +95,9 @@ test("Layer 2: validateAgronomicVector catches cross-parameter textural sum disc
   assert.equal(validReport.valid, true);
   assert.equal(validReport.errors.length, 0);
 
-  // Invalidate textural sum
+
   const badVector = structuredClone(base);
-  badVector.soilPhysical.sandPercent = 60; // 60 + 30 + 20 = 110%
+  badVector.soilPhysical.sandPercent = 60;
   const badReport = validateAgronomicVector(badVector);
 
   assert.equal(badReport.valid, false);
@@ -116,7 +112,7 @@ test("Layer 2: validateAgronomicVector detects hydraulic sequencing violation", 
     eoPrior: {},
   });
 
-  // Physically impossible: PWP >= FC
+
   const invertedVector = structuredClone(base);
   invertedVector.soilPhysical.wiltingPointVolPct = 25.0;
   invertedVector.soilPhysical.fieldCapacityVolPct = 20.0;
@@ -134,7 +130,7 @@ test("Layer 2: validateAgronomicVector detects CaCO3 lime vs acidic pH contradic
     eoPrior: {},
   });
 
-  // Contradiction: CaCO3 > 15% with pH < 6.5
+
   const contradictoryVector = structuredClone(base);
   contradictoryVector.soilChemical.caco3Percent = 22.0;
   contradictoryVector.soilChemical.phH2o = 5.2;
@@ -146,7 +142,7 @@ test("Layer 2: validateAgronomicVector detects CaCO3 lime vs acidic pH contradic
 });
 
 test("Layer 3: validateAgronomicVector computes confidence score and tier distribution", () => {
-  // 1. High confidence: all MEAS
+
   const labVector = normalizeFieldInputsToScientificVector({
     measured: {
       sandPercent: 30,
@@ -176,7 +172,7 @@ test("Layer 3: validateAgronomicVector computes confidence score and tier distri
   );
   assert.ok(labReport.confidenceSummary.tierCounts.MEAS > 5);
 
-  // 2. Lower confidence: only EO priors
+
   const eoVector = normalizeFieldInputsToScientificVector({
     measured: {},
     estimated: {},

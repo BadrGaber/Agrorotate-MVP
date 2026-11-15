@@ -1,7 +1,3 @@
-/**
- * Regression tests for server/geo.mjs.
- * Run: npm test
- */
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -56,7 +52,7 @@ test("analyseBoundary drops a duplicated closing vertex on a copy", () => {
 
 test("analyseBoundary reports a positive area for a real square", () => {
   const geometry = analyseBoundary(SQUARE);
-  // A 0.1° x 0.1° square near lat 30.85 is about 11.1 km x 9.6 km ≈ 10,600 ha.
+
   assert.ok(
     geometry.areaHa > 10_000 && geometry.areaHa < 11_500,
     `areaHa=${geometry.areaHa}`,

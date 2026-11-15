@@ -37,7 +37,7 @@ def check_memory_budget(limit_gb: float = 4.2) -> float:
         raise MemoryError(f"RAM limit exceeded! Current: {mem:.2f} GB > Limit: {limit_gb:.2f} GB")
     return mem
 
-# 30 Crops Physiological & Economic Database
+
 CROP_SPECS: Dict[str, Dict[str, Any]] = {
     "bread-wheat": {"idx": 0, "family": "POACEAE", "season": "cool", "kc": 1.15, "ky": 1.00, "sal_thresh": 6.0, "sal_slope": 7.1, "base_yield": 6.5, "n_fix": -110, "som_delta": 0.02, "bare_days": 30, "price": 280, "cost": 950, "root_depth": 120, "min_ph": 5.5, "max_ph": 8.5},
     "six-row-barley": {"idx": 1, "family": "POACEAE", "season": "cool", "kc": 1.10, "ky": 0.90, "sal_thresh": 8.0, "sal_slope": 5.0, "base_yield": 5.5, "n_fix": -85, "som_delta": 0.015, "bare_days": 28, "price": 220, "cost": 750, "root_depth": 110, "min_ph": 6.0, "max_ph": 8.8},
@@ -83,22 +83,22 @@ def saxton_rawls_hydraulics(sand_pct: float, clay_pct: float, som_pct: float) ->
     C = max(0.01, min(0.70, clay_pct / 100.0))
     OM = max(0.2, min(8.0, som_pct))
 
-    # 1500 kPa Wilting Point
+
     t1500 = -0.024*S + 0.487*C + 0.006*OM + 0.005*(S*OM) - 0.013*(C*OM) + 0.068*(S*C) + 0.031
     wp = max(0.02, min(0.38, t1500 + 0.14*t1500 - 0.02))
 
-    # 33 kPa Field Capacity
+
     t33 = -0.251*S + 0.195*C + 0.011*OM + 0.006*(S*OM) - 0.027*(C*OM) + 0.452*(S*C) + 0.299
     fc = max(wp + 0.035, min(0.55, t33 + 1.283*(t33**2) - 0.374*t33 - 0.015))
 
-    # Saturated Volumetric Moisture & Bulk Density
+
     ts33 = 0.278*S + 0.034*C + 0.022*OM - 0.018*(S*OM) - 0.027*(C*OM) - 0.584*(S*C) + 0.078
     s33 = ts33 + 0.636*ts33 - 0.107
     sat = max(0.35, min(0.62, fc + s33 - 0.097*S + 0.043))
     bd = max(0.95, min(1.85, (1.0 - sat) * 2.65))
     awc = max(0.03, fc - wp)
 
-    # Ksat (mm/hr)
+
     b = (math.log(1500.0) - math.log(33.0)) / max(0.05, math.log(fc*100.0) - math.log(wp*100.0))
     lam = 1.0 / b
     ksat = 1930.0 * (max(0.02, sat - fc) ** (3.0 - lam))
@@ -130,19 +130,19 @@ def simulate_trajectory_chunk(
     """
     np.random.seed(seed)
     random.seed(seed)
-    
+
     n_sites = len(sites_df)
     rows = []
-    
-    # Pre-sample site indices
+
+
     site_indices = np.random.randint(0, n_sites, size=chunk_size)
     rolls = np.random.uniform(0.0, 1.0, size=chunk_size)
-    
+
     for i in range(chunk_size):
         site = sites_df.iloc[site_indices[i]]
         roll = rolls[i]
-        
-        # Stochastic Modality-Degradation Dropout:
+
+
         if roll < 0.45:
             tier = "EST"
             alpha = 0.75
@@ -164,78 +164,78 @@ def simulate_trajectory_chunk(
             sand = float(site["sand_pct"])
             ph = float(site["ph_h2o"])
             ece = float(site["ece_dsm"])
-            
+
         silt = float(np.clip(100.0 - clay - sand, 5.0, 80.0))
         som = float(site["som_pct"])
         esp = float(site["esp_pct"])
-        
-        # Dynamic Saxton & Rawls hydraulics
+
+
         ptf = saxton_rawls_hydraulics(sand, clay, som)
-        
+
         is_rainfed = (site["irrigation_access"] == "rainfed")
-        # Tile drainage active on flat clayey soils or explicit tile regions
+
         has_tile_drainage = (clay > 28.0 and site.get("srtm_slope_pct", 1.5) < 3.0) or ("TILE" in str(site.get("site_id", "")))
-        
+
         water_quota = 1500.0 if is_rainfed else (4200.0 + random.random() * 3200.0)
         water_ecw = 0.3 if is_rainfed else (0.7 + random.random() * 1.6)
-        
-        # 6 Pathogens initial pressure [0.05 to 0.40]:
-        rkn_p = round(random.uniform(0.08, 0.35), 3)  # Root-knot nematode
-        fw_p = round(random.uniform(0.06, 0.30), 3)   # Fusarium wilt
-        awr_p = round(random.uniform(0.03, 0.20), 3)  # Allium white rot
-        ob_p = round(random.uniform(0.04, 0.25), 3)   # Orobanche broomrape
-        cn_p = round(random.uniform(0.05, 0.32), 3)   # Cyst nematode
-        rr_p = round(random.uniform(0.06, 0.30), 3)   # Rhizoctonia root rot
-        
+
+
+        rkn_p = round(random.uniform(0.08, 0.35), 3)
+        fw_p = round(random.uniform(0.06, 0.30), 3)
+        awr_p = round(random.uniform(0.03, 0.20), 3)
+        ob_p = round(random.uniform(0.04, 0.25), 3)
+        cn_p = round(random.uniform(0.05, 0.32), 3)
+        rr_p = round(random.uniform(0.06, 0.30), 3)
+
         current_ece = ece
         current_som = som
         current_n_stock = 45.0
-        
+
         prev_family = None
-        
+
         for s_idx in range(6):
             is_warm = (s_idx % 2 == 0)
             candidates = WARM_CROPS if is_warm else COOL_CROPS
-            
-            # Select crop, penalizing repeating same family
+
+
             valid_candidates = [c for c in candidates if prev_family is None or CROP_SPECS[c]["family"] != prev_family or "cover" in c]
             crop_id = random.choice(valid_candidates if len(valid_candidates) > 0 else candidates)
             spec = CROP_SPECS[crop_id]
             prev_family = spec["family"]
-            
-            # AquaCrop & ETo balance:
+
+
             annual_eto = float(site["annual_eto_mm"])
             eto_season = (annual_eto / 2.0) * (1.15 if is_warm else 0.85)
             etc_crop = eto_season * spec["kc"]
             rain_season = float(site["annual_precip_mm"]) * (0.6 if is_warm else 0.4)
-            
+
             if is_rainfed:
                 eta = min(etc_crop, rain_season + ptf["awc"] * 100.0)
             else:
                 eta = etc_crop
-                
+
             water_deficit = max(0.0, etc_crop - eta)
             aquacrop_reduct = spec["ky"] * (water_deficit / max(1.0, etc_crop)) * 100.0
-            
-            # Maas-Hoffman Salinity Penalty:
+
+
             if current_ece > spec["sal_thresh"]:
                 excess_sal = current_ece - spec["sal_thresh"]
                 sal_reduct = min(100.0, excess_sal * spec["sal_slope"])
             else:
                 sal_reduct = 0.0
 
-            # pH Acidity & Alkalinity Response (Aluminum toxicity / nutrient lockout)
+
             min_ph = spec.get("min_ph", 5.5)
             max_ph = spec.get("max_ph", 8.5)
             ph_reduct = 0.0
             if ph < min_ph:
-                # Severe Al3+ toxicity below minimum threshold (e.g. Amazon Oxisol pH 4.2)
+
                 ph_reduct = min(85.0, (min_ph - ph) * 35.0)
             elif ph > max_ph:
-                # Micronutrient precipitation / sodic alkalinity
+
                 ph_reduct = min(60.0, (ph - max_ph) * 20.0)
-                
-            # Pathogen yield impact based on host susceptibility
+
+
             pathogen_reduct = 0.0
             if spec["family"] == "FABACEAE":
                 pathogen_reduct += ob_p * 18.0 + cn_p * 15.0
@@ -243,11 +243,11 @@ def simulate_trajectory_chunk(
                 pathogen_reduct += rkn_p * 20.0 + fw_p * 18.0 + rr_p * 15.0
             elif spec["family"] == "AMARYLLIDACEAE":
                 pathogen_reduct += awr_p * 25.0
-                
+
             total_reduct = max(0.0, min(100.0, math.sqrt(aquacrop_reduct**2 + sal_reduct**2 + ph_reduct**2) + pathogen_reduct * 0.4))
             actual_yield = spec["base_yield"] * max(0.05, (100.0 - total_reduct) / 100.0)
-            
-            # Soil State Transitions:
+
+
             if not is_rainfed:
                 leach_efficiency = 0.22 if has_tile_drainage else 0.08
                 delta_ece = (water_ecw * eta) / 500.0 - current_ece * leach_efficiency
@@ -255,41 +255,41 @@ def simulate_trajectory_chunk(
             else:
                 delta_ece = -current_ece * (0.12 if has_tile_drainage else 0.06)
                 current_ece = max(0.2, current_ece + delta_ece)
-                
+
             current_som = max(0.2, min(10.0, current_som + spec["som_delta"]))
             current_n_stock = max(10.0, current_n_stock + spec["n_fix"])
-            
-            # 6-Pathogen Multi-Season Dynamics:
-            if spec["family"] == "BRASSICACEAE":  # Biofumigant effect
+
+
+            if spec["family"] == "BRASSICACEAE":
                 rkn_p = max(0.02, rkn_p * 0.25)
                 fw_p = max(0.02, fw_p * 0.28)
                 awr_p = max(0.02, awr_p * 0.20)
                 ob_p = max(0.02, ob_p * 0.30)
                 cn_p = max(0.02, cn_p * 0.25)
                 rr_p = max(0.02, rr_p * 0.22)
-            elif spec["family"] == "POACEAE":    # Grass break
+            elif spec["family"] == "POACEAE":
                 rkn_p = max(0.04, rkn_p * 0.70)
                 fw_p = max(0.04, fw_p * 0.75)
                 awr_p = max(0.02, awr_p * 0.85)
                 cn_p = max(0.03, cn_p * 0.75)
             elif crop_id in ["berseem-clover-multi-cut", "hairy-vetch-cover"]:
-                ob_p = max(0.02, ob_p * 0.35)  # Suicidal trap crop
+                ob_p = max(0.02, ob_p * 0.35)
             elif crop_id in ["faba-bean", "chickpea", "lentil"]:
                 ob_p = min(1.0, ob_p + 0.25)
                 cn_p = min(1.0, cn_p + 0.20)
             elif crop_id == "soybean":
-                cn_p = min(1.0, cn_p + 0.35)   # SCN host
+                cn_p = min(1.0, cn_p + 0.35)
                 rr_p = min(1.0, rr_p + 0.18)
             elif crop_id == "sugar-beet":
-                cn_p = min(1.0, cn_p + 0.40)   # BCN host
+                cn_p = min(1.0, cn_p + 0.40)
                 rr_p = min(1.0, rr_p + 0.25)
             elif crop_id == "bulb-onion":
                 awr_p = min(1.0, awr_p + 0.45)
             elif crop_id == "potato":
                 cn_p = min(1.0, cn_p + 0.35)
                 rr_p = min(1.0, rr_p + 0.30)
-                
-            # 32 Normalized Continuous Environmental & Soil Dimensions:
+
+
             f0_sand = sand / 100.0
             f1_silt = silt / 100.0
             f2_clay = clay / 100.0
@@ -322,8 +322,8 @@ def simulate_trajectory_chunk(
             f29_ecw = min(1.0, water_ecw / 5.0)
             f30_eto = min(1.0, annual_eto / 2500.0)
             f31_slope = min(1.0, float(site.get("srtm_slope_pct", 1.5)) / 20.0)
-            
-            # 8 Explicit Crop Identity & Physiological Traits (No longer blind to crop!)
+
+
             c0_kc = spec["kc"]
             c1_sal_thresh = spec["sal_thresh"] / 10.0
             c2_sal_slope = spec["sal_slope"] / 20.0
@@ -332,7 +332,7 @@ def simulate_trajectory_chunk(
             c5_base_yield = spec["base_yield"] / 100.0
             c6_crop_idx = spec["idx"] / 29.0
             c7_season = 1.0 if is_warm else 0.0
-            
+
             rows.append({
                 "trajectory_id": f"TRAJ_{seed}_{i:06d}",
                 "season_idx": s_idx,
@@ -341,7 +341,7 @@ def simulate_trajectory_chunk(
                 "alpha_confidence": alpha,
                 "crop_id": crop_id,
                 "family": spec["family"],
-                # 32 Soil & Climate Features
+
                 "f0": f0_sand, "f1": f1_silt, "f2": f2_clay, "f3": f3_coarse,
                 "f4": f4_bd, "f5": f5_fc, "f6": f6_wp, "f7": f7_awc,
                 "f8": f8_ksat, "f9": f9_drainage, "f10": f10_wt, "f11": f11_root,
@@ -350,10 +350,10 @@ def simulate_trajectory_chunk(
                 "f20": f20_p, "f21": f21_k, "f22": f22_rkn, "f23": f23_fw,
                 "f24": f24_awr, "f25": f25_ob, "f26": f26_cn, "f27": f27_rr,
                 "f28": f28_quota, "f29": f29_ecw, "f30": f30_eto, "f31": f31_slope,
-                # 8 Physiological Crop Traits
+
                 "c0": c0_kc, "c1": c1_sal_thresh, "c2": c2_sal_slope, "c3": c3_n_fix,
                 "c4": c4_root_depth, "c5": c5_base_yield, "c6": c6_crop_idx, "c7": c7_season,
-                # Grounded Multi-Objective Training Labels
+
                 "label_yield_actual_t_ha": round(actual_yield, 3),
                 "label_yield_reduct_pct": round(total_reduct, 2),
                 "label_delta_ece": round(delta_ece, 3),
@@ -361,7 +361,7 @@ def simulate_trajectory_chunk(
                 "label_water_demand_mm": round(eta, 1),
                 "label_net_margin_usd": round(actual_yield * spec["price"] - spec["cost"], 1),
             })
-            
+
     return pd.DataFrame(rows)
 
 if __name__ == "__main__":

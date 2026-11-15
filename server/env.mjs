@@ -1,11 +1,3 @@
-/**
- * Minimal .env reader for the local API.
- *
- * Node 18 does not load .env files on its own, and the project deliberately
- * keeps the server dependency-free. This parser supports the subset the
- * project documents: KEY=value, optional quotes, comments and an optional
- * `export` prefix. Existing process environment values always win.
- */
 import fs from "node:fs";
 import path from "node:path";
 
@@ -42,10 +34,10 @@ export function parseEnv(text) {
   return values;
 }
 
-/**
- * Loads .env and .env.local from `cwd` without overriding variables that were
- * already set by the shell. Later files override earlier files.
- */
+
+
+
+
 export function loadEnvFiles({ cwd = process.cwd(), files } = {}) {
   const candidates = files ?? [
     path.join(cwd, ".env"),
@@ -61,8 +53,8 @@ export function loadEnvFiles({ cwd = process.cwd(), files } = {}) {
       loadedFiles.push(file);
     } catch (error) {
       if (error?.code !== "ENOENT") {
-        // A malformed or unreadable file must not stop the API. The caller can
-        // still see the status through the EO endpoint.
+
+
       }
     }
   }

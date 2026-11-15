@@ -1,11 +1,3 @@
-/**
- * TASK-01 — numeric input integrity.
- *
- * Covers the five required cases for every field family: zero, empty,
- * non-numeric text, negative/out-of-range, and a valid in-range value. The
- * point is that 0 survives, absence stays absent, and invalid text is reported
- * instead of becoming 0 or a default.
- */
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
@@ -48,7 +40,7 @@ test("an empty optional field stays absent and does not become zero", () => {
     assert.equal(parsed.value, null);
   }
 
-  // Only a declared planning default may fill absence.
+
   const quota = resolveNumericInput("", INPUT_SPECS.waterEcwDsm, 1.1);
   assert.equal(quota.value, 1.1);
   assert.equal(quota.usedFallback, true);
@@ -102,8 +94,8 @@ test("negative and out-of-range values are rejected per field and unit", () => {
   assert.equal(tooAcidic.ok, false);
   assert.equal(tooAcidic.issue.code, "below_min");
 
-  // The same numeric value is valid in one unit and invalid in another: bounds
-  // are per field, not one global range.
+
+
   assert.equal(parseNumericInput("50", INPUT_SPECS.exchangeableKPpm).ok, true);
   assert.equal(parseNumericInput("55", INPUT_SPECS.eceDsm).ok, false);
 });

@@ -4,8 +4,8 @@ import type {
   WorkspaceState,
 } from "../state/model";
 import type { BoundingBox, PolygonMetrics } from "../components/FieldMap";
-// Static import: a dynamic import here produced "Failed to fetch dynamically
-// imported module" on some reloads and silently dropped every climate value.
+
+
 import { summarisePower } from "../engine/climate";
 
 const API_BASE =
@@ -117,7 +117,7 @@ export interface EoSoilGrids {
   caveat?: string;
   source?: string;
   cache?: "server_cache" | "live" | "none";
-  /** Present while a background fetch is running; how long to wait before polling. */
+
   retryAfterMs?: number;
 }
 
@@ -207,11 +207,11 @@ export interface EoSnapshot {
   };
 }
 
-/**
- * One field's EO context: live SoilGrids priors, SRTM terrain metrics, the
- * GIBS product registry and the server's Earthdata-token status. The response
- * never contains a credential.
- */
+
+
+
+
+
 export async function fetchEoContext(options: {
   boundary?: { lat: number; lon: number }[];
   lat?: number | null;
@@ -240,12 +240,12 @@ export async function fetchEoContext(options: {
   return (await response.json()) as EoSnapshot;
 }
 
-/**
- * SoilGrids is the slowest public call (ISRIC can take ~30 s on the first
- * full-property query). The unified snapshot returns it from cache when it can
- * and leaves a `pending` marker otherwise, so this separate route can finish
- * without holding up terrain or the product registry.
- */
+
+
+
+
+
+
 export async function fetchEoSoilGrids(options: {
   lat?: number | null;
   lon?: number | null;
@@ -276,8 +276,8 @@ export async function fetchEoSoilGrids(options: {
     return (await response.json()) as EoSoilGrids;
   };
 
-  // The server answers from cache or with a `pending` marker and keeps fetching
-  // upstream, so poll briefly instead of holding one long request open.
+
+
   const deadline = Date.now() + 30_000;
   let result = await ask();
   while (result.status === "pending" && Date.now() < deadline) {
@@ -324,7 +324,7 @@ async function geocodeFallback(
     }));
 }
 
-/** Explicit, user-triggered search. No autocomplete: the public policy forbids it. */
+
 export async function searchPlaces(
   query: string,
   limit = 5,
@@ -343,8 +343,8 @@ export async function searchPlaces(
     }
     throw new Error(`Geocode API responded ${response.status}`);
   } catch {
-    // Offline fallback. The backend remains the normal path and keeps the
-    // User-Agent + cache policy there.
+
+
     return geocodeFallback(query, limit);
   }
 }
@@ -528,11 +528,11 @@ async function parcelsFallback(
   return mapOverpassParcels(elements, lat, lon, limit);
 }
 
-/**
- * Candidate field outlines mapped in OpenStreetMap near a place. This is a
- * suggestion from public map data, never a surveyed boundary: the corners stay
- * editable and the UI says where they came from.
- */
+
+
+
+
+
 export async function searchParcels(
   lat: number,
   lon: number,
@@ -559,7 +559,7 @@ export async function searchParcels(
   }
 }
 
-/** One call returns geometry, terrain and the cached POWER payload. */
+
 export async function analyzeField(
   boundary: { lat: number; lon: number }[],
   options: { years?: number; force?: boolean; elevationM?: number | null } = {},
@@ -594,7 +594,7 @@ export function defaultClimateWindow(years = 3): {
   end: string;
 } {
   const end = new Date();
-  end.setDate(end.getDate() - 3); // POWER daily data lag
+  end.setDate(end.getDate() - 3);
   const start = new Date(end);
   start.setFullYear(start.getFullYear() - years);
   start.setDate(start.getDate() + 1);
@@ -625,11 +625,11 @@ async function fetchDirectFromPower(
   return response.json();
 }
 
-/**
- * Requests the live agro-climatology window for a field. Uses the local API
- * (cached + reproducible metadata) and falls back to a direct POWER request so
- * the app keeps working with no backend.
- */
+
+
+
+
+
 export async function fetchClimateContext(
   latitude: number,
   longitude: number,
@@ -664,8 +664,8 @@ export async function fetchClimateContext(
         longitude: number;
       };
     };
-    // The API caches the raw POWER payload; the single climate implementation
-    // lives in the front-end engine so both paths produce identical numbers.
+
+
     const normalised = summarisePower(
       data.raw,
       latitude,
@@ -683,7 +683,7 @@ export async function fetchClimateContext(
       request: data.request,
     };
   } catch {
-    // Offline / no backend: call POWER directly from the browser.
+
   }
 
   const raw = await fetchDirectFromPower(
