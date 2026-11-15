@@ -1085,6 +1085,26 @@ function evaluateTrajectory(crops, workspace) {
   const quota = parseNumeric(workspace.water?.quotaMm) ?? (isRainfed ? 1500 : 5500);
   const ecw = parseNumeric(workspace.water?.ecwDsm) ?? 1.1;
   const ph = parseNumeric(workspace.soil?.lab?.ph) ?? 7.5;
+  const lab = workspace.soil?.lab ?? {};
+  const esp = parseNumeric(lab.espPct) ?? 6.0;
+  const caco3 = parseNumeric(lab.caco3Pct) ?? 6.0;
+  const no3n = parseNumeric(lab.no3nPpm) ?? 18.0;
+  const olsenP = parseNumeric(lab.olsenPPpm) ?? 12.0;
+  const exchK = parseNumeric(lab.exchangeableKPpm) ?? 150.0;
+  const heatDays = parseNumeric(workspace.climate?.summary?.heatDays35) ?? 30;
+  const precip = parseNumeric(workspace.climate?.summary?.annualPrecipMm) ?? 45;
+  const slopeClass = workspace.field?.slopeClass ?? "flat";
+  const slopeMap = { flat: 1.0, slight: 3.5, moderate: 7.0, steep: 15.0 };
+  const slopePct = slopeMap[slopeClass] ?? 1.5;
+  const elevationM = parseNumeric(workspace.field?.elevationM) ?? 10;
+  const sarw = parseNumeric(workspace.water?.sarw) ?? 2.0;
+  const waterNo3n = parseNumeric(workspace.water?.no3nPpm) ?? 2.0;
+  const waterSystem = workspace.water?.system ?? "drip";
+  const systemEffMap = { drip: 0.90, sprinkler: 0.75, surface: 0.60, pivot: 0.82, none: 1.0 };
+  const irrigationEff = systemEffMap[waterSystem] ?? 0.85;
+
+  // Temperature lapse rate: elevation moderates heat stress frequency
+  const effectiveHeatDays = Math.max(0, heatDays - Math.round((elevationM / 150) * 2.0));
 
   let ece = parseNumeric(workspace.soil?.lab?.eceDsm) ?? 2.1;
   let som = Math.max(0.2, (parseNumeric(workspace.soil?.lab?.socPct) ?? 1.0) * 1.724);
@@ -1128,6 +1148,49 @@ function evaluateTrajectory(crops, workspace) {
       );
     }
 
+    // 1. CaCO3 Active Lime Crusting & Chlorosis:
+    const isSmallSeeded = ["sesame", "bulb-onion", "flax-linseed"].includes(crop.id);
+    const isLimeSensitive = ["potato", "sweet-potato"].includes(crop.id) || isSmallSeeded;
+    if (caco3 > 12 && isLimeSensitive) {
+      const caco3Penalty = Math.min(25, Math.round((caco3 - 12) * 1.2));
+      physicalFloorReduct = Math.min(100, physicalFloorReduct + caco3Penalty);
+      if (caco3 > 18) {
+        vulnerabilities.push({
+          seasonIndex: sIdx,
+          stressType: "Lime Chlorosis / Crusting Hazard",
+          description: `Season ${sIdx + 1} (${crop.name}): High active lime (${caco3.toFixed(0)}%) induces iron chlorosis and seed emergence crusting.`,
+        });
+      }
+    }
+
+    // 2. ESP Sodicity & Hypoxia:
+    const isSodicTolerant = ["six-row-barley", "sugar-beet", "berseem-clover-multi-cut"].includes(crop.id);
+    if (esp > 12 && !isSodicTolerant) {
+      const espPenalty = Math.min(30, Math.round((esp - 12) * 1.5));
+      physicalFloorReduct = Math.min(100, physicalFloorReduct + espPenalty);
+      if (esp > 15) {
+        vulnerabilities.push({
+          seasonIndex: sIdx,
+          stressType: "Sodicity / Soil Dispersion Hazard",
+          description: `Season ${sIdx + 1} (${crop.name}): Sodic soil (ESP ${esp.toFixed(0)}% > 15%) causes clay dispersion and aeration deficit.`,
+        });
+      }
+    }
+
+    // 3. Late-season Thermal Stress (>35C adjusted for elevation):
+    const isHeatSensitiveCool = crop.season === "cool" && ["potato", "faba-bean", "bulb-onion", "chickpea"].includes(crop.id);
+    if (effectiveHeatDays > 25 && isHeatSensitiveCool) {
+      const heatPenalty = Math.min(25, Math.round((effectiveHeatDays - 25) * 0.7));
+      physicalFloorReduct = Math.min(100, physicalFloorReduct + heatPenalty);
+      if (effectiveHeatDays > 35) {
+        vulnerabilities.push({
+          seasonIndex: sIdx,
+          stressType: "Late-Season Thermal Stress",
+          description: `Season ${sIdx + 1} (${crop.name}): High heat-spike frequency (${effectiveHeatDays} days >35°C) risks flower abortion.`,
+        });
+      }
+    }
+
     const fVec = buildRuntimeVector40(workspace, crop, { isWarm, ece, nStock, quota, ecw });
     const neuralPred = runNeuralSurrogateInference(fVec);
 
@@ -1163,18 +1226,60 @@ function evaluateTrajectory(crops, workspace) {
       yieldReduct = physicalFloorReduct;
     }
 
+    // Gross water demand conditioned on irrigation method efficiency:
     const effWater = crop.waterDemandMm * (isRainfed ? 0.75 : 1.0);
-    totalWaterMm += effWater;
+    const grossWater = isRainfed ? effWater : effWater / irrigationEff;
+    totalWaterMm += grossWater;
+
+    // Sprinkler overhead wetting disease hazard:
+    if (waterSystem === "sprinkler" && ["potato", "processing-tomato", "bulb-onion"].includes(crop.id)) {
+      vulnerabilities.push({
+        seasonIndex: sIdx,
+        stressType: "Sprinkler Foliar Disease Hazard",
+        description: `Season ${sIdx + 1} (${crop.name}): Overhead sprinkler canopy wetting promotes foliar fungal and bacterial blights.`,
+      });
+    }
+
+    // Slope tuber erosion hazard:
+    if (slopePct > 8 && ["potato", "sweet-potato", "sugar-beet"].includes(crop.id)) {
+      vulnerabilities.push({
+        seasonIndex: sIdx,
+        stressType: "Slope Erosion Hazard",
+        description: `Season ${sIdx + 1} (${crop.name}): Intensive root harvesting on steep slope (${slopePct}%) promotes topsoil runoff.`,
+      });
+    }
+
+    // SARw infiltration hazard:
+    if (ecw < 0.15 * sarw + 0.1 && sarw > 6) {
+      vulnerabilities.push({
+        seasonIndex: sIdx,
+        stressType: "Infiltration Permeability Hazard",
+        description: `Season ${sIdx + 1}: Low ECw (${ecw.toFixed(2)} dS/m) relative to SARw (${sarw.toFixed(1)}) induces surface crusting.`,
+      });
+    }
+
+    // Soil and Irrigation Water NPK input cost adjustment:
+    let effectiveInputCost = crop.inputCostUsdPerHa;
+    const waterNCreditUsd = !isRainfed && waterNo3n > 5 ? Math.min(65, Math.round((waterNo3n - 5) * 1.5)) : 0;
+    if (crop.nitrogenFixationKgHa <= 0) {
+      const nCredit = no3n > 18 ? Math.min(120, Math.round((no3n - 18) * 4)) : -Math.min(60, Math.round((18 - no3n) * 3));
+      effectiveInputCost -= (nCredit + waterNCreditUsd);
+    } else {
+      if (no3n < 15) effectiveInputCost -= 35; // Bio-fixation economic premium
+    }
+    if (olsenP < 8) effectiveInputCost += 25; // Starter P addition
+    if (olsenP > 35) effectiveInputCost -= 15; // Residual P discount
 
     const yieldFrac = Math.max(0.08, (100 - yieldReduct) / 100);
     const revenue = crop.baseYieldTHa * yieldFrac * crop.farmgatePriceUsdPerTon;
-    const pumpingCost = isRainfed ? 0 : effWater * 10 * 0.04;
-    totalNetUsd += revenue - crop.inputCostUsdPerHa - pumpingCost;
+    const pumpingCost = isRainfed ? 0 : grossWater * 10 * 0.04;
+    totalNetUsd += revenue - effectiveInputCost - pumpingCost;
 
     if (!isRainfed) {
       const deltaEcePhysical = (ecw * effWater) / 450 - ece * 0.1;
       const deltaEceNeural = neuralPred && eceHeadTrained ? neuralPred.deltaEceDsm : deltaEcePhysical;
-      ece = Math.max(0.2, Math.min(30.0, ece + 0.6 * deltaEcePhysical + 0.4 * deltaEceNeural));
+      const rainLeach = Math.min(0.15, precip / 4000);
+      ece = Math.max(0.2, Math.min(30.0, ece + 0.6 * deltaEcePhysical + 0.4 * deltaEceNeural - ece * rainLeach));
     } else {
       ece = Math.max(0.2, ece * 0.92);
     }
@@ -1204,7 +1309,7 @@ function evaluateTrajectory(crops, workspace) {
       });
     }
 
-    let reason = `${crop.nitrogenFixationKgHa >= 0 ? "+" : ""}${crop.nitrogenFixationKgHa} kg N/ha; bare: ${crop.bareDaysAfterHarvest}d; margin: $${Math.round(revenue - crop.inputCostUsdPerHa - pumpingCost)}/ha`;
+    let reason = `${crop.nitrogenFixationKgHa >= 0 ? "+" : ""}${crop.nitrogenFixationKgHa} kg N/ha; bare: ${crop.bareDaysAfterHarvest}d; margin: $${Math.round(revenue - effectiveInputCost - pumpingCost)}/ha`;
     if (neuralReduct !== null) {
       reason += `; real-data yield prior: ${yieldReduct}% gap`;
     }
@@ -1222,7 +1327,7 @@ function evaluateTrajectory(crops, workspace) {
       family: crop.family,
       biophysicalFloorMet: yieldReduct < 80,
       yieldReductionPercent: yieldReduct,
-      waterDemandMm: Math.round(effWater),
+      waterDemandMm: Math.round(grossWater),
       nitrogenBalanceKgHa: crop.nitrogenFixationKgHa,
       bareFieldDaysAfterHarvest: crop.bareDaysAfterHarvest,
       causalRationale: reason,
@@ -1230,13 +1335,12 @@ function evaluateTrajectory(crops, workspace) {
   }
 
   const netReturnScore = Math.max(10, Math.min(99, Math.round((totalNetUsd / 7500) * 100)));
-  const waterSavingScore = Math.max(10, Math.min(99, Math.round(100 - (totalWaterMm / 4000) * 100)));
-  // Same soil score as src/engine/optimizer.ts: capped components, so the
-  // objective actually differentiates rotations instead of saturating at 98.
+  const waterSavingScore = Math.max(10, Math.min(99, Math.round(100 - (totalWaterMm / 4800) * 100)));
   const somScore = Math.min(40, (som - 1.2) * 150);
   const nScore = Math.min(30, (nStock / 150) * 30);
   const bareScore = Math.max(0, 30 - (bareDaysTotal / 180) * 30);
-  const soilHealthScore = Math.max(15, Math.min(98, Math.round(35 + somScore + nScore + bareScore)));
+  const slopeProtectionBonus = (slopePct > 6 && crops.some((c) => c.id.includes("cover"))) ? 6 : 0;
+  const soilHealthScore = Math.max(15, Math.min(98, Math.round(35 + somScore + nScore + bareScore + slopeProtectionBonus)));
 
   // Risk aversion score (0 to 100):
   const vulnPenalty = vulnerabilities.length * 12;
@@ -1247,7 +1351,8 @@ function evaluateTrajectory(crops, workspace) {
     Object.values(c.pathogenRoles || {}).some((r) => r === "TRAP_CROP" || r === "BIOFUMIGANT")
   ).length;
   const pathogenBonus = Math.min(15, pathogenBreakCount * 4);
-  const riskScore = Math.max(10, Math.min(99, Math.round(85 - vulnPenalty - salinityStress + droughtBonus + pathogenBonus)));
+  const potassiumBonus = exchK > 220 ? 5 : 0;
+  const riskScore = Math.max(10, Math.min(99, Math.round(85 - vulnPenalty - salinityStress + droughtBonus + pathogenBonus + potassiumBonus)));
 
   return {
     netReturnScore,

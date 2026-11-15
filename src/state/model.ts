@@ -478,6 +478,7 @@ export interface WaterState {
   quotaMm: string;
   ecwDsm: string;
   sarw: string;
+  no3nPpm?: string;
   /** Fields filled from a plain-language answer; never a lab measurement. */
   estimates: Record<string, EstimateRecord>;
 }
@@ -628,6 +629,7 @@ export const DEFAULT_WORKSPACE: WorkspaceState = {
     quotaMm: "",
     ecwDsm: "",
     sarw: "",
+    no3nPpm: "",
     estimates: {},
   },
   climate: {

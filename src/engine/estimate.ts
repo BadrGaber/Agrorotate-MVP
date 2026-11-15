@@ -490,6 +490,7 @@ export interface NormalizeInputOptions {
     seasonalWaterQuotaM3Ha?: number;
     irrigationEcwDsm?: number;
     irrigationSarw?: number;
+    irrigationNo3NPpm?: number;
     irrigationEfficiencyFrac?: number;
     irrigationSystemType?: IrrigationSystemType;
     waterSupplyRegime?: WaterSupplyRegime;
@@ -1213,6 +1214,7 @@ export function workspaceToAgronomicVector(
       seasonalWaterQuotaM3Ha: parseNumHelper(water.quotaMm) ? parseNumHelper(water.quotaMm)! * 10 : undefined,
       irrigationEcwDsm: parseNumHelper(water.ecwDsm),
       irrigationSarw: parseNumHelper(water.sarw),
+      irrigationNo3NPpm: parseNumHelper(water.no3nPpm),
       waterSupplyRegime,
       irrigationSystemType,
     },
