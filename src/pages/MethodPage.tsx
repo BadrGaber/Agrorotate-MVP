@@ -254,6 +254,42 @@ export function MethodPage() {
                 </p>
               </div>
 
+              <div>
+                <div className="row row--between">
+                  <strong>Integrated Biophysical Floor & Multi-Objective Modifiers</strong>
+                  <span className="badge badge--soft badge--meas">FAO-29 & Sourced</span>
+                </div>
+                <ul className="small" style={{ marginTop: 6, paddingLeft: 18, lineHeight: 1.6 }}>
+                  <li>
+                    <strong>Active Lime Crusting & Chlorosis:</strong> When CaCO₃ &gt; 12%, lime-sensitive and small-seeded species (sesame, onion, flax, potato) receive emergence &amp; chlorosis penalties: <span className="mono">Penalty = min(25, round((CaCO₃ − 12) × 1.2))</span>.
+                  </li>
+                  <li>
+                    <strong>Sodicity &amp; Soil Dispersion:</strong> When ESP &gt; 12% in non-sodic tolerant crops, structural clay dispersion causes aeration hypoxia: <span className="mono">Penalty = min(30, round((ESP − 12) × 1.5))</span>.
+                  </li>
+                  <li>
+                    <strong>Elevation Thermal Lapse Rate:</strong> Orographic altitude moderates heat-spike frequency for cool-season crops: <span className="mono">HeatDays_eff = max(0, HeatDays₃₅ − round((Elevation / 150) × 2.0))</span>.
+                  </li>
+                  <li>
+                    <strong>Irrigation Efficiency &amp; Gross Hydrological Demand:</strong> Gross water is scaled by application efficiency: <span className="mono">GrossDemand = NetDemand / η_sys</span> (Drip: 0.90, Sprinkler: 0.75, Surface: 0.60, Pivot: 0.82).
+                  </li>
+                  <li>
+                    <strong>Sprinkler Canopy Wetting Hazard:</strong> Overhead sprinklers trigger foliar blight warnings on fungal-susceptible solanaceous and allium crops.
+                  </li>
+                  <li>
+                    <strong>Soil &amp; Irrigation Water NPK Crediting:</strong> High soil NO₃-N (&gt; 18 ppm) and irrigation water nitrate (&gt; 5 ppm) reduce fertilizer costs directly, while Olsen-P &lt; 8 ppm adds starter P costs.
+                  </li>
+                  <li>
+                    <strong>Infiltration Permeability Screening (FAO-29):</strong> Evaluates potential soil crusting when <span className="mono">ECw &lt; 0.15 × SARw + 0.1</span>.
+                  </li>
+                  <li>
+                    <strong>Slope Erosion Hazard &amp; Cover Protection:</strong> Root harvesting on slopes &gt; 8% raises topsoil runoff hazards, mitigated by continuous cover cropping.
+                  </li>
+                  <li>
+                    <strong>Data Provenance Calibration:</strong> Field area, slope, and elevation sources (drawn vs declared, DEM vs observation) calibrate scientific confidence bands (alpha tiers 0.50–1.00).
+                  </li>
+                </ul>
+              </div>
+
               <Note tone="sky" glyph="drop">
                 <strong>Water planning.</strong> The plan compares crop water demand with
                 your recorded quota through ETc = Kc × ETo, and the indicative leaching

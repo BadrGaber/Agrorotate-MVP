@@ -312,9 +312,13 @@ export function SourcesPage() {
               one implementation shared by every path.
             </div>
             <div>
-              <strong>FAO Irrigation & Drainage Paper 29 / Annex 1</strong> — crop salinity
-              threshold (ECe) and yield-decline slope pairs per crop, kept source-scoped:
-              the app only quotes them for crops whose profile carries the pair.
+              <strong>FAO Irrigation & Drainage Paper 29 / Annex 1 (Ayers &amp; Westcot, 1985)</strong> — crop salinity
+              threshold (ECe) and yield-decline slope pairs per crop, soil sodicity dispersion thresholds (ESP &gt; 12%),
+              active lime sensitivity (CaCO₃ &gt; 12%), and water infiltration permeability hazard screening (ECw vs SARw).
+            </div>
+            <div>
+              <strong>Saxton &amp; Rawls (2006) Soil Physics</strong> — pedotransfer functions predicting field capacity,
+              wilting point, available water capacity, and saturated hydraulic conductivity across 12 USDA textural classes.
             </div>
             <div>
               <strong>FAO crop season windows</strong> — planting/harvest windows and family

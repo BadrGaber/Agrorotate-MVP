@@ -369,7 +369,11 @@ export function alternativeCrops(
       ...alt,
       yieldLossPct,
       yieldSource: fit ? (fit.sourceByCrop[alt.crop.id] ?? null) : null,
-      fitScore: scoreAlternative(priority, usedFamilies, alt, yieldLossPct),
+      fitScore: scoreAlternative(priority, usedFamilies, alt, yieldLossPct, {
+        waterSystem: state.water?.system,
+        caco3Pct: Number(state.soil?.lab?.caco3Pct),
+        espPct: Number(state.soil?.lab?.espPct),
+      }),
     };
   });
 
@@ -407,11 +411,24 @@ export function scoreAlternative(
   usedFamilies: Set<string>,
   alt: Pick<Alternative, "crop" | "salinity" | "breaksFamily" | "seasonMatch">,
   yieldLossPct?: number | null,
+  context?: {
+    waterSystem?: string;
+    caco3Pct?: number;
+    espPct?: number;
+  },
 ): number {
-  const yieldScore =
+  let yieldScore =
     yieldLossPct === undefined || yieldLossPct === null
       ? 55
       : Math.max(0, Math.min(100, 100 - yieldLossPct));
+
+  // Active biophysical adjustments:
+  if ((context?.caco3Pct ?? 0) > 12 && ["potato", "sweet-potato", "sesame", "bulb-onion", "flax-linseed"].includes(alt.crop.id)) {
+    yieldScore = Math.max(10, yieldScore - 15);
+  }
+  if ((context?.espPct ?? 0) > 12 && !["six-row-barley", "sugar-beet", "berseem-clover-multi-cut"].includes(alt.crop.id)) {
+    yieldScore = Math.max(10, yieldScore - 15);
+  }
 
   let waterScore = alt.seasonMatch ? 100 : 30;
   if (alt.crop.isCoverCrop) waterScore = Math.min(100, waterScore + 5);
@@ -420,7 +437,7 @@ export function scoreAlternative(
   if (alt.crop.family === "Fabaceae") soilScore = Math.min(100, soilScore + 10);
   if (usedFamilies.has(alt.crop.family)) soilScore = Math.max(0, soilScore - 20);
 
-  const riskScore =
+  let riskScore =
     alt.salinity.state === "below"
       ? 100
       : alt.salinity.state === "above"
@@ -428,6 +445,10 @@ export function scoreAlternative(
         : alt.salinity.state === "no_threshold"
           ? 55
           : 70;
+
+  if (context?.waterSystem === "sprinkler" && ["potato", "processing-tomato", "bulb-onion"].includes(alt.crop.id)) {
+    riskScore = Math.max(10, riskScore - 15);
+  }
 
   const w = priority.weights ?? { yield: 3, water: 3, soil: 3, risk: 3 };
   const sum = (w.yield ?? 3) + (w.water ?? 3) + (w.soil ?? 3) + (w.risk ?? 3) || 12;
@@ -453,12 +474,22 @@ export function cropFitScore(
   const slotMeta = SLOT_META[index];
   const breaksFamily = previous ? crop.family !== previous.family : null;
   const seasonMatch = slotMeta ? crop.season === slotMeta.season : true;
-  return scoreAlternative(state.priorities, plantedFamilies(state), {
-    crop,
-    salinity,
-    breaksFamily,
-    seasonMatch,
-  }, fit ? (fit.lossPct[crop.id] ?? null) : null);
+  return scoreAlternative(
+    state.priorities,
+    plantedFamilies(state),
+    {
+      crop,
+      salinity,
+      breaksFamily,
+      seasonMatch,
+    },
+    fit ? (fit.lossPct[crop.id] ?? null) : null,
+    {
+      waterSystem: state.water?.system,
+      caco3Pct: Number(state.soil?.lab?.caco3Pct),
+      espPct: Number(state.soil?.lab?.espPct),
+    },
+  );
 }
 
 export interface PlanCoverage {
